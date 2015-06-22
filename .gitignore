@@ -120,3 +120,6 @@ Thumbs.db
 
 #OS X
 .DS_Store
+
+#Dependancies that should be installed fresh with NPM:
+node_modules
