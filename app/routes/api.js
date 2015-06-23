@@ -18,7 +18,8 @@ module.exports = function(app, express){
 	apiRouter.route('/users')
 
 		//user creation
-		.post(function(req, res){})
+		.post(function(req, res){
+		})
 
 		//get all users
 		.get(function(req, res){
@@ -36,7 +37,14 @@ module.exports = function(app, express){
 	apiRouter.route('/users/:id)
 
 		//return the specific user
-		.get(function (req, res) {})
+		.get(function (req, res) {
+			User.findOne({username ,req.params.user_id}, function(err, user) {
+				if (err) res.send(err);
+
+				// return that user
+				res.json(user);
+			});
+		})
 
 		//update the user's restrictions
 		.post(function (req, res){})
