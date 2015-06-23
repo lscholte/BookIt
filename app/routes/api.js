@@ -1,7 +1,7 @@
 
 //not all require's are listed here yet
 var bodyParser 	= require("body-parser"),
-    jwt		= require("jswebtoken");
+    jwt		= require("jsonwebtoken");
 var User = require('../models/user');
 var Booking = require('../models/booking');
 
