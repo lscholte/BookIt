@@ -74,7 +74,7 @@ module.exports = function(app, express){
 		//remove the equipment from a booking
 		.delete(function(req, res){});
 	
-
+	//returns user own info
 	apiRouter.get('/me', function(req, res){
 		res.send(req.decoded);
 	});
