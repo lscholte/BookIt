@@ -1,8 +1,5 @@
 var mongoose     = require('mongoose');
 var Schema       = mongoose.Schema;
-var EquipmentSchema = require('equipment');
-var RoomSchema = require('room');
-var UserSchema = require('user');
 
 var BookingSchema = new Schema({
 	user: {type : mongoose.Schema.ObjectId, ref : 'User' , required: true},

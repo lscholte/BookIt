@@ -10,7 +10,7 @@ module.exports = function(app, express){
 	var apiRouter = express.Router();
 
 	apiRouter.get('/', function(req, res){
-		res.json(message : 'user base page');
+		res.json({message: 'user base page'});
 	});
 
 	//---------------------------
@@ -34,11 +34,11 @@ module.exports = function(app, express){
 
 	//---------------------------
 	//with a specified user
-	apiRouter.route('/users/:id)
+	apiRouter.route('/users/:id')
 
 		//return the specific user
 		.get(function (req, res) {
-			User.findOne({username ,req.params.user_id}, function(err, user) {
+			User.findOne({username: req.params.user_id}, function(err, user) {
 				if (err) res.send(err);
 
 				// return that user
@@ -50,14 +50,14 @@ module.exports = function(app, express){
 		.post(function (req, res){})
 		
 		//remove the specific user
-		.delete(function (req, res));
+		.delete(function (req, res){});
 
 
 	//=========================================
 	
 	
 	apiRouter.get('/', function(req, res){
-		res.json(message: 'booking base page');
+		res.json({message: 'booking base page'});
 	});
 	//---------------------------
 	//no specified booking
