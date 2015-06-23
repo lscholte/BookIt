@@ -38,7 +38,7 @@ module.exports = function(app, express){
 
 		//return the specific user
 		.get(function (req, res) {
-			User.findOne({username ,req.params.user_id}, function(err, user) {
+			User.findOne({username ,req.params.id}, function(err, user) {
 				if (err) res.send(err);
 
 				// return that user
@@ -81,7 +81,14 @@ module.exports = function(app, express){
 	apiRouter.route('/bookings/:id')
 
 		//get the specific booking
-		.get(function(req, res){})
+		.get(function(req, res){
+			Booking.findById({req.params.id}, function(err, booking) {
+				if (err) res.send(err);
+
+				// return that user
+				res.json(booking);
+			});
+		})
 
 		//remove the specific booking
 		.delete(function(req, res){});
