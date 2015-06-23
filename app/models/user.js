@@ -5,7 +5,7 @@ var bcrypt 		 = require('bcrypt-nodejs');
 // user schema 
 var UserSchema   = new Schema({
 	name: String,
-	userType: Number,
+	userType: {type: String, required: true, enum: ['student', 'staff_faculty', 'admin']},
 	bannedUntil: Date,
 	username: { type: String, required: true, index: { unique: true }},
 	password: { type: String, required: true, select: false }
@@ -36,5 +36,31 @@ UserSchema.methods.comparePassword = function(password) {
 };
 
 //Todo: add setters, getters for variables
+
+UserSchema.methods.setName = function(name){
+	this.name = name;
+};
+
+UserSchema.methods.getName = function(){
+	return this.name;
+};
+
+UserSchema.methods.getUserType = function(){
+	return this.userType;
+};
+
+UserSchema.methods.setBannedUntil = function(date){
+	this.bannedUntil = date;
+};
+
+UserSchema.methods.getBannedUntil = function(){
+	return this.bannedUntil;
+};
+
+UserSchema.methods.isBanned = function(){
+	var currentDate = new Date();
+	return this.bannedUntil.now() > currentDate.now();
+};
+
 
 module.exports = mongoose.model('User', UserSchema);
