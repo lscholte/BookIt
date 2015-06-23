@@ -37,7 +37,7 @@ module.exports = function(app, express){
 
 		//return the specific user
 		.get(function (req, res) {
-			User.findOne({username ,req.params.id}, function(err, user) {
+			User.findOne({username: req.params.id}, function(err, user) {
 				if (err) res.send(err);
 
 				// return that user
@@ -81,7 +81,7 @@ module.exports = function(app, express){
 
 		//get the specific booking
 		.get(function(req, res){
-			Booking.findById({req.params.id}, function(err, booking) {
+			Booking.findById(req.params.id, function(err, booking) {
 				if (err) res.send(err);
 
 				// return that user
