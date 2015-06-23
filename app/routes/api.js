@@ -8,7 +8,8 @@ var Booking = require('../models/booking');
 module.exports = function(app, express){
 
 	var apiRouter = express.Router();
-
+	//The commands below are accessed from http://localhost:1337/api/<route>
+	
 	apiRouter.get('/', function(req, res){
 		res.json({message: 'user base page'});
 	});
@@ -53,11 +54,9 @@ module.exports = function(app, express){
 
 
 	//=========================================
-	
-	
-	apiRouter.get('/', function(req, res){
-		res.json({message: 'booking base page'});
-	});
+	//
+	//Bookings below	
+	//
 	//---------------------------
 	//no specified booking
 	apiRouter.route('/bookings')
@@ -104,10 +103,5 @@ module.exports = function(app, express){
 		//remove the equipment from a booking
 		.delete(function(req, res){});
 	
-	//returns user own info
-	apiRouter.get('/me', function(req, res){
-		res.send(req.decoded);
-	});
-
 	return apiRouter;
 }
