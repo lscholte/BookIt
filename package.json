@@ -1,0 +1,21 @@
+{
+  "name": "BookIt",
+  "version": "1.0.0",
+  "description": "Study Room booking application created for UVic's SENG 299 course.",
+  "main": "server.js",
+  "dependencies": {
+    "express": "~4.10.3",
+    "mongoose": "~3.8.19",
+    "morgan": "~1.5.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/simgriffi/BookIt.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/simgriffi/BookIt/issues"
+  },
+  "homepage": "https://github.com/simgriffi/BookIt"
+}
