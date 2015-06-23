@@ -2,6 +2,8 @@
 //not all require's are listed here yet
 var bodyParser 	= require("body-parser"),
     jwt		= require("jswebtoken");
+var User = require('../models/user');
+var Booking = require('../models/booking');
 
 module.exports = function(app, express){
 
@@ -19,7 +21,14 @@ module.exports = function(app, express){
 		.post(function(req, res){})
 
 		//get all users
-		.get(function(req, res){});
+		.get(function(req, res){
+			User.find({}, function(err, users) {
+				if (err) res.send(err);
+
+				// return the users
+				res.json(users);
+			});
+		});
 	
 
 	//---------------------------
@@ -50,7 +59,14 @@ module.exports = function(app, express){
 		.post(function(req, res){})
 
 		//get all bookings
-		.get(function(req, res){});
+		.get(function(req, res){
+			Booking.find({}, function(err, bookings) {
+				if (err) res.send(err);
+
+				// return the users
+				res.json(bookings);
+			});
+		});
 
 	//--------------------------
 	//with a specified booking
