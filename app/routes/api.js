@@ -4,6 +4,7 @@ var bodyParser 	= require("body-parser"),
     jwt		= require("jsonwebtoken");
 var User = require('../models/user');
 var Booking = require('../models/booking');
+var Room = require('../models/room');
 
 module.exports = function(app, express){
 
@@ -42,7 +43,6 @@ module.exports = function(app, express){
 
 		//get all users
 		.get(function(req, res){
-			console.log('Getting stuff!');
 			User.find({}, function(err, users) {
 				if (err) res.send(err);
 
@@ -76,7 +76,7 @@ module.exports = function(app, express){
 				if (req.body.name) user.name = req.body.name;
 				if (req.body.username) user.username = req.body.username;
 				if (req.body.password) user.password = req.body.password;
-				if (req.body.bannedUntil) user.bannedUntil = req.body.bannedUntil;
+				if (req.body.bannedUntil) user.bannedUntil = new Date(req.body.bannedUntil);
 				if(req.body.userType) user.userType = req.body.userType;
 
 				// save the user
@@ -91,7 +91,15 @@ module.exports = function(app, express){
 		})
 		
 		//remove the specific user
-		.delete(function (req, res){});
+		.delete(function (req, res){
+			User.remove({
+				username: req.params.id
+			}, function(err, user) {
+				if (err) res.send(err);
+
+				res.json({ message: 'Successfully deleted' });
+			});
+		});
 
 
 	//=========================================
@@ -103,7 +111,32 @@ module.exports = function(app, express){
 	apiRouter.route('/bookings')
 		
 		//create a booking
-		.post(function(req, res){})
+		//ToDo: see if there's a better way than these nested asychronous functions
+		.post(function(req, res){
+			
+			var booking = new Booking();		
+			//fill in fields here
+			booking.startDate = new Date(parseInt(req.body.startDate));
+			booking.endDate = new Date(parseInt(req.body.endDate));
+			//Turn userName into user object so we can get its reference
+			User.findOne({username: req.body.username}, function(err, user){
+				booking.user = user._id;
+				//turn room number into room object so we can get its reference
+				Room.findOne({roomNumber: req.body.roomNumber}, function(err, room){
+					booking.room = room._id;
+					
+					//save the booking
+					booking.save(function(err) {
+						if (err) {
+							res.send(err);
+						}
+		
+						// return a message
+						res.json({ message: 'Booking created!' });
+					});
+				});
+			});
+		})
 
 		//get all bookings
 		.get(function(req, res){

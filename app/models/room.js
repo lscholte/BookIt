@@ -2,7 +2,7 @@ var mongoose     = require('mongoose');
 var Schema       = mongoose.Schema;
 
 var RoomSchema = new Schema({
-	roomNumber: {type: Number, required: true, index: {unique: true}}
+	roomNumber: {type: Number, required: true, index: {}}
 });
 
 RoomSchema.methods.setRoomNumber = function(roomNumber){
