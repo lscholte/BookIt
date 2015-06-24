@@ -1,11 +1,12 @@
-.row {
-	background-color:#183152;
-	
+.header {
+	background-color: #183152;
+    text-align: center;
+    overflow: hidden;
+    line-height: 60px;
 }
 
-.row h1{
+.header h1{
 	color: white;
-	margin:0;
-	text-align:center;
-	font-family:"Arial";
+	margin: 0;
+	font-family: "Arial";
 }
