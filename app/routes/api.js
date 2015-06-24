@@ -67,7 +67,28 @@ module.exports = function(app, express){
 		})
 
 		//update the user's restrictions
-		.post(function (req, res){})
+		.post(function (req, res){
+			User.findOne({username: req.params.id}, function(err, user) {
+
+				if (err) res.send(err);
+
+				// set the new user information if it exists in the request
+				if (req.body.name) user.name = req.body.name;
+				if (req.body.username) user.username = req.body.username;
+				if (req.body.password) user.password = req.body.password;
+				if (req.body.bannedUntil) user.bannedUntil = req.body.bannedUntil;
+				if(req.body.userType) user.userType = req.body.userType;
+
+				// save the user
+				user.save(function(err) {
+					if (err) res.send(err);
+
+					// return a message
+					res.json({ message: 'User updated!' });
+				});
+
+			});
+		})
 		
 		//remove the specific user
 		.delete(function (req, res){});
