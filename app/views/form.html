@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+
+	<!-- FOR ANGULAR ROUTING -->
+
+	<!-- CSS  -->
+	<!-- load bootstrap from CDN and custom CSS -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.1/paper/bootstrap.min.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css">
+	<link rel="stylesheet" href="styles/style.css">
+
+	<!-- JS -->
+	<!-- Add Main Angular JavaScript libraries here-->
+
+	<!-- Add Angular controllers here -->
+
+	<!-- Add Angular services here-->
+
+	<!-- Add main Angular app files here -->
+
+</head>
+<body>
+
+<form id="fm1" name="credentials" class="fm-v clearfix uniForm" action="/cas/login" method="post">
+	<div class="box" id="login">
+		<fieldset class="row">
+			
+			<span class="row">
+				<label for="username">NetLink ID:</label>
+					<input id="username" name="username" target="text" class="required" tabindex="1" type="text" value="" autocomplete="false">
+				
+			</span>
+			<span class="row ">
+				<label for="password">Password:</label>		
+				<input id="password" name="password" class="required" tabindex="2" type="password" value="" autocomplete="off">
+			</span>	
+		</fieldset>
+		<div class="buttonHolder btn-group">
+			<input type="hidden" name="lt" value="e3s1">
+			<input type="hidden" name="_eventId" value="submit">
+	
+			<input class="btn-submit" name="submit" accesskey="l" value="Sign in" tabindex="4" type="submit">
+		</div>
+	</div>
+</form>
+
+
+</body>
+</html>

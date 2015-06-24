@@ -9,3 +9,18 @@
 	margin: 0;
 	font-family: "Arial";
 }
+
+.fm-v{
+	margin-left:40px;
+}
+
+
+.buttonHolder{
+	margin-left:170px;
+}
+.buttonHolder input{
+	background-color:#183152;
+	color:white;
+	font-family:"Arial";
+	border-color:black;
+}
