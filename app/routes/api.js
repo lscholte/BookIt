@@ -140,7 +140,7 @@ module.exports = function(app, express){
 
 		//get all bookings
 		.get(function(req, res){
-			Booking.find({}, function(err, bookings) {
+			Booking.find().populate('room user').exec(function(err, bookings){
 				if (err) res.send(err);
 
 				// return the users
