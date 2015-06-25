@@ -154,12 +154,18 @@ module.exports = function(app, express){
 
 		//get the specific booking
 		.get(function(req, res){
-			Booking.findById(req.params.id, function(err, booking) {
+			Booking.findById(req.params.id).populate('room user').exec(function(err, booking) {
 				if (err) res.send(err);
 
 				// return that user
 				res.json(booking);
 			});
+			/*Booking.findById(req.params.id, function(err, booking) {
+				if (err) res.send(err);
+
+				// return that user
+				res.json(booking);
+			});*/
 		})
 
 		//remove the specific booking
