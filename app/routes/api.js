@@ -115,8 +115,8 @@ module.exports = function(app, express){
 		.post(function(req, res){
 			
 			var booking = new Booking();		
-			booking.startDate = new Date(parseInt(req.body.startDate));
-			booking.endDate = new Date(parseInt(req.body.endDate));
+			booking.setStartDate(new Date(parseInt(req.body.startDate)));
+			booking.setEndDate(new Date(parseInt(req.body.endDate)));
 			
 			//Turn userName into user object so we can get its reference
 			User.findOne({username: req.body.username}, function(err, user){
@@ -124,6 +124,7 @@ module.exports = function(app, express){
 				//Check user doesn't have restriction
 				if(user.isBanned()){
 					res.status(401).send('User unable to create booking until ' + user.getBannedUntil.toTimeString());
+					return;
 				}
 				
 				//Check that the booking isn't too long
@@ -138,16 +139,20 @@ module.exports = function(app, express){
 				}
 				
 				//Check that booking falls within hours of operation
+				var day = booking.getStartDate().getDay();
+				if((day > 0 && day <6 && (booking.getStartDate().getHours() < 8 || booking.getEndDate().getHours() > 22)) || ((day == 0 || day == 6) && (booking.getStartDate().getHours() < 11 || booking.getEndDate().getHours() > 18))){
+					res.status(401).send('Rooms only available 8:00am - 10:00pm Monday-Friday and 11:00am - 6:00pm Saturday-Sunday');
+					return;
+				}
 				
 				
-				
-				booking.user = user._id;
+				booking.setUser(user._id);
 				//turn room number into room object so we can get its reference
 				Room.findOne({roomNumber: req.body.roomNumber}, function(err, room){
 					
 					//Check room is available
 					
-					booking.room = room._id;
+					booking.setRoom(room._id);
 					
 					//save the booking
 					booking.save(function(err) {
