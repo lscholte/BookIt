@@ -115,14 +115,38 @@ module.exports = function(app, express){
 		.post(function(req, res){
 			
 			var booking = new Booking();		
-			//fill in fields here
 			booking.startDate = new Date(parseInt(req.body.startDate));
 			booking.endDate = new Date(parseInt(req.body.endDate));
+			
 			//Turn userName into user object so we can get its reference
 			User.findOne({username: req.body.username}, function(err, user){
+				
+				//Check user doesn't have restriction
+				if(user.isBanned()){
+					res.status(401).send('User unable to create booking until ' + user.getBannedUntil.toTimeString());
+				}
+				
+				//Check that the booking isn't too long
+				var duration = (booking.getEndDate().getTime() - booking.getStartDate().getTime())/(60*60*1000);
+				if(user.getUserType() == 'student' && duration != 1){
+					res.status(401).send('Students can only book rooms for 1 hour');
+					return;	
+				}
+				else if(user.getUserType() == 'staff_faculty' && (duration != 1 || duration != 2 || duration != 3)){
+					res.status(401).send('Staff and Faculty can book rooms for either 1 hour, 2 hours or 3 hours');
+					return;
+				}
+				
+				//Check that booking falls within hours of operation
+				
+				
+				
 				booking.user = user._id;
 				//turn room number into room object so we can get its reference
 				Room.findOne({roomNumber: req.body.roomNumber}, function(err, room){
+					
+					//Check room is available
+					
 					booking.room = room._id;
 					
 					//save the booking
@@ -160,16 +184,16 @@ module.exports = function(app, express){
 				// return that user
 				res.json(booking);
 			});
-			/*Booking.findById(req.params.id, function(err, booking) {
-				if (err) res.send(err);
-
-				// return that user
-				res.json(booking);
-			});*/
 		})
 
 		//remove the specific booking
-		.delete(function(req, res){});
+		.delete(function(req, res){
+			Booking.remove({_id: req.params.id}, function(err, user) {
+				if (err) res.send(err);
+
+				res.json({ message: 'Successfully deleted' });
+			});
+		});
 
 
 	//__________________________
@@ -184,4 +208,4 @@ module.exports = function(app, express){
 		.delete(function(req, res){});
 	
 	return apiRouter;
-}
+};

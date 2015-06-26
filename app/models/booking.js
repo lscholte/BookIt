@@ -14,7 +14,7 @@ BookingSchema.methods.setUser = function(user){
 };
 
 BookingSchema.methods.getUser = function(){
-	return this.populate('user');
+	return this.user;
 };
 
 BookingSchema.methods.setRoom = function(room){
@@ -22,7 +22,7 @@ BookingSchema.methods.setRoom = function(room){
 };
 
 BookingSchema.methods.getRoom = function(){
-	return this.populate('room');	
+	return this.room;
 };
 
 BookingSchema.methods.setEquipment = function(equipment){
@@ -30,7 +30,7 @@ BookingSchema.methods.setEquipment = function(equipment){
 };
 
 BookingSchema.methods.getEquipment = function(){
-	return this.populate('equipment');
+	return this.equipment;
 };
 
 BookingSchema.methods.setStartDate = function(date){
