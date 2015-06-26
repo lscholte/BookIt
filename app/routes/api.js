@@ -132,8 +132,7 @@ module.exports = function(app, express){
 				if(user.getUserType() == 'student' && duration != 1){
 					res.status(401).send('Students can only book rooms for 1 hour');
 					return;	
-				}
-				else if(user.getUserType() == 'staff_faculty' && (duration != 1 || duration != 2 || duration != 3)){
+				} else if(user.getUserType() == 'staff_faculty' && (duration != 1 || duration != 2 || duration != 3)){
 					res.status(401).send('Staff and Faculty can book rooms for either 1 hour, 2 hours or 3 hours');
 					return;
 				}
@@ -145,23 +144,39 @@ module.exports = function(app, express){
 					return;
 				}
 				
-				
 				booking.setUser(user._id);
+				
 				//turn room number into room object so we can get its reference
 				Room.findOne({roomNumber: req.body.roomNumber}, function(err, room){
 					
 					//Check room is available
-					
-					booking.setRoom(room._id);
-					
-					//save the booking
-					booking.save(function(err) {
-						if (err) {
-							res.send(err);
+					//Get the count of all bookings that use the same room and have:
+					//	startTime < booking.startTime && endTime > booking.endTime
+					//	startTime > booking.startTime && startTime < booking.endTime
+					//	endTime > booking.startTime && endTime < booking.endTime
+					Booking.count({room: room._id, $or:[{$and: [{startDate: {$lte:booking.getStartDate()}}, {endDate: {$gte:booking.getEndDate()}}]}, {$and:[{startDate: {$gte:booking.getStartDate()}}, {starDate: {$lte:booking.getEndDate()}}]}, {$and:[{endDate: {$gte:booking.getStartDate()}}, {endDate: {$lte:booking.getEndDate()}}]}]}, function(err, count){
+						
+						if(err){
+							console.log(err);
 						}
-		
-						// return a message
-						res.json({ message: 'Booking created!' });
+						
+						if(count > 0){
+							res.status(401).send('This room is already in use during this time slot');
+							return;
+						}
+						
+						//Otherwise this room is available!
+						booking.setRoom(room._id);
+
+						//save the booking
+						booking.save(function(err) {
+							if (err) {
+								res.send(err);
+							}
+			
+							// return a message
+							res.json({ message: 'Booking created!' });
+						});
 					});
 				});
 			});
