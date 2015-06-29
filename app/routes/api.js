@@ -156,7 +156,7 @@ module.exports = function(app, express){
 					//	startTime < booking.startTime && endTime > booking.endTime
 					//	startTime > booking.startTime && startTime < booking.endTime
 					//	endTime > booking.startTime && endTime < booking.endTime
-					Booking.count({room: room._id, $or:[{$and: [{startDate: {$lte:booking.getStartDate()}}, {endDate: {$gte:booking.getEndDate()}}]}, {$and:[{startDate: {$gte:booking.getStartDate()}}, {starDate: {$lte:booking.getEndDate()}}]}, {$and:[{endDate: {$gte:booking.getStartDate()}}, {endDate: {$lte:booking.getEndDate()}}]}]}, function(err, count){
+					Booking.count({room: room._id, $or:[{$and: [{startDate: {$lte:booking.getStartDate()}}, {endDate: {$gte:booking.getEndDate()}}]}, {$and:[{startDate: {$gte:booking.getStartDate()}}, {startDate: {$lte:booking.getEndDate()}}]}, {$and:[{endDate: {$gte:booking.getStartDate()}}, {endDate: {$lte:booking.getEndDate()}}]}]}, function(err, count){
 						
 						if(err){console.log(err);}
 						
@@ -224,20 +224,12 @@ module.exports = function(app, express){
 	
 		.get(function(req, res){
 			
-			/*for(var j=1;j<=5;j++){
-				var equipment = new Equipment();
-				equipment.id = j;
-				equipment.setEquipmentType('laptop');
-				equipment.save();
-			}*/
-			
-			
 			if(req.query.startDate && req.query.endDate){
 				//Get all equipment books that occur at the same time:
 				//	startTime < booking.startTime && endTime > booking.endTime
 				//	startTime > booking.startTime && startTime < booking.endTime
 				//	endTime > booking.startTime && endTime < booking.endTime
-				Booking.find({$or:[{$and: [{startDate: {$lte:req.query.startDate}}, {endDate: {$gte:req.query.endDate}}]}, {$and:[{startDate: {$gte:req.query.startDate}}, {starDate: {$lte:req.query.endDate}}]}, {$and:[{endDate: {$gte:req.query.startDate}}, {endDate: {$lte:req.query.endDate}}]}]}).select('equipment').populate('equipment').exec(function(err, bookings){
+				Booking.find({$or:[{$and: [{startDate: {$lte:req.query.startDate}}, {endDate: {$gte:req.query.endDate}}]}, {$and:[{startDate: {$gte:req.query.startDate}}, {startDate: {$lte:req.query.endDate}}]}, {$and:[{endDate: {$gte:req.query.startDate}}, {endDate: {$lte:req.query.endDate}}]}]}).select('equipment').populate('equipment').exec(function(err, bookings){
 					var equipmentList = [];
 					bookings.forEach(function(booking){
 						equipmentList.concat(booking.equipment);
