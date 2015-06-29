@@ -5,6 +5,7 @@ var bodyParser 	= require("body-parser"),
 var User = require('../models/user');
 var Booking = require('../models/booking');
 var Room = require('../models/room');
+var Equipment = require('../models/equipment');
 
 module.exports = function(app, express){
 
@@ -218,6 +219,63 @@ module.exports = function(app, express){
 	//__________________________
 	//booking router with equipement
 	
+		
+	apiRouter.route('/equipment')
+	
+		.get(function(req, res){
+			
+			/*for(var j=1;j<=5;j++){
+				var equipment = new Equipment();
+				equipment.id = j;
+				equipment.setEquipmentType('laptop');
+				equipment.save();
+			}*/
+			
+			
+			if(req.query.startDate && req.query.endDate){
+				//Get all equipment books that occur at the same time:
+				//	startTime < booking.startTime && endTime > booking.endTime
+				//	startTime > booking.startTime && startTime < booking.endTime
+				//	endTime > booking.startTime && endTime < booking.endTime
+				Booking.find({$or:[{$and: [{startDate: {$lte:req.query.startDate}}, {endDate: {$gte:req.query.endDate}}]}, {$and:[{startDate: {$gte:req.query.startDate}}, {starDate: {$lte:req.query.endDate}}]}, {$and:[{endDate: {$gte:req.query.startDate}}, {endDate: {$lte:req.query.endDate}}]}]}).select('equipment').populate('equipment').exec(function(err, bookings){
+					var equipmentList = [];
+					bookings.forEach(function(booking){
+						equipmentList.concat(booking.equipment);
+					});
+					
+					//get all equipment so we can calculate available equipment
+					var unusedEquipment = [];
+					Equipment.find({}, function(err, allEquipment){
+
+						if(err){
+							console.log(err);
+						}
+
+						
+						//for every piece of equipment, check if it's in list of used equipment. If it's not, append it to unused equipment list
+						allEquipment.forEach(function(item){
+							var itemFound = false;
+							//we have to use this loop instead of array.includes() because we're comparing objects
+							for(var i=0; i < equipmentList.length; i++){
+								if(equipmentList[i].getId() == item.getId()){
+									itemFound = true;
+									break;
+								}
+							}
+							
+							if(!itemFound){
+								unusedEquipment.push(item);
+							}
+						});
+						res.json(unusedEquipment);
+					});
+					
+				});	
+			}else{
+				res.status(400).send('Please specify a startDate and an endDate for the query.');
+			}
+		});
+	
 	apiRouter.route('/bookings/equipment/:id')
 		
 		//update the equipment on a booking
@@ -225,6 +283,6 @@ module.exports = function(app, express){
 		
 		//remove the equipment from a booking
 		.delete(function(req, res){});
-	
+		
 	return apiRouter;
 };

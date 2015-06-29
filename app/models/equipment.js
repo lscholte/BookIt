@@ -18,4 +18,4 @@ EquipmentSchema.methods.getEquipmentType = function(){
 	return this.equipmentType;
 };
 
-module.exports = mongoose.model('Equipment', EquipmentSchema);
+module.exports = mongoose.model('Equipment', EquipmentSchema, 'Equipment');
