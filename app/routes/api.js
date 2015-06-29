@@ -128,6 +128,7 @@ module.exports = function(app, express){
 				}
 				
 				//Check that the booking isn't too long
+				// Note: this checks that bookings are exactly 1, 2, or 3 hours long. This may be too restrictive
 				var duration = (booking.getEndDate().getTime() - booking.getStartDate().getTime())/(60*60*1000);
 				if(user.getUserType() == 'student' && duration != 1){
 					res.status(401).send('Students can only book rooms for 1 hour');
@@ -156,9 +157,7 @@ module.exports = function(app, express){
 					//	endTime > booking.startTime && endTime < booking.endTime
 					Booking.count({room: room._id, $or:[{$and: [{startDate: {$lte:booking.getStartDate()}}, {endDate: {$gte:booking.getEndDate()}}]}, {$and:[{startDate: {$gte:booking.getStartDate()}}, {starDate: {$lte:booking.getEndDate()}}]}, {$and:[{endDate: {$gte:booking.getStartDate()}}, {endDate: {$lte:booking.getEndDate()}}]}]}, function(err, count){
 						
-						if(err){
-							console.log(err);
-						}
+						if(err){console.log(err);}
 						
 						if(count > 0){
 							res.status(401).send('This room is already in use during this time slot');
