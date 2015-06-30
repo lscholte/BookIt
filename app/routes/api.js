@@ -76,6 +76,11 @@ module.exports = function(app, express){
 			User.findOne({username: req.params.username}, function(err, user) {
 
 				if (err) res.send(err);
+				
+				if(!user){
+					res.status(404).send('User ' + req.params.username + ' not found.');
+					return;
+				}
 
 				// Update user fields from the information in the reqest, if it exisits
 				for (e in req.body) {
