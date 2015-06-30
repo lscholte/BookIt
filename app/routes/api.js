@@ -1,10 +1,10 @@
 
-//not all require's are listed here yet
-var bodyParser 	 = require("body-parser"),
-	jwt		     = require("jsonwebtoken"),
-	User         = require('../models/user'),
-	Booking      = require('../models/booking'),
-	Room         = require('../models/room');
+var bodyParser = require("body-parser"),
+    jwt	       = require("jsonwebtoken"),
+    User       = require('../models/user'),
+    Booking    = require('../models/booking'),
+    Room       = require('../models/room'),
+    Equipment  = require('../models/equipment');
 
 module.exports = function(app, express){
 
@@ -151,8 +151,10 @@ module.exports = function(app, express){
 					res.status(401).send('User unable to create booking until ' + user.getBannedUntil.toTimeString());
 					return;
 				}
-
+				
 				// Check that the booking isn't too long
+				// Note: this checks that bookings are exactly 1, 2, or 3 hours long. This may be too restrictive
+
 				var duration = (booking.getEndDate().getTime() - booking.getStartDate().getTime())/(60*60*1000);
 				if(user.getUserType() == 'student' && duration != 1){
 					res.status(401).send('Students can only book rooms for 1 hour');
@@ -162,7 +164,7 @@ module.exports = function(app, express){
 					return;
 				}
 
-				//Check that booking falls within hours of operation
+				// Check that booking falls within hours of operation
 				var day = booking.getStartDate().getDay();
 				if((day > 0 && day <6 && (booking.getStartDate().getHours() < 8 || booking.getEndDate().getHours() > 22)) || ((day == 0 || day == 6) && (booking.getStartDate().getHours() < 11 || booking.getEndDate().getHours() > 18))){
 					res.status(401).send('Rooms only available 8:00am - 10:00pm Monday-Friday and 11:00am - 6:00pm Saturday-Sunday');
@@ -179,15 +181,6 @@ module.exports = function(app, express){
 					//	startTime < booking.startTime && endTime > booking.endTime
 					//	startTime > booking.startTime && startTime < booking.endTime
 					//	endTime > booking.startTime && endTime < booking.endTime
-					/*					__ 	 __
-					_______________  	|	 |
-					|	startTime |		|	 |		 __
-					|		      |		|	 |	 __  |
-					| new booking |		| 	_|_  |	 |
-					|			  |		|		 | 	_|_
-					|____endTime__|		|		 |
-									   _|_ 		_|_
-					*/
 					Booking.count({room: room._id, $or:[{$and: [{startDate: {$lte:booking.getStartDate()}}, {endDate: {$gte:booking.getEndDate()}}]}, {$and:[{startDate: {$gte:booking.getStartDate()}}, {startDate: {$lte:booking.getEndDate()}}]}, {$and:[{endDate: {$gte:booking.getStartDate()}}, {endDate: {$lte:booking.getEndDate()}}]}]}, function(err, count){
 
 						if(err){
@@ -253,13 +246,69 @@ module.exports = function(app, express){
 
 	//---------------------------
 	// API route with equipement specified
+		
+	apiRouter.route('/equipment')
+	
+		.get(function(req, res){
+			
+			if(req.query.startDate && req.query.endDate){
+				//Get all equipment books that occur at the same time:
+				//	startTime < booking.startTime && endTime > booking.endTime
+				//	startTime > booking.startTime && startTime < booking.endTime
+				//	endTime > booking.startTime && endTime < booking.endTime
+				Booking.find({$or:[{$and: [{startDate: {$lte:req.query.startDate}}, {endDate: {$gte:req.query.endDate}}]}, {$and:[{startDate: {$gte:req.query.startDate}}, {startDate: {$lte:req.query.endDate}}]}, {$and:[{endDate: {$gte:req.query.startDate}}, {endDate: {$lte:req.query.endDate}}]}]}).select('equipment').populate('equipment').exec(function(err, bookings){
+					var equipmentList = [];
+					bookings.forEach(function(booking){
+						equipmentList.concat(booking.equipment);
+					});
+					
+					//get all equipment so we can calculate available equipment
+					var unusedEquipment = [];
+					Equipment.find({}, function(err, allEquipment){
+
+						if(err){
+							console.log(err);
+						}
+
+						
+						//for every piece of equipment, check if it's in list of used equipment. If it's not, append it to unused equipment list
+						allEquipment.forEach(function(item){
+							var itemFound = false;
+							//we have to use this loop instead of array.includes() because we're comparing objects
+							for(var i=0; i < equipmentList.length; i++){
+								if(equipmentList[i].getId() == item.getId()){
+									itemFound = true;
+									break;
+								}
+							}
+							
+							if(!itemFound){
+								unusedEquipment.push(item);
+							}
+						});
+						res.json(unusedEquipment);
+					});
+					
+				});	
+			}else{
+				res.status(400).send('Please specify a startDate and an endDate for the query.');
+			}
+		});
+	
 	apiRouter.route('/bookings/equipment/:id')
 
 		//update the equipment on a booking
 		.put(function(req, res){})
 
 		//remove the equipment from a booking
-		.delete(function(req, res){});
+		.delete(function(req, res){
+			Booking.remove({
+				_id: req.params.id
+			}, function(err, user) {
+				if (err) res.send(err);
 
+				res.json({ message: 'Successfully deleted' });
+			});
+		});
 	return apiRouter;
 };
