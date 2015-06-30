@@ -63,6 +63,7 @@
 
 <!-- Create Booking Button -->
 <button type="button" class="btn btn-default btn-lg" data-toggle="modal" data-target="#selectDayModal">Create a Booking</button>
+<button type="button" class="btn btn-default btn-lg" data-toggle="modal" data-target="#selectTimeModal">Select a Time</button>
 
 <!-- Select Day Modal -->
 <div id="selectDayModal" class="modal fade" role="dialog">
@@ -88,7 +89,116 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal" datatarget="#selectTimeModal">Continue</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal" data-toggle="modal" datatarget="#selectTimeModal">Continue</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+        
+    </div>
+</div>
+<!-- Modal -->
+<div id="selectTimeModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">    
+	<!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Select a Date to Book</h4>
+            </div>
+            <div class="modal-body">
+                	<div class="container">
+		<h2>Make Booking</h2>
+			
+		<div style="height:300px;overflow:scroll;">
+		<table id="thetable" class="table table-bordered table-hover" >
+			<thead>
+				<tr>
+				<th>Time</th>
+				<th>Availability</th>
+				</tr>
+			</thead>
+    <div >
+	<tbody >
+      <tr>
+        <td>Time1</td>
+        <td>Y/N</td>
+      </tr>
+      <tr>
+        <td>Time2</td>
+        <td>Y/N</td>
+      </tr>
+      <tr>
+        <td>Time3</td>
+        <td>Y/N</td>
+      </tr>
+	   <tr>
+        <td>Time4</td>
+        <td>Y/N</td>
+      </tr>
+	  <tr>
+        <td>Time4</td>
+        <td>Y/N</td>
+      </tr>
+	  <tr>
+        <td>Time4</td>
+        <td>Y/N</td>
+      </tr>
+	  <tr>
+        <td>Time4</td>
+        <td>Y/N</td>
+      </tr>
+	  <tr>
+        <td>Time4</td>
+        <td>Y/N</td>
+      </tr>
+	  <tr>
+        <td>Time4</td>
+        <td>Y/N</td>
+      </tr>
+	  <tr>
+        <td>Time4</td>
+        <td>Y/N</td>
+      </tr>
+	  <tr>
+        <td>Time4</td>
+        <td>Y/N</td>
+      </tr>
+	  <tr>
+        <td>Time4</td>
+        <td>Y/N</td>
+      </tr>
+	  <tr>
+        <td>Time4</td>
+        <td>Y/N</td>
+      </tr>
+	  <tr>
+        <td>Time4</td>
+        <td>Y/N</td>
+      </tr>
+	  <tr>
+        <td>Time4</td>
+        <td>Y/N</td>
+      </tr>
+	  <tr>
+        <td>Time4</td>
+        <td>Y/N</td>
+      </tr>
+	   <tr>
+        <td>Time5</td>
+        <td>Y/N</td>
+		 <tr>
+        <td>Time6</td>
+        <td>Y/N</td>
+      </tr>
+      </tr>
+    </tbody>
+	</div>
+  </table>
+	</div>
+	</div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Continue</button>
                 <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
             </div>
         </div>
