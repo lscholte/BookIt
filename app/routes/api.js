@@ -183,9 +183,9 @@ module.exports = function(app, express){
 
 					//Check room is available
 					//Get the count of all bookings that use the same room and have:
-					//	startTime < booking.startTime && endTime > booking.endTime or
-					//	startTime > booking.startTime && startTime < booking.endTime or
-					//	endTime > booking.startTime && endTime < booking.endTime
+					//	startTime <= booking.startTime && endTime >= booking.endTime or
+					//	startTime >= booking.startTime && startTime < booking.endTime or
+					//	endTime > booking.startTime && endTime <= booking.endTime
 					Booking.count({room: room._id, $or:[{$and: [{startDate: {$lte:booking.getStartDate()}}, {endDate: {$gte:booking.getEndDate()}}]}, {$and:[{startDate: {$gte:booking.getStartDate()}}, {startDate: {$lt:booking.getEndDate()}}]}, {$and:[{endDate: {$gt:booking.getStartDate()}}, {endDate: {$lte:booking.getEndDate()}}]}]}, function(err, count){
 
 						if(err){
@@ -201,14 +201,14 @@ module.exports = function(app, express){
 						booking.room = room._id;
 
 						//save the booking
-						booking.save(function(err) {
+						booking.save(function(err, booking) {
 							if (err) {
 								res.send(err);
 								return;
 							}
 
 							// Return a message
-							res.json({ message: 'Booking created!' });
+							res.json({ message: 'Booking created!', id: booking._id});
 						});
 					});
 				});
