@@ -227,7 +227,7 @@ module.exports = function(app, express){
 				query = Booking.find();
 			}
 			
-			query.populate('room user').exec(function(err, bookings){
+			query.populate('room user equipment').exec(function(err, bookings){
 				if (err) res.send(err);
 
 				// return the users
@@ -241,7 +241,7 @@ module.exports = function(app, express){
 
 		// Get the specific booking
 		.get(function(req, res){
-			Booking.findById(req.params.id).populate('room user').exec(function(err, booking) {
+			Booking.findById(req.params.id).populate('room user equipment').exec(function(err, booking) {
 				if (err) res.send(err);
 
 				// return that booking
