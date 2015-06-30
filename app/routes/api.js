@@ -221,7 +221,7 @@ module.exports = function(app, express){
 			var query;
 			
 			if(req.query.startDate && req.query.endDate){
-				query = Booking.find({$or:[{$and: [{startDate: {$lte:req.query.startDate}}, {endDate: {$gte:req.query.endDate}}]}, {$and:[{startDate: {$gte:req.query.startDate}}, {startDate: {$lte:req.query.endDate}}]}, {$and:[{endDate: {$gte:req.query.startDate}}, {endDate: {$lte:req.query.endDate}}]}]});	
+				query = Booking.find({$or:[{$and: [{startDate: {$lte:req.query.startDate}}, {endDate: {$gte:req.query.endDate}}]}, {$and:[{startDate: {$gte:req.query.startDate}}, {startDate: {$lt:req.query.endDate}}]}, {$and:[{endDate: {$gt:req.query.startDate}}, {endDate: {$lte:req.query.endDate}}]}]});	
 			}
 			else{
 				query = Booking.find();
