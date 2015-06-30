@@ -12,6 +12,11 @@ app.config(function($routeProvider, $locationProvider){
 
                  templateUrl: 'app/views/pages/login.html'
                  })
+           
+           .when("/main", {
+                 
+                 templateUrl: 'app/views/pages/main.html'
+                 });
          
            // Added to remove the # from URLs
            $locationProvider.html5Mode(true);
