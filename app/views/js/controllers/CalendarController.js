@@ -1,1 +1,3 @@
-app.controller('CalendarController',['$scope']);
+app.controller('CalendarController',['$scope', 'roomTotals', function($scope, roomTotals) {
+
+}

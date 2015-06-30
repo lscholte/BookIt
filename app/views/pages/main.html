@@ -4,8 +4,39 @@
             
         </div>
         <div class="col-xs-10">
-            <div class="jumbotron">
-                A Calendar View Will Be Seen Here
+            <div class="container">
+                <h2>Rooms Available</h2>
+                <div class="calendar-header">
+                    <div class="previous">
+                        <button type="button" class="btn btn-default">Previous Week</button>
+                    </div>
+                        {{ date }}
+                    <div class="next">
+                        <button type="button" class="btn btn-default">Next Week</button>
+                    </div>
+                </div>
+
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Sunday</th>
+                            <th>Monday</th>
+                            <th>Tuesday</th>
+                            <th>Wednesday</th>
+                            <th>Thursday</th>
+                            <th>Friday</th>
+                            <th>Saturday</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Hello</td>
+                        </tr>
+                        <tr>
+                            <td>Hello</td>
+                        </tr>
+                    </tbody>
+                </table>                           
             </div>
         </div>
         <div class="col-xs-1">
@@ -69,7 +100,7 @@
 <div id="selectTimeModal" class="modal fade" role="dialog">
     <div class="modal-dialog">    
 	<!-- Modal content-->
-        <div class="modal-content">
+        <div style="overflow:auto"; class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
                 <h4 class="modal-title">Select a Date to Book</h4>
@@ -78,7 +109,7 @@
                 	<div class="container">
 		<h2>Make Booking</h2>
 			
-		<div style="height:300px;overflow:scroll;">
+		<div style="width:400px;height:300px;overflow:scroll;">
 		<table id="thetable" class="table table-bordered table-hover" >
 			<thead>
 				<tr>

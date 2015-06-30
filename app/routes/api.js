@@ -183,10 +183,10 @@ module.exports = function(app, express){
 
 					//Check room is available
 					//Get the count of all bookings that use the same room and have:
-					//	startTime < booking.startTime && endTime > booking.endTime
-					//	startTime > booking.startTime && startTime < booking.endTime
+					//	startTime < booking.startTime && endTime > booking.endTime or
+					//	startTime > booking.startTime && startTime < booking.endTime or
 					//	endTime > booking.startTime && endTime < booking.endTime
-					Booking.count({room: room._id, $or:[{$and: [{startDate: {$lte:booking.getStartDate()}}, {endDate: {$gte:booking.getEndDate()}}]}, {$and:[{startDate: {$gte:booking.getStartDate()}}, {startDate: {$lte:booking.getEndDate()}}]}, {$and:[{endDate: {$gte:booking.getStartDate()}}, {endDate: {$lte:booking.getEndDate()}}]}]}, function(err, count){
+					Booking.count({room: room._id, $or:[{$and: [{startDate: {$lte:booking.getStartDate()}}, {endDate: {$gte:booking.getEndDate()}}]}, {$and:[{startDate: {$gte:booking.getStartDate()}}, {startDate: {$lt:booking.getEndDate()}}]}, {$and:[{endDate: {$gt:booking.getStartDate()}}, {endDate: {$lte:booking.getEndDate()}}]}]}, function(err, count){
 
 						if(err){
 							console.log(err);
@@ -221,13 +221,13 @@ module.exports = function(app, express){
 			var query;
 			
 			if(req.query.startDate && req.query.endDate){
-				query = Booking.find({$or:[{$and: [{startDate: {$lte:req.query.startDate}}, {endDate: {$gte:req.query.endDate}}]}, {$and:[{startDate: {$gte:req.query.startDate}}, {startDate: {$lte:req.query.endDate}}]}, {$and:[{endDate: {$gte:req.query.startDate}}, {endDate: {$lte:req.query.endDate}}]}]});	
+				query = Booking.find({$or:[{$and: [{startDate: {$lte:req.query.startDate}}, {endDate: {$gte:req.query.endDate}}]}, {$and:[{startDate: {$gte:req.query.startDate}}, {startDate: {$lt:req.query.endDate}}]}, {$and:[{endDate: {$gt:req.query.startDate}}, {endDate: {$lte:req.query.endDate}}]}]});	
 			}
 			else{
 				query = Booking.find();
 			}
 			
-			query.populate('room user').exec(function(err, bookings){
+			query.populate('room user equipment').exec(function(err, bookings){
 				if (err) res.send(err);
 
 				// return the users
@@ -241,7 +241,7 @@ module.exports = function(app, express){
 
 		// Get the specific booking
 		.get(function(req, res){
-			Booking.findById(req.params.id).populate('room user').exec(function(err, booking) {
+			Booking.findById(req.params.id).populate('room user equipment').exec(function(err, booking) {
 				if (err) res.send(err);
 
 				// return that booking
@@ -261,7 +261,7 @@ module.exports = function(app, express){
 
 
 	//---------------------------
-	// API route with equipement specified
+	// API route with equipment specified
 		
 	apiRouter.route('/equipment')
 	
@@ -274,7 +274,7 @@ module.exports = function(app, express){
 				//	startTime < booking.startTime && endTime > booking.endTime
 				//	startTime > booking.startTime && startTime < booking.endTime
 				//	endTime > booking.startTime && endTime < booking.endTime
-				Booking.find({$or:[{$and: [{startDate: {$lte:req.query.startDate}}, {endDate: {$gte:req.query.endDate}}]}, {$and:[{startDate: {$gte:req.query.startDate}}, {startDate: {$lte:req.query.endDate}}]}, {$and:[{endDate: {$gte:req.query.startDate}}, {endDate: {$lte:req.query.endDate}}]}]}).select('equipment').populate('equipment').exec(function(err, bookings){
+				Booking.find({$or:[{$and: [{startDate: {$lte:req.query.startDate}}, {endDate: {$gte:req.query.endDate}}]}, {$and:[{startDate: {$gte:req.query.startDate}}, {startDate: {$lt:req.query.endDate}}]}, {$and:[{endDate: {$gt:req.query.startDate}}, {endDate: {$lte:req.query.endDate}}]}]}).select('equipment').populate('equipment').exec(function(err, bookings){
 					var equipmentList = [];
 					bookings.forEach(function(booking){
 						equipmentList.concat(booking.equipment);
@@ -309,18 +309,42 @@ module.exports = function(app, express){
 					
 				});	
 			}else{
-				res.status(400).send('Please specify a startDate and an endDate for the query.');
+				res.status(400).send("Please specify a startDate and an endDate for the query. Here's all the equipment:");
 			}
 		});
 	
-	apiRouter.route('/bookings/equipment/:id')
+	apiRouter.route('/bookings/equipment/:bookingID')
 
 		//update the equipment on a booking
-		.put(function(req, res){})
+		.put(function(req, res){
+			if(req.body.equipmentID){
+				Booking.findById(req.params.bookingID).exec(function(err, booking) {
+					if (err) res.send(err);
+					Equipment.findById(req.body.equipmentID).exec(function(err, equip) {
+						if (err) res.send(err);
+						console.log(equip);
+						booking.equipment.push(equip);
+						booking.save(function(err){
+							if (err) res.send(err);
+							res.json(booking);
+						});
+					});
+				});
+			} else {
+				res.status(400).send({message : "Specify an equipmentID in the body to add, else use /DELETE to remove all equipment" });
+			}
+			
+		})
 
 		//remove the equipment from a booking
-
-		.delete(function(req, res){});
-
+		.delete(function(req, res){
+			Booking.findById(req.params.bookingID).exec(function(err, booking) {
+				if (err) res.send(err);
+				booking.equipment = [];
+				booking.save(function(err){
+					res.status(200).send({message : "Removed all equipment on booking, send equipmentID in /PUT body to add", booking : booking});
+				});
+			});
+		});
 	return apiRouter;
 };
