@@ -309,7 +309,7 @@ module.exports = function(app, express){
 					
 				});	
 			}else{
-				res.status(400).send("Please specify a startDate and an endDate for the query. Here's all the equipment:");
+				res.status(400).send("Please specify a startDate and an endDate for the query.");
 			}
 		});
 	
@@ -322,7 +322,14 @@ module.exports = function(app, express){
 					if (err) res.send(err);
 					Equipment.findById(req.body.equipmentID).exec(function(err, equip) {
 						if (err) res.send(err);
-						console.log(equip);
+						//TODO disallow same types of equipment, this only disallows the same piece equipment
+						for (var i = 0; i < booking.equipment.length; i++ ){
+							var e = booking.equipment[i];
+							if (e.toString() == equip._id.toString()){					
+								res.status(400).send("That equipment is already attached to this booking");
+								return;
+							}
+						}
 						booking.equipment.push(equip);
 						booking.save(function(err){
 							if (err) res.send(err);
