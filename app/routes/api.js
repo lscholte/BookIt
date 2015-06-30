@@ -258,7 +258,7 @@ module.exports = function(app, express){
 
 
 	//---------------------------
-	// API route with equipement specified
+	// API route with equipment specified
 		
 	apiRouter.route('/equipment')
 	
@@ -304,23 +304,41 @@ module.exports = function(app, express){
 					
 				});	
 			}else{
-				res.status(400).send('Please specify a startDate and an endDate for the query.');
+				res.status(400).send("Please specify a startDate and an endDate for the query. Here's all the equipment:");
 			}
 		});
 	
-	apiRouter.route('/bookings/equipment/:id')
+	apiRouter.route('/bookings/equipment/:bookingID')
 
 		//update the equipment on a booking
-		.put(function(req, res){})
+		.put(function(req, res){
+			if(req.body.equipmentID){
+				Booking.findById(req.params.bookingID).exec(function(err, booking) {
+					if (err) res.send(err);
+					Equipment.findById(req.body.equipmentID).exec(function(err, equip) {
+						if (err) res.send(err);
+						console.log(equip);
+						booking.equipment.push(equip);
+						booking.save(function(err){
+							if (err) res.send(err);
+							res.json(booking);
+						});
+					});
+				});
+			} else {
+				res.status(400).send({message : "Specify an equipmentID in the body to add, else use /DELETE to remove all equipment" });
+			}
+			
+		})
 
 		//remove the equipment from a booking
 		.delete(function(req, res){
-			Booking.remove({
-				_id: req.params.id
-			}, function(err, user) {
+			Booking.findById(req.params.bookingID).exec(function(err, booking) {
 				if (err) res.send(err);
-
-				res.json({ message: 'Successfully deleted' });
+				booking.equipment = [];
+				booking.save(function(err){
+					res.status(200).send({message : "Removed all equipment on booking, send equipmentID in /PUT body to add", booking : booking});
+				});
 			});
 		});
 	return apiRouter;
