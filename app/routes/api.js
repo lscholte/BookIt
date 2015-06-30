@@ -274,7 +274,7 @@ module.exports = function(app, express){
 				//	startTime < booking.startTime && endTime > booking.endTime
 				//	startTime > booking.startTime && startTime < booking.endTime
 				//	endTime > booking.startTime && endTime < booking.endTime
-				Booking.find({$or:[{$and: [{startDate: {$lte:req.query.startDate}}, {endDate: {$gte:req.query.endDate}}]}, {$and:[{startDate: {$gte:req.query.startDate}}, {startDate: {$lte:req.query.endDate}}]}, {$and:[{endDate: {$gte:req.query.startDate}}, {endDate: {$lte:req.query.endDate}}]}]}).select('equipment').populate('equipment').exec(function(err, bookings){
+				Booking.find({$or:[{$and: [{startDate: {$lte:req.query.startDate}}, {endDate: {$gte:req.query.endDate}}]}, {$and:[{startDate: {$gte:req.query.startDate}}, {startDate: {$lt:req.query.endDate}}]}, {$and:[{endDate: {$gt:req.query.startDate}}, {endDate: {$lte:req.query.endDate}}]}]}).select('equipment').populate('equipment').exec(function(err, bookings){
 					var equipmentList = [];
 					bookings.forEach(function(booking){
 						equipmentList.concat(booking.equipment);
