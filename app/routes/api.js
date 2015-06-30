@@ -195,9 +195,7 @@ module.exports = function(app, express){
 						//Otherwise this room is available!
 						booking.room = room._id;
 
-						console.log(booking);
-
-						// Save the booking
+						//save the booking
 						booking.save(function(err) {
 							if (err) {
 								res.send(err);
@@ -262,6 +260,8 @@ module.exports = function(app, express){
 		
 	apiRouter.route('/equipment')
 	
+	
+		//Get equipment that is available during the specified time period
 		.get(function(req, res){
 			
 			if(req.query.startDate && req.query.endDate){
@@ -314,14 +314,8 @@ module.exports = function(app, express){
 		.put(function(req, res){})
 
 		//remove the equipment from a booking
-		.delete(function(req, res){
-			Booking.remove({
-				_id: req.params.id
-			}, function(err, user) {
-				if (err) res.send(err);
 
-				res.json({ message: 'Successfully deleted' });
-			});
-		});
+		.delete(function(req, res){});
+
 	return apiRouter;
 };
