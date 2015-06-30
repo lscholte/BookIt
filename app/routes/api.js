@@ -146,7 +146,7 @@ module.exports = function(app, express){
 					return;
 				}
 				
-				booking.setUser(user._id);
+				booking.user = user._id;
 				
 				//turn room number into room object so we can get its reference
 				Room.findOne({roomNumber: req.body.roomNumber}, function(err, room){
@@ -166,12 +166,15 @@ module.exports = function(app, express){
 						}
 						
 						//Otherwise this room is available!
-						booking.setRoom(room._id);
+						booking.room = room._id;
+
+						console.log(booking);
 
 						//save the booking
 						booking.save(function(err) {
 							if (err) {
 								res.send(err);
+								return;
 							}
 			
 							// return a message
@@ -184,7 +187,17 @@ module.exports = function(app, express){
 
 		//get all bookings
 		.get(function(req, res){
-			Booking.find().populate('room user').exec(function(err, bookings){
+			
+			var query;
+			
+			if(req.query.startDate && req.query.endDate){
+				query = Booking.find({$or:[{$and: [{startDate: {$lte:req.query.startDate}}, {endDate: {$gte:req.query.endDate}}]}, {$and:[{startDate: {$gte:req.query.startDate}}, {startDate: {$lte:req.query.endDate}}]}, {$and:[{endDate: {$gte:req.query.startDate}}, {endDate: {$lte:req.query.endDate}}]}]});	
+			}
+			else{
+				query = Booking.find();
+			}
+			
+			query.populate('room user').exec(function(err, bookings){
 				if (err) res.send(err);
 
 				// return the users
