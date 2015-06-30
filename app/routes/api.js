@@ -76,6 +76,11 @@ module.exports = function(app, express){
 			User.findOne({username: req.params.username}, function(err, user) {
 
 				if (err) res.send(err);
+				
+				if(!user){
+					res.status(404).send('User ' + req.params.username + ' not found.');
+					return;
+				}
 
 				// Update user fields from the information in the reqest, if it exisits
 				for (e in req.body) {
@@ -178,10 +183,10 @@ module.exports = function(app, express){
 
 					//Check room is available
 					//Get the count of all bookings that use the same room and have:
-					//	startTime < booking.startTime && endTime > booking.endTime
-					//	startTime > booking.startTime && startTime < booking.endTime
+					//	startTime < booking.startTime && endTime > booking.endTime or
+					//	startTime > booking.startTime && startTime < booking.endTime or
 					//	endTime > booking.startTime && endTime < booking.endTime
-					Booking.count({room: room._id, $or:[{$and: [{startDate: {$lte:booking.getStartDate()}}, {endDate: {$gte:booking.getEndDate()}}]}, {$and:[{startDate: {$gte:booking.getStartDate()}}, {startDate: {$lte:booking.getEndDate()}}]}, {$and:[{endDate: {$gte:booking.getStartDate()}}, {endDate: {$lte:booking.getEndDate()}}]}]}, function(err, count){
+					Booking.count({room: room._id, $or:[{$and: [{startDate: {$lte:booking.getStartDate()}}, {endDate: {$gte:booking.getEndDate()}}]}, {$and:[{startDate: {$gte:booking.getStartDate()}}, {startDate: {$lt:booking.getEndDate()}}]}, {$and:[{endDate: {$gt:booking.getStartDate()}}, {endDate: {$lte:booking.getEndDate()}}]}]}, function(err, count){
 
 						if(err){
 							console.log(err);
@@ -195,9 +200,7 @@ module.exports = function(app, express){
 						//Otherwise this room is available!
 						booking.room = room._id;
 
-						console.log(booking);
-
-						// Save the booking
+						//save the booking
 						booking.save(function(err) {
 							if (err) {
 								res.send(err);
@@ -262,6 +265,8 @@ module.exports = function(app, express){
 		
 	apiRouter.route('/equipment')
 	
+	
+		//Get equipment that is available during the specified time period
 		.get(function(req, res){
 			
 			if(req.query.startDate && req.query.endDate){

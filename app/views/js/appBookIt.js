@@ -5,10 +5,14 @@ app.config(function($routeProvider, $locationProvider){
            $routeProvider
            
            // Route for home page
+          
+           // Route for main page 
+
            .when("/", {
+
                  templateUrl: 'app/views/pages/login.html'
-                 });
-           
+                 })
+         
            // Added to remove the # from URLs
            $locationProvider.html5Mode(true);
-           });
+           })
