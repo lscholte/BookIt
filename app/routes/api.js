@@ -274,7 +274,15 @@ module.exports = function(app, express){
 		.put(function(req, res){})
 		
 		//remove the equipment from a booking
-		.delete(function(req, res){});
+		.delete(function(req, res){
+			Booking.remove({
+				_id: req.params.id
+			}, function(err, user) {
+				if (err) res.send(err);
+
+				res.json({ message: 'Successfully deleted' });
+			});
+		});
 		
 	return apiRouter;
 };
