@@ -1,65 +1,69 @@
 
-//not all require's are listed here yet
-var bodyParser 	= require("body-parser"),
-    jwt		= require("jsonwebtoken");
-var User = require('../models/user');
-var Booking = require('../models/booking');
-var Room = require('../models/room');
-var Equipment = require('../models/equipment');
+var bodyParser = require("body-parser"),
+    jwt	       = require("jsonwebtoken"),
+    User       = require('../models/user'),
+    Booking    = require('../models/booking'),
+    Room       = require('../models/room'),
+    Equipment  = require('../models/equipment');
 
 module.exports = function(app, express){
 
 	var apiRouter = express.Router();
-	//The commands below are accessed from http://localhost:1337/api/<route>
-	
+	//The commands below are accessed from http://localhost:8080/api/<route>
+
 	apiRouter.get('/', function(req, res){
-		res.json({message: 'user base page'});
+		res.json({message: 'api base page'});
 	});
 
 	//---------------------------
-	//no specified user
+	// API route without a specified user
 	apiRouter.route('/users')
 
-		//user creation
+		// New user creation
 		.post(function(req, res){
-			var user = new User();		// create a new instance of the User model
-			user.name = req.body.name;  // set the users name (comes from the request)
-			user.username = req.body.username;  // set the users username (comes from the request)
-			user.password = req.body.password;  // set the users password (comes from the request)
-			user.userType = req.body.userType;
+			var user = new User();			// Create a new instance of the User model
+			user.name = req.body.name;  		// Using info from the request set the users name, ...
+			user.username = req.body.username;	// 	 ... username, ...
+			user.password = req.body.password;	// 	 ... password, ...
+			user.userType = req.body.userType;	//	 ... and user type.
 
 			user.save(function(err) {
 				if (err) {
-					// duplicate entry
-					if (err.code == 11000) 
-						return res.json({ success: false, message: 'A user with that username already exists. '});
-					else 
-						return res.send(err);
+					switch (err.code){
+					// Switch for catching errors on user creation: eg. username and password requirements
+						case 11000:
+							return res.json({success: false, message: 'That username is taken!'});
+							break;
+						default:
+							res.send(err);
+							break;
+					}
 				}
 
-				// return a message
+				// Return a message
 				res.json({ message: 'User created!' });
 			});
 		})
 
-		//get all users
+		// Get and return all users
 		.get(function(req, res){
+			// Find operation with no matching arguement - returns all
 			User.find({}, function(err, users) {
 				if (err) res.send(err);
 
-				// return the users
+				// Return the users
 				res.json(users);
 			});
 		});
-	
+
 
 	//---------------------------
-	//with a specified user
-	apiRouter.route('/users/:id')
+	// API route with a specified user
+	apiRouter.route('/users/:username')
 
-		//return the specific user
+		// Return the specific (:username) user
 		.get(function (req, res) {
-			User.findOne({username: req.params.id}, function(err, user) {
+			User.findOne({username: req.params.username}, function(err, user) {
 				if (err) res.send(err);
 
 				// return that user
@@ -69,77 +73,103 @@ module.exports = function(app, express){
 
 		//update the user's restrictions
 		.post(function (req, res){
-			User.findOne({username: req.params.id}, function(err, user) {
+			User.findOne({username: req.params.username}, function(err, user) {
 
 				if (err) res.send(err);
+				
+				if(!user){
+					res.status(404).send('User ' + req.params.username + ' not found.');
+					return;
+				}
 
-				// set the new user information if it exists in the request
-				if (req.body.name) user.name = req.body.name;
-				if (req.body.username) user.username = req.body.username;
-				if (req.body.password) user.password = req.body.password;
-				if (req.body.bannedUntil) user.bannedUntil = new Date(req.body.bannedUntil);
-				if(req.body.userType) user.userType = req.body.userType;
+				// Update user fields from the information in the reqest, if it exisits
+				for (e in req.body) {
 
-				// save the user
+					switch (e) {
+						case 'name':
+							user.name = req.body.name;
+							break;
+
+						case 'username':
+							user.username = req.body.username;
+							break;
+
+						case 'password':
+							user.password = req.body.password;
+							break;
+
+						case 'bannedUntil':
+							user.bannedUntil = new Date(req.body.bannedUntil);
+							break;
+
+						case 'userType':
+							user.userType = req.body.userType;
+							break;
+
+						default:
+							break;
+					}
+				};
+
+
+				// Save the user
 				user.save(function(err) {
 					if (err) res.send(err);
 
-					// return a message
+					// Return a message
 					res.json({ message: 'User updated!' });
 				});
 
 			});
 		})
-		
-		//remove the specific user
+
+		// Remove the specific user
 		.delete(function (req, res){
-			User.remove({
-				username: req.params.id
-			}, function(err, user) {
+			User.remove({username: req.params.username}, function(err, user) {
 				if (err) res.send(err);
 
-				res.json({ message: 'Successfully deleted' });
+				res.json({ message: 'Successfully deleted ' + req.params.username });
 			});
 		});
 
 
 	//=========================================
-	//
-	//Bookings below	
-	//
+	// Bookings are handled below
+
 	//---------------------------
-	//no specified booking
+	// API route with no specified booking
 	apiRouter.route('/bookings')
-		
-		//create a booking
+
+		// Create a booking
 		//ToDo: see if there's a better way than these nested asychronous functions
 		.post(function(req, res){
-			
-			var booking = new Booking();		
+
+			var booking = new Booking();
 			booking.setStartDate(new Date(parseInt(req.body.startDate)));
 			booking.setEndDate(new Date(parseInt(req.body.endDate)));
-			
-			//Turn userName into user object so we can get its reference
+
+			// Turn userName into user object so we can get its reference
 			User.findOne({username: req.body.username}, function(err, user){
-				
-				//Check user doesn't have restriction
+
+				// Check user doesn't have restriction
 				if(user.isBanned()){
 					res.status(401).send('User unable to create booking until ' + user.getBannedUntil.toTimeString());
 					return;
 				}
 				
-				//Check that the booking isn't too long
+				// Check that the booking isn't too long
 				// Note: this checks that bookings are exactly 1, 2, or 3 hours long. This may be too restrictive
+
 				var duration = (booking.getEndDate().getTime() - booking.getStartDate().getTime())/(60*60*1000);
 				if(user.getUserType() == 'student' && duration != 1){
 					res.status(401).send('Students can only book rooms for 1 hour');
-					return;	
+					return;
 				} else if(user.getUserType() == 'staff_faculty' && (duration != 1 || duration != 2 || duration != 3)){
 					res.status(401).send('Staff and Faculty can book rooms for either 1 hour, 2 hours or 3 hours');
 					return;
 				}
-				
-				//Check that booking falls within hours of operation
+
+				// Check that booking falls within hours of operation
 				var day = booking.getStartDate().getDay();
 				if((day > 0 && day <6 && (booking.getStartDate().getHours() < 8 || booking.getEndDate().getHours() > 22)) || ((day == 0 || day == 6) && (booking.getStartDate().getHours() < 11 || booking.getEndDate().getHours() > 18))){
 					res.status(401).send('Rooms only available 8:00am - 10:00pm Monday-Friday and 11:00am - 6:00pm Saturday-Sunday');
@@ -147,19 +177,21 @@ module.exports = function(app, express){
 				}
 				
 				booking.user = user._id;
-				
+
 				//turn room number into room object so we can get its reference
 				Room.findOne({roomNumber: req.body.roomNumber}, function(err, room){
-					
+
 					//Check room is available
 					//Get the count of all bookings that use the same room and have:
 					//	startTime < booking.startTime && endTime > booking.endTime
 					//	startTime > booking.startTime && startTime < booking.endTime
 					//	endTime > booking.startTime && endTime < booking.endTime
 					Booking.count({room: room._id, $or:[{$and: [{startDate: {$lte:booking.getStartDate()}}, {endDate: {$gte:booking.getEndDate()}}]}, {$and:[{startDate: {$gte:booking.getStartDate()}}, {startDate: {$lte:booking.getEndDate()}}]}, {$and:[{endDate: {$gte:booking.getStartDate()}}, {endDate: {$lte:booking.getEndDate()}}]}]}, function(err, count){
-						
-						if(err){console.log(err);}
-						
+
+						if(err){
+							console.log(err);
+						}
+
 						if(count > 0){
 							res.status(401).send('This room is already in use during this time slot');
 							return;
@@ -168,16 +200,14 @@ module.exports = function(app, express){
 						//Otherwise this room is available!
 						booking.room = room._id;
 
-						console.log(booking);
-
 						//save the booking
 						booking.save(function(err) {
 							if (err) {
 								res.send(err);
 								return;
 							}
-			
-							// return a message
+
+							// Return a message
 							res.json({ message: 'Booking created!' });
 						});
 					});
@@ -185,7 +215,7 @@ module.exports = function(app, express){
 			});
 		})
 
-		//get all bookings
+		// Get all bookings
 		.get(function(req, res){
 			
 			var query;
@@ -205,36 +235,38 @@ module.exports = function(app, express){
 			});
 		});
 
-	//--------------------------
-	//with a specified booking
+	//---------------------------
+	// API route with a booking specified
 	apiRouter.route('/bookings/:id')
 
-		//get the specific booking
+		// Get the specific booking
 		.get(function(req, res){
 			Booking.findById(req.params.id).populate('room user').exec(function(err, booking) {
 				if (err) res.send(err);
 
-				// return that user
+				// return that booking
 				res.json(booking);
 			});
 		})
 
-		//remove the specific booking
+		// Remove the specific booking
 		.delete(function(req, res){
 			Booking.remove({_id: req.params.id}, function(err, user) {
 				if (err) res.send(err);
 
+				// Return a message
 				res.json({ message: 'Successfully deleted' });
 			});
 		});
 
 
-	//__________________________
-	//booking router with equipement
-	
+	//---------------------------
+	// API route with equipement specified
 		
 	apiRouter.route('/equipment')
 	
+	
+		//Get equipment that is available during the specified time period
 		.get(function(req, res){
 			
 			if(req.query.startDate && req.query.endDate){
@@ -282,20 +314,13 @@ module.exports = function(app, express){
 		});
 	
 	apiRouter.route('/bookings/equipment/:id')
-		
+
 		//update the equipment on a booking
 		.put(function(req, res){})
-		
-		//remove the equipment from a booking
-		.delete(function(req, res){
-			Booking.remove({
-				_id: req.params.id
-			}, function(err, user) {
-				if (err) res.send(err);
 
-				res.json({ message: 'Successfully deleted' });
-			});
-		});
-		
+		//remove the equipment from a booking
+
+		.delete(function(req, res){});
+
 	return apiRouter;
 };

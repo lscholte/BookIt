@@ -9,10 +9,10 @@ app.config(function($routeProvider, $locationProvider){
            // Route for main page 
 
            .when("/", {
-           		controller: "MainController",
-                 templateUrl: 'app/views/pages/main.html'
-            });
 
+                 templateUrl: 'app/views/pages/login.html'
+                 })
+         
            // Added to remove the # from URLs
            $locationProvider.html5Mode(true);
-           });
+           })
