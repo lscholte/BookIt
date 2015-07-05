@@ -1,3 +1,7 @@
+// this file is not likely to be used
+// acts as a template to help design controllers for other services
+// this is from Mean Machine TextBook
+
 anguler.module('userService', [])
 
 .factory('User', function($http) {
