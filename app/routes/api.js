@@ -161,7 +161,7 @@ module.exports = function(app, express){
 			if(!user) {
 				res.json({
 					success: false,
-					message: 'Authentication failed. User not found.'
+					message: 'Invalid Username'
 				});
 			}
 
@@ -172,7 +172,7 @@ module.exports = function(app, express){
 				if (!validPassword) {
 					res.json({
 						success: false,
-						message: 'Authentication failed. Wrong password.'
+						message: 'Incorrect password.'
 					});
 				}
 

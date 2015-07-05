@@ -1,3 +1,5 @@
+angular.module('authService', [])
+
 // ================================================
 // auth factory to login and get information
 // inject $http for communicating with the API
@@ -19,7 +21,7 @@
 		})
 			.success(function(data) {
 				AuthToken.setToken(data.token);
-				return datal
+				return data;
 			});
 	};
 
@@ -41,7 +43,7 @@
 	// get the logged in user's info
 	authFactory.getUser = function() {
 		if(AuthToken.getToken())
-			return $http.get('/api/me');
+			return $http.get('/api/me', { cache: true });
 		else
 			return $q.reject({ message: 'User has no token.'});
 	}
@@ -77,7 +79,7 @@
 
 	return authTokenFactory;
 
-});
+})
 
 // ====================================================
 // application configuration to integrate token into requests
