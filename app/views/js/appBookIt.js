@@ -1,6 +1,6 @@
 var app = angular.module('BookIt', ['ngRoute']);
 
-app.config(function($routeProvider, $locationProvider){
+app.config(function($routeProvider, $locationProvider) {
            
            $routeProvider
            
