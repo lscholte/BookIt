@@ -28,7 +28,7 @@ angular.module('mainCtrl', [])
 		Auth.login(vm.loginData.username, vm.loginData.password)
 			.success(function(data) {
 
-				// if a user successfully logs in redirect to users page
+				// if a user successfully logs in redirect to main page
 				if(data.success)
 					$location.path('/main');
 				else

@@ -18,10 +18,12 @@ angular.module('appBookIt.routes', ['ngRoute'])
            // Route for main page
            .when("/main", {
                  
-                 templateUrl: 'app/views/pages/main.html'
+                 templateUrl : 'app/views/pages/main.html',
+                 controller  : 'mainController',
+                 contollerAs : 'main'
 
                  });
          
            // Added to remove the # from URLs
            $locationProvider.html5Mode(true);
-           })
+});
