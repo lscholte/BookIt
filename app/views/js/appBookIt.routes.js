@@ -20,7 +20,6 @@ angular.module('appBookIt.routes', ['ngRoute'])
                  
                  templateUrl : 'app/views/pages/main.html',
                  controller  : 'mainController',
-                 contollerAs : 'main'
 
                  });
          

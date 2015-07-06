@@ -12,7 +12,7 @@
 	<link rel="stylesheet" href="app/views/styles/style.css">
         
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-   <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 
 	<!-- JS -->
     <!-- Add Main Angular JavaScript libraries here-->
@@ -30,17 +30,17 @@
     <script src="app/views/js/appBookIt.routes.js"></script>
 
 </head>
-<body ng-app="BookIt" ng-controller="mainController as index">
+<body ng-app="appBookIt" ng-controller="mainController as main">
     <div class="header">
         <div class="row">
-            <div class="col-xs-2" ng-if="index.loggedIn">
+            <div class="col-xs-2" ng-if="main.loggedIn">
                 Placeholder-UserName  <!-- This will need to be controlled by Angular to update the name -->
             </div>
             <div class="col-xs-8">
                 <h1>BookIt</h1>
             </div>
             <div class="col-xs-2">
-                <div class="logoutHolder" ng-if="index.loggedIn">
+                <div class="logoutHolder" ng-if="main.loggedIn">
                     <div class="btn-group">
 
                         <input class="btn-submit" ng-click="index.doLogOut()" name="submit" accesskey="l" value="Log Out" tabindex="4" type="submit">  
