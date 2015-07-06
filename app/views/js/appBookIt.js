@@ -1,1 +1,9 @@
-var app = angular.module('BookIt', ['appBookIt.routes','authService','mainCtrl']);
+angular.module('BookIt', ['appBookIt.routes','authService','mainCtrl'])
+
+// application configuration to integrate token into requests
+.config(function($httpProvider) {
+
+  // attach our auth interceptor to the http requests
+  $httpProvider.interceptors.push('AuthInterceptor');
+
+});
