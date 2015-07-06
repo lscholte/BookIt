@@ -1,1 +1,1 @@
-var app = angular.module('BookIt', ['appBookIt.routes','authService','mainCtrl']);
+angular.module('appBookIt', ['appBookIt.routes','authService','mainCtrl']);

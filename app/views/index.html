@@ -12,7 +12,7 @@
 	<link rel="stylesheet" href="app/views/styles/style.css">
         
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-   <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 
 	<!-- JS -->
     <!-- Add Main Angular JavaScript libraries here-->
@@ -23,28 +23,28 @@
     <script src="app/views/js/controllers/mainCtrl.js"></script>
     
     <!-- Add Angular services here-->
-      <script src="app/views/js/services/authService.js"></script>
+    <script src="app/views/js/services/authService.js"></script>
     
     <!-- Add main Angular app files here -->
     <script src="app/views/js/appBookIt.js"></script>
     <script src="app/views/js/appBookIt.routes.js"></script>
 
 </head>
-<body ng-app="BookIt">
+<body ng-app="appBookIt" ng-controller="mainController as main">
     <div class="header">
         <div class="row">
-            <div class="col-xs-2">
+            <div class="col-xs-2" ng-if="main.loggedIn">
                 Placeholder-UserName  <!-- This will need to be controlled by Angular to update the name -->
             </div>
             <div class="col-xs-8">
                 <h1>BookIt</h1>
             </div>
             <div class="col-xs-2">
-                <div class="logoutHolder">
+                <div class="logoutHolder" ng-if="main.loggedIn">
                     <div class="btn-group">
-    
-                        <input class="btn-submit" name="submit" accesskey="l" value="Log Out" tabindex="4" type="submit">  <!-- Some of this will change -->
 
+                        <input class="btn-submit" ng-click="index.doLogOut()" name="submit" accesskey="l" value="Log Out" tabindex="4" type="submit">  
+                    
                     </div>
                 </div>    
             </div>
