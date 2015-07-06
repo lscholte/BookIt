@@ -31,6 +31,12 @@ UserSchema.pre('save', function(next) {
 // method to compare a given password with the database hash
 UserSchema.methods.comparePassword = function(password) {
 	var user = this;
+	
+	//fixes weird case where an undefined value, instead of an empty string, was being sent
+	if (typeof password == 'undefined'){
+		password = "";
+	}
+	
 	return bcrypt.compareSync(password, user.password);
 };
 
