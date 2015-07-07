@@ -1,3 +1,21 @@
+<script>
+    function populateSelectDayDropdown() {
+        var d = new Date();
+        var text = "";
+        
+        for(var i = 0; i < 14; ++i) {
+            text += "<li><a href=\"#\">" + d.toDateString() + "</a></li>\n";
+            d.setMilliseconds(d.getMilliseconds() + 86400000);
+        }
+        document.getElementById("selectDayDropdown").innerHTML = text;
+    }
+
+    $(document).on('click', '#selectDayDropdown li a', function() {
+                        var dayText = $(this).text();
+                        $('#selectedDay').html(dayText + '<span class="caret"></span>');
+                    });
+</script>
+
 <!-- Calendar section -->
 <div class="calendar">
     <div class="row">
@@ -65,7 +83,8 @@
 
 <!-- Create Booking Button -->
 <div class="container">
-    <button type="button" class="btn btn-default btn-lg" data-toggle="modal" data-target="#selectDayModal">Create a Booking</button>
+    <button type="button" class="btn btn-default btn-lg" data-toggle="modal" data-target="#selectDayModal" onclick="populateSelectDayDropdown()
+">Create a Booking</button>
 </div>
 
 <!-- Select Day Modal -->
@@ -80,17 +99,14 @@
             </div>
             <div class="modal-body">
                 <div class="dropdown">
-                    <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">Select Day
+                    <button id="selectedDay" class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">Select Day
                         <span class="caret"></span>
                     </button>
                     
                     <!-- We should generate the dropdown items with a script.
                      These values are simply placeholders.-->
-                    <ul class="dropdown-menu">
-                        <li><a href="#">Today</a></li>
-                        <li><a href="#">Tomorrow</a></li>
-                        <li><a href="#">...</a></li>
-                        <li><a href="#">14 days from now</a></li>
+                    <ul id="selectDayDropdown" class="dropdown-menu">
+
                     </ul>
                 </div>
             </div>
