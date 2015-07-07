@@ -34,9 +34,8 @@
     <div class="header">
         <div class="row">
             <div class="col-xs-2">
-                <!-- This will need to be controlled by Angular to update the name -->
-                <div ng-if="main.loggedIn"> Hello {{ main}}! </div>
-                <div ng-if="!main.loggedIn"><a href='/login'>Login</a></div>
+                <div ng-if='main.loggedIn'>Hello there {{ main.user.data.name }}!</div>
+		        <div ng-if='!main.loggedIn'><a href='/login'>Login</a></div>
             </div>
             <div class="col-xs-8">
                 <h1>BookIt</h1>
