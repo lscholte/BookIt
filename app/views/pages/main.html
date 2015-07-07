@@ -17,7 +17,7 @@
 </script>
 
 <!-- Calendar section -->
-<div class="calendar">
+<div class="calendar" ng-controller="CalendarController as calendar">
     <div class="row">
         <div class="col-xs-1">
             
@@ -29,7 +29,7 @@
                     <div class="previous">
                         <button type="button" class="btn btn-default">Previous Week</button>
                     </div>
-                    {{ date }}
+                    {{ calendar.date.toUTCString() }}
                     <div class="next">
                         <button type="button" class="btn btn-default">Next Week</button>
                     </div>
@@ -48,11 +48,8 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>Hello</td>
-                        </tr>
-                        <tr>
-                            <td>Hello</td>
+                        <tr ng-repeat="time in times">
+                            <td>{{ calendar.hours }}</td>
                         </tr>
                     </tbody>
                 </table>

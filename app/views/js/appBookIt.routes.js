@@ -19,7 +19,7 @@ angular.module('appBookIt.routes', ['ngRoute'])
            .when("/main", {
                  
                  templateUrl : 'app/views/pages/main.html',
-                 controller  : 'mainController',
+                 controller  : 'CalendarController',
 
                  });
          
