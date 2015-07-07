@@ -20,6 +20,10 @@ module.exports = function(app, express){
 		res.json({message: 'api base page'});
 	});
 
+	apiRouter.get('/me', function(req, res){
+		res.send(req.decoded);
+	});
+
 	//=========================================
 	// Users are handled below
 
