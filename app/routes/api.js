@@ -155,9 +155,7 @@ module.exports = function(app, express){
 
 		// find the user
 		// select the password explicitly since mongoose is not returning it by default
-		User.findOne({
-			username: req.body.username
-		}).select('password').exec(function(err, user) {
+		User.findOne({username: req.body.username}).select("password username").exec(function(err, user) {
 
 			if (err) throw err;
 
@@ -255,6 +253,12 @@ module.exports = function(app, express){
 			User.findOne({username: req.body.username}, function(err, user){
 
 				// Check user doesn't have restriction
+				
+				if(!user){
+					res.status(401).send('Unable to find user ' + user.userName);
+					return;
+				}
+				
 				if(user.isBanned()){
 					res.status(401).send('User unable to create booking until ' + user.getBannedUntil.toTimeString());
 					return;

@@ -33,8 +33,10 @@
 <body ng-app="appBookIt" ng-controller="mainController as main">
     <div class="header">
         <div class="row">
-            <div class="col-xs-2" ng-if="main.loggedIn">
-                Placeholder-UserName  <!-- This will need to be controlled by Angular to update the name -->
+            <div class="col-xs-2">
+                <!-- This will need to be controlled by Angular to update the name -->
+                <div ng-if="main.loggedIn"> Hello {{ main}}! </div>
+                <div ng-if="!main.loggedIn"><a href='/login'>Login</a></div>
             </div>
             <div class="col-xs-8">
                 <h1>BookIt</h1>
