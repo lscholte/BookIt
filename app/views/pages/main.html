@@ -1,14 +1,4 @@
 <script>
-    function populateSelectDayDropdown() {
-        var d = new Date();
-        var text = "";
-        
-        for(var i = 0; i < 14; ++i) {
-            text += "<li><a href=\"#\">" + d.toDateString() + "</a></li>\n";
-            d.setMilliseconds(d.getMilliseconds() + 86400000);
-        }
-        return text;
-    }
 
     $(document).on('click', '#selectDayDropdown li a', function() {
                         var dayText = $(this).text();
@@ -19,16 +9,7 @@
                         var dayText = $(this).text();
                         $('#selectedDayQuickBook').html(dayText + '<span class="caret"></span>');
                     });
-					
-	$(document).on('click', '#createBooking', function() {
-                        var text = populateSelectDayDropdown();
-                        $('#selectDayDropdown').html(text);
-                    });
-					
-	$(document).on('click', '#quickBook', function() {
-                        var text = populateSelectDayDropdown();
-                        $('#quickBookDropdown').html(text);
-                    });
+
 </script>
 
 <!-- Calendar section -->
@@ -44,7 +25,7 @@
                     <div class="previous">
                         <button type="button" class="btn btn-default">Previous Week</button>
                     </div>
-                    {{ calendar.date.toUTCString() }}
+                    {{ calendar.date.toDateString() }} {{ calendar.date.toLocaleTimeString()}}
                     <div class="next">
                         <button type="button" class="btn btn-default">Next Week</button>
                     </div>
@@ -53,6 +34,7 @@
                 <table class="table table-striped">
                     <thead>
                         <tr>
+                            <th></th>
                             <th>Sunday</th>
                             <th>Monday</th>
                             <th>Tuesday</th>
@@ -63,15 +45,15 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr ng-repeat="time in times">
-                            <td>{{ calendar.hours }}</td>
+                        <tr ng-repeat="hour in calendar.hours track by $index">
+                            <td class="timeCell">{{ hour }}</td>
                         </tr>
                     </tbody>
                 </table>
             </div>
         </div>
         <div class="col-xs-1">
-            
+         
         </div>
     </div>
 </div>
@@ -93,254 +75,258 @@
     </div>
 </div>
 
-<!-- Create QuickBook Button -->
-<div class="container">
-    <button id= "quickBook" type="button" class="btn btn-default btn-lg" data-toggle="modal" data-target="#quickBookModel" 
->QuickBook</button>
-</div>
-
-<div id="quickBookModel" class="modal fade" role="dialog" data-backdrop="static">
-    <div class="modal-dialog">
-        
-        <!-- Modal content-->
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Select a Date to Book</h4>
-            </div>
-            <div class="modal-body">
-                <div class="dropdown">
-                    <button id="selectedDayQuickBook" class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">Select Day
-                        <span class="caret"></span>
-                    </button>
-                    
-                    <!-- We should generate the dropdown items with a script.
-                     These values are simply placeholders.-->
-                    <ul id="quickBookDropdown" class="dropdown-menu">
-
-                    </ul>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-toggle="modal" data-target="#other" data-dismiss="modal">Continue</button>
-                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-            </div>
-        </div>
-        
+<div ng-controller="BookingController as booking">
+    <!-- Create QuickBook Button -->
+    <div class="container">
+        <button id= "quickBook" type="button" class="btn btn-default btn-lg" data-toggle="modal" data-target="#quickBookModel" ng-click="booking.setPotentialDays()">QuickBook</button>
     </div>
-</div>
 
-
-
-
-
-<!-- Create Booking Button -->
-<div class="container">
-    <button id = "createBooking" type="button" class="btn btn-default btn-lg" data-toggle="modal" data-target="#selectDayModal" 
->Create a Booking</button>
-</div>
-
-
-
-
-<!-- Select Day Modal -->
-<div id="selectDayModal" class="modal fade" role="dialog" data-backdrop="static">
-    <div class="modal-dialog">
-        
-        <!-- Modal content-->
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Select a Date to Book</h4>
-            </div>
-            <div class="modal-body">
-                <div class="dropdown">
-                    <button id="selectedDay" class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">Select Day
-                        <span class="caret"></span>
-                    </button>
-                    
-                    <!-- We should generate the dropdown items with a script.
-                     These values are simply placeholders.-->
-                    <ul id="selectDayDropdown" class="dropdown-menu">
-
-                    </ul>
+    <div id="quickBookModel" class="modal fade" role="dialog" data-backdrop="static">
+        <div class="modal-dialog">
+            
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Select a Date to Book</h4>
                 </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-toggle="modal" data-target="#selectTimeModal" data-dismiss="modal">Continue</button>
-                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-            </div>
-        </div>
-        
-    </div>
-</div>
-
-
-<!-- Select Time Modal -->
-<div id="selectTimeModal" class="modal fade" role="dialog" data-backdrop="static">
-    <div class="modal-dialog">
-        
-        <!-- Modal content-->
-        <div style="overflow-x:hidden"; class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Select a Time to Book</h4>
-            </div>
-            <div class="modal-body">
-                <div class="container">
-                    <h2>Available Times to Book</h2>
-                    
-                    <div style="width:500px;height:300px;overflow:scroll;overflow-x:hidden">
-                        <table id="thetable" class="table table-bordered table-hover" >
-                            <thead>
-                                <tr>
-                                    <th>Time</th>
-                                    <th>Availability</th>
-                                </tr>
-                            </thead>
-                            <div>
-                                <tbody>
-                                    <!-- These rows will need to be generated with a script.
-                                     These values are simply placeholders. -->
-                                    <tr>
-                                        <td>8:00am-9:00am</td>
-                                        <td>Y/N</td>
-                                    </tr>
-                                    <tr>
-                                        <td>9:00am-10:00am</td>
-                                        <td>Y/N</td>
-                                    </tr>
-                                    <tr>
-                                        <td>...</td>
-                                        <td>Y/N</td>
-                                    </tr>
-                                    <tr>
-                                        <td>9:00pm-10:00pm</td>
-                                        <td>Y/N</td>
-                                    </tr>
-                                </tbody>
-                            </div>
-                        </table>
+                <div class="modal-body">
+                    <div class="dropdown">
+                        <button id="selectedDayQuickBook" class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">Select Day
+                            <span class="caret"></span>
+                        </button>
+                        
+                        <!-- We should generate the dropdown items with a script.
+                         These values are simply placeholders.-->
+                        <ul id="quickBookDropdown" class="dropdown-menu">
+                            <li ng-repeat="day in booking.days">
+                                <a href="#">{{ day }}</a>
+                            </li>
+                        </ul>
                     </div>
                 </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-toggle="modal" data-target="#other" data-dismiss="modal">Continue</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                </div>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-toggle="modal" data-target="#selectRoomModal" data-dismiss="modal">Continue</button>
-                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-            </div>
+            
         </div>
-        
     </div>
-</div>
 
-<!-- Select Room Modal -->
-<div id="selectRoomModal" class="modal fade" role="dialog" data-backdrop="static">
-    <div class="modal-dialog">
-        
-        <!-- Modal content-->
-        <div style="overflow-x:hidden"; class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Select a Room to Book</h4>
-            </div>
-            <div class="modal-body">
-                <div class="container">
-                    <h2>Available Rooms to Book</h2>
-                    
-                    <div style="width:500px;height:300px;overflow:scroll;overflow-x:hidden">
-                        <table id="thetable" class="table table-bordered table-hover" >
-                            <thead>
-                                <tr>
-                                    <th>Room</th>
-                                    <th>Availability</th>
-                                </tr>
-                            </thead>
-                            <div>
-                                <tbody>
-                                    <!-- These rows will need to be generated with a script.
-                                     These values are simply placeholders. -->
-                                    <tr>
-                                        <td>1</td>
-                                        <td>Y/N</td>
-                                    </tr>
-                                    <tr>
-                                        <td>2</td>
-                                        <td>Y/N</td>
-                                    </tr>
-                                    <tr>
-                                        <td>3</td>
-                                        <td>Y/N</td>
-                                    </tr>
-									<tr>
-                                        <td>4</td>
-                                        <td>Y/N</td>
-                                    </tr>
-									<tr>
-                                        <td>5</td>
-                                        <td>Y/N</td>
-                                    </tr>
-									<tr>
-                                        <td>6</td>
-                                        <td>Y/N</td>
-                                    </tr>
-									<tr>
-                                        <td>7</td>
-                                        <td>Y/N</td>
-                                    </tr>
-									<tr>
-                                        <td>8</td>
-                                        <td>Y/N</td>
-                                    </tr>
-                                    <tr>
-                                        <td>9</td>
-                                        <td>Y/N</td>
-                                    </tr>
-									<tr>
-                                        <td>10</td>
-                                        <td>Y/N</td>
-                                    </tr>
-                                </tbody>
-                            </div>
-                        </table>
+
+
+
+
+    <!-- Create Booking Button -->
+    <div class="container">
+        <button id = "createBooking" type="button" class="btn btn-default btn-lg" data-toggle="modal" data-target="#selectDayModal" ng-click="booking.setPotentialDays()">Create a Booking</button>
+    </div>
+
+
+
+
+    <!-- Select Day Modal -->
+    <div id="selectDayModal" class="modal fade" role="dialog" data-backdrop="static">
+        <div class="modal-dialog">
+            
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Select a Date to Book</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="dropdown">
+                        <button id="selectedDay" class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">Select Day
+                            <span class="caret"></span>
+                        </button>
+                        
+                        <!-- We should generate the dropdown items with a script.
+                         These values are simply placeholders.-->
+                        <ul id="selectDayDropdown" class="dropdown-menu">
+                            <li ng-repeat="day in booking.days">
+                                <a href="#" ng-click="booking.setSelectedDay(day)">{{ day }}</a>
+                            </li>
+                        </ul>
                     </div>
-					<input type="checkbox"> Projector <input type="checkbox"> Laptop <br>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-toggle="modal" data-target="#selectTimeModal" data-dismiss="modal">Continue</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
                 </div>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-toggle="modal" data-target="#confirmationModal" data-dismiss="modal">Continue</button>
-                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-            </div>
+            
         </div>
-        
     </div>
-</div>
 
-<!-- Confirmation Modal -->
-<div id="confirmationModal" class="modal fade" role="dialog" data-backdrop="static">
-    <div class="modal-dialog">
-        
-        <!-- Modal content-->
-        <div style="overflow-x:hidden"; class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Confirmation</h4>
-            </div>
-            <div class="modal-body" >
-                <div class="container">
-                <h5>You have booked</h5>
-				Room: Room Number<br>
-				Time: Time booked<br>
-				Date: Date booked<br>
-				Projector: Y/N<br>
-				Laptop: Y/N<br>
-                 
-                    
+
+    <!-- Select Time Modal -->
+    <div id="selectTimeModal" class="modal fade" role="dialog" data-backdrop="static">
+        <div class="modal-dialog">
+            
+            <!-- Modal content-->
+            <div style="overflow-x:hidden"; class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Select a Time to Book</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="container">
+                        <h2>Available Times to Book</h2>
+                        
+                        <div style="width:500px;height:300px;overflow:scroll;overflow-x:hidden">
+                            <table id="thetable" class="table table-bordered table-hover" >
+                                <thead>
+                                    <tr>
+                                        <th>Time</th>
+                                        <th>Availability</th>
+                                    </tr>
+                                </thead>
+                                <div>
+                                    <tbody>
+                                        <!-- These rows will need to be generated with a script.
+                                         These values are simply placeholders. -->
+                                        <tr>
+                                            <td>8:00am-9:00am</td>
+                                            <td>Y/N</td>
+                                        </tr>
+                                        <tr>
+                                            <td>9:00am-10:00am</td>
+                                            <td>Y/N</td>
+                                        </tr>
+                                        <tr>
+                                            <td>...</td>
+                                            <td>Y/N</td>
+                                        </tr>
+                                        <tr>
+                                            <td>9:00pm-10:00pm</td>
+                                            <td>Y/N</td>
+                                        </tr>
+                                    </tbody>
+                                </div>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-toggle="modal" data-target="#selectRoomModal" data-dismiss="modal">Continue</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
                 </div>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default"  data-dismiss="modal">Ok</button>
-            </div>
+            
         </div>
-        
+    </div>
+
+    <!-- Select Room Modal -->
+    <div id="selectRoomModal" class="modal fade" role="dialog" data-backdrop="static">
+        <div class="modal-dialog">
+            
+            <!-- Modal content-->
+            <div style="overflow-x:hidden"; class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Select a Room to Book</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="container">
+                        <h2>Available Rooms to Book</h2>
+                        
+                        <div style="width:500px;height:300px;overflow:scroll;overflow-x:hidden">
+                            <table id="thetable" class="table table-bordered table-hover" >
+                                <thead>
+                                    <tr>
+                                        <th>Room</th>
+                                        <th>Availability</th>
+                                    </tr>
+                                </thead>
+                                <div>
+                                    <tbody>
+                                        <!-- These rows will need to be generated with a script.
+                                         These values are simply placeholders. -->
+                                        <tr>
+                                            <td>1</td>
+                                            <td>Y/N</td>
+                                        </tr>
+                                        <tr>
+                                            <td>2</td>
+                                            <td>Y/N</td>
+                                        </tr>
+                                        <tr>
+                                            <td>3</td>
+                                            <td>Y/N</td>
+                                        </tr>
+                                        <tr>
+                                            <td>4</td>
+                                            <td>Y/N</td>
+                                        </tr>
+                                        <tr>
+                                            <td>5</td>
+                                            <td>Y/N</td>
+                                        </tr>
+                                        <tr>
+                                            <td>6</td>
+                                            <td>Y/N</td>
+                                        </tr>
+                                        <tr>
+                                            <td>7</td>
+                                            <td>Y/N</td>
+                                        </tr>
+                                        <tr>
+                                            <td>8</td>
+                                            <td>Y/N</td>
+                                        </tr>
+                                        <tr>
+                                            <td>9</td>
+                                            <td>Y/N</td>
+                                        </tr>
+                                        <tr>
+                                            <td>10</td>
+                                            <td>Y/N</td>
+                                        </tr>
+                                    </tbody>
+                                </div>
+                            </table>
+                        </div>
+                        <input type="checkbox"> Projector <input type="checkbox"> Laptop <br>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-toggle="modal" data-target="#confirmationModal" data-dismiss="modal">Continue</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+
+    <!-- Confirmation Modal -->
+    <div id="confirmationModal" class="modal fade" role="dialog" data-backdrop="static">
+        <div class="modal-dialog">
+            
+            <!-- Modal content-->
+            <div style="overflow-x:hidden"; class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Confirmation</h4>
+                </div>
+                <div class="modal-body" >
+                    <div class="container">
+                    <h5>You have booked</h5>
+                    Room: Room Number<br>
+                    Time: Time booked<br>
+                    Date: Date booked<br>
+                    Projector: Y/N<br>
+                    Laptop: Y/N<br>
+                     
+                        
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default"  data-dismiss="modal">Ok</button>
+                </div>
+            </div>
+            
+        </div>
     </div>
 </div>
