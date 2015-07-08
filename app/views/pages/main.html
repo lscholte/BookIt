@@ -16,7 +16,7 @@
 <div class="calendar" ng-controller="CalendarController as calendar">
     <div class="row">
         <div class="col-xs-1">
-            
+           
         </div>
         <div class="col-xs-10">
             <div class="container">
@@ -25,7 +25,7 @@
                     <div class="previous">
                         <button type="button" class="btn btn-default">Previous Week</button>
                     </div>
-                    Week of {{ calendar.weekStart().toDateString() }} - {{ calendar.weekEnd().toDateString() }}
+                    Week of {{ calendar.weekStart().toDateString() }} - {{ calendar.weekEnd().toDateString() }} 
                     <div class="next">
                         <button type="button" class="btn btn-default">Next Week</button>
                     </div>
@@ -44,8 +44,14 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr ng-repeat="hour in calendar.hours track by $index">
-                            <td class="timeCell">{{ hour }}</td>
+                        <tr>
+                            <td>{{ calendar.getBookingCount(calendar.weekStart()) }}</td>
+                            <td>{{ calendar.getBookingCount(calendar.weekStart().setDate(calendar.weekStart().getDate() + 1)) }}</td>
+                            <td>{{ calendar.getBookingCount(calendar.weekStart().setDate(calendar.weekStart().getDate() + 2)) }}</td>
+                            <td>{{ calendar.getBookingCount(calendar.weekStart().setDate(calendar.weekStart().getDate() + 3)) }}</td>
+                            <td>{{ calendar.getBookingCount(calendar.weekStart().setDate(calendar.weekStart().getDate() + 4)) }}</td>
+                            <td>{{ calendar.getBookingCount(calendar.weekStart().setDate(calendar.weekStart().getDate() + 5)) }}</td>
+                            <td>{{ calendar.getBookingCount(calendar.weekStart().setDate(calendar.weekStart().getDate() + 6)) }}</td>
                         </tr>
                     </tbody>
                 </table>
