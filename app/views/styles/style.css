@@ -58,3 +58,7 @@
 .next{
 	float:right;
 }
+
+.timeCell{
+	text-align: center;
+}

@@ -44,7 +44,7 @@
                     <div class="previous">
                         <button type="button" class="btn btn-default">Previous Week</button>
                     </div>
-                    {{ calendar.date.toUTCString() }}
+                    {{ calendar.date.toDateString() }} {{ calendar.date.toLocaleTimeString()}}
                     <div class="next">
                         <button type="button" class="btn btn-default">Next Week</button>
                     </div>
@@ -53,6 +53,7 @@
                 <table class="table table-striped">
                     <thead>
                         <tr>
+                            <th></th>
                             <th>Sunday</th>
                             <th>Monday</th>
                             <th>Tuesday</th>
@@ -63,15 +64,15 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr ng-repeat="time in times">
-                            <td>{{ calendar.hours }}</td>
+                        <tr ng-repeat="hour in calendar.hours track by $index">
+                            <td class="timeCell">{{ hour }}</td>
                         </tr>
                     </tbody>
                 </table>
             </div>
         </div>
         <div class="col-xs-1">
-            
+         
         </div>
     </div>
 </div>
