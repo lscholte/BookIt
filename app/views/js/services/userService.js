@@ -30,7 +30,7 @@ anguler.module('userService', [])
 	};
 
 	// delete a user
-	userFactory.delete = funcion(id) {
+	userFactory.delete = function(id) {
 		return $http.delete('/api/users/' + id);
 	};
 
