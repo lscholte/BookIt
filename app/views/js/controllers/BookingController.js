@@ -1,8 +1,9 @@
 angular.module('bookingCtrl', [])
 
-.controller('BookingController', function($scope, $location, Auth){            
+.controller('BookingController', function($scope, $location, Auth){
             
             this.days = [];
+            this.selectedDay = null;
             
             this.setPotentialDays = function() {
                 var d = new Date();
@@ -11,6 +12,10 @@ angular.module('bookingCtrl', [])
                     this.days.push(d.toDateString())
                     d.setMilliseconds(d.getMilliseconds() + 86400000);
                 }
+            }
+            
+            this.setSelectedDay = function(dayText) {
+                this.selectedDay = new Date(dayText);
             }
             
             });

@@ -146,7 +146,7 @@
                          These values are simply placeholders.-->
                         <ul id="selectDayDropdown" class="dropdown-menu">
                             <li ng-repeat="day in booking.days">
-                                <a href="#">{{ day }}</a>
+                                <a href="#" ng-click="booking.setSelectedDay(day)">{{ day }}</a>
                             </li>
                         </ul>
                     </div>
