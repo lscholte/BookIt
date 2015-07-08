@@ -25,7 +25,7 @@
                     <div class="previous">
                         <button type="button" class="btn btn-default">Previous Week</button>
                     </div>
-                    {{ calendar.date.toDateString() }} {{ calendar.date.toLocaleTimeString()}}
+                    Week of {{ calendar.weekStart().toDateString() }} - {{ calendar.weekEnd().toDateString() }}
                     <div class="next">
                         <button type="button" class="btn btn-default">Next Week</button>
                     </div>
@@ -34,7 +34,6 @@
                 <table class="table table-striped">
                     <thead>
                         <tr>
-                            <th></th>
                             <th>Sunday</th>
                             <th>Monday</th>
                             <th>Tuesday</th>
