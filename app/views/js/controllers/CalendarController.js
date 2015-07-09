@@ -5,10 +5,12 @@ angular.module('calendarCtrl', ['calendarService'])
 	var vm = this;
 	vm.date = new Date();
 
+	//loads all the bookings
 	Calendar.all().success(function(data){
 		vm.bookings = data;
 	});
 
+	// returns the number of available booking time slots on a given day
 	vm.getBookingCount = function(day){
 		day = new Date(day);
 		var count;
@@ -32,22 +34,26 @@ angular.module('calendarCtrl', ['calendarService'])
 		return count;
 	};
 
+	//Get date object for the Sunday of week specified by vm.date
 	vm.weekStart = function(){
   		var day = vm.date.getDay();
      	var diff = vm.date.getDate() - day;
   		return new Date(vm.date.setDate(diff));
 	};
 
+	//Get date object for the Saturday of week specified by vm.date
 	vm.weekEnd = function(){
   		var day = vm.date.getDay();
      	var diff = vm.date.getDate() - day;
   		return new Date(vm.date.setDate(diff + 6));
 	};
 
+	//Change current week to the next week
 	vm.nextWeek = function(){
 		vm.date.setDate(vm.date.getDate() + 7);
 	};
 
+	//change current week to the previous week
 	vm.lastWeek = function(){
 		vm.date.setDate(vm.date.getDate() - 7);
 	};
