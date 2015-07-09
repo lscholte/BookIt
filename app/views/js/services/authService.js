@@ -86,7 +86,7 @@ angular.module('authService', [])
 // ====================================================
 
 .factory('AuthInterceptor', function($q, $location, AuthToken) {
-	
+
 	var interceptorFactory = {};
 
 	// this will happen on all HTTP requests
