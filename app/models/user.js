@@ -6,6 +6,7 @@ var bcrypt 		 = require('bcrypt-nodejs');
 var UserSchema = new Schema({
 	name: String,
 	bannedUntil: Date,
+	bookingID: String,
 	userType: { type: String, required: true, enum: ['student', 'staff_faculty', 'admin']},
 	username: { type: String, required: true, index: { unique: true }},
 	password: { type: String, required: true, select: false }
@@ -31,12 +32,12 @@ UserSchema.pre('save', function(next) {
 // method to compare a given password with the database hash
 UserSchema.methods.comparePassword = function(password) {
 	var user = this;
-	
+
 	//fixes weird case where an undefined value, instead of an empty string, was being sent
 	if (typeof password == 'undefined'){
 		password = "";
 	}
-	
+
 	return bcrypt.compareSync(password, user.password);
 };
 
@@ -59,6 +60,14 @@ UserSchema.methods.setBannedUntil = function(date){
 UserSchema.methods.getBannedUntil = function(){
 	return this.bannedUntil;
 };
+
+UserSchema.methods.getBooking = function(){
+	return this.bookingID;
+};
+
+UserSchema.methods.setBooking = function(booking){
+	this.bookingID = booking.toString();
+}
 
 UserSchema.methods.isBanned = function(){
 	if(this.bannedUntil == null){

@@ -1,10 +1,10 @@
 
 var bodyParser = require("body-parser"),
-    jwt	       = require("jsonwebtoken"),
+    jwt        = require("jsonwebtoken"),
     User       = require('../models/user'),
     Booking    = require('../models/booking'),
     Room       = require('../models/room'),
-    Equipment  = require('../models/equipment');
+    Equipment  = require('../models/equipment'),
     config     = require('../../config');
 
 // super secret for creating tokens
@@ -17,7 +17,7 @@ module.exports = function(app, express){
 	//The commands below are accessed from http://localhost:8080/api/<route>
 
 	apiRouter.get('/', function(req, res){
-		res.json({message: 'api base page'});
+		res.json({message: 'Last we saw, our API was here. Have you seen it?'});
 	});
 
 	//========================================
@@ -30,12 +30,12 @@ module.exports = function(app, express){
 		console.log(req.body.username);
 
 		// find the user
-		// select the password explicitly since mongoose is not returning it by default
+		// select the names and password explicitly since mongoose is not returning it by default
 		User.findOne({
 			username: req.body.username
-		}).select('name username password').exec(function(err, user) {
+		}).select('name username password bookingID').exec(function(err, user) {
 
-			if (err) throw err;
+			if (err) res.send(err);
 
 			// no user with that username was found
 			if(!user) {
@@ -60,30 +60,32 @@ module.exports = function(app, express){
 
 					// if user is found and password is right
 					// create a token
-					var token = jwt.sign({
-								name: user.name,
-								username: user.username
-							     },
-							     superSecret, 
-							     {
+					var token = jwt.sign(
+					{
+						name: user.name,
+						username: user.username,
+						bookingID: user.bookingID
+					},
+					superSecret,
+					{
 								expiresInMinutes: 1440 // expires in 24 hours
-							     });
+							});
 
-					// return the informatino including token as JSON
+					// return the information including token as JSON
 					res.json({
 						success: true,
-						message: 'Enjoy your token!',
+						message: 'The gods smile upon you, enjoy your token!',
 						token: token
 					});
 				}
 			}
-		});	
+		});
 	});
 
 	// route middleware to verify a token
 	apiRouter.use(function(req, res, next) {
 		//do logging
-		console.log('Somebody just came to our app!');
+		console.log("API hit from " + req.connection.remoteAddress + " at " + Date());
 
 		// check header or url parameters or post parameters for token
 		var token = req.body.token || req.query.token || req.headers['x-access-token'];
@@ -94,14 +96,12 @@ module.exports = function(app, express){
 			// verifies secret and checks exp
 			jwt.verify(token, superSecret, function(err, decoded) {
 				if (err) {
-					return res.json({ success: false, message: 'Failed to authenticate token'});
+					return res.json({ success: false, message: "This system doesn't trust you. What could you be doing in your life to cause token authentication failure?"});
 				}
 
 				else{
 					// if everything is good, save to request for use in other routes
 					req.decoded = decoded;
-					console.log("Below is the decoded token");
-					console.log(req.decoded);
 					next(); // make sure we go to the next routes and don't stop here
 				}
 			});
@@ -110,10 +110,10 @@ module.exports = function(app, express){
 		else{
 
 			// if there is no token
-			// return an HTTP response of 403 (access forbidden) and an error message 
+			// return an HTTP response of 403 (access forbidden) and an error message
 			return res.status(403).send({
 				success: false,
-				message: 'No token provided.'
+				message: 'No token provided. What are you even trying to do?'
 			});
 		}
 	});
@@ -141,14 +141,14 @@ module.exports = function(app, express){
 				if (err) {
 					switch (err.code){
 					// Switch for catching errors on user creation: eg. username and password requirements
-						case 11000:
-							return res.json({success: false, message: 'That username is taken!'});
-							break;
-						default:
-							res.send(err);
-							break;
-					}
+					case 11000:
+					return res.json({success: false, message: 'That username is taken!'});
+					break;
+					default:
+					res.send(err);
+					break;
 				}
+			}
 
 				// Return a message
 				res.json({ message: 'User created!' });
@@ -181,20 +181,25 @@ module.exports = function(app, express){
 			});
 		})
 
-		//update the user's restrictions
+		//update the user's information
 		.post(function (req, res){
 			User.findOne({username: req.params.username}, function(err, user) {
 
 				if (err) res.send(err);
-				
+
 				if(!user){
-					res.status(404).send('User ' + req.params.username + ' not found.');
+					res.status(404).send('The database exploded, thus ' + req.params.username + ' was not found.');
+					return;
+				}
+
+				// Tells if the req.body is an empty object
+				if (!Object.keys(req.body).length) {
+					res.status(401).send("Nothing to update, make sure you're sending informaton as x-www-form-urlencoded, not just form-data!");
 					return;
 				}
 
 				// Update user fields from the information in the reqest, if it exisits
 				for (e in req.body) {
-
 					switch (e) {
 						case 'name':
 							user.name = req.body.name;
@@ -212,24 +217,30 @@ module.exports = function(app, express){
 							user.bannedUntil = new Date(req.body.bannedUntil);
 							break;
 
+						case 'bookingID':
+							user.bookingID = req.body.bookingID;
+							break;
+
 						case 'userType':
 							user.userType = req.body.userType;
 							break;
 
 						default:
+							res.status(401).send({error: "The key: \'" + e + "\' doesn't exist in the user object!",
+													message: "Other valid keys may OR may not have been updated!"
+												});
+							return;
 							break;
 					}
 				};
-
 
 				// Save the user
 				user.save(function(err) {
 					if (err) res.send(err);
 
 					// Return a message
-					res.json({ message: 'User updated!' });
+					res.status(200).json({ message: 'Thanks for wasting our server time, the user is updated...' });
 				});
-
 			});
 		})
 
@@ -238,7 +249,7 @@ module.exports = function(app, express){
 			User.remove({username: req.params.username}, function(err, user) {
 				if (err) res.send(err);
 
-				res.json({ message: 'Successfully deleted ' + req.params.username });
+				res.json({ message: 'Successfully obliterated ' + req.params.username });
 			});
 		});
 
@@ -260,18 +271,33 @@ module.exports = function(app, express){
 			// Turn userName into user object so we can get its reference
 			User.findOne({username: req.body.username}, function(err, user){
 
-				// Check user doesn't have restriction
-				
+				// User doesn't exist
 				if(!user){
-					res.status(401).send('Unable to find user ' + user.userName);
+					res.status(401).send('Where\'s ' + user.userName + "? Oh wait, I was looking for waldo..");
 					return;
 				}
-				
+
+				// Check user doesn't have restriction
 				if(user.isBanned()){
 					res.status(401).send('User unable to create booking until ' + user.getBannedUntil.toTimeString());
 					return;
 				}
-				
+
+				// Check if the user has a booking already, and that that booking is for the future
+				if (user.getBooking()){
+					Booking.findById(user.bookingID, function(err, booking){
+						if (err){
+							console.log("Error finding user's booking: ");
+							console.log(err);
+						}
+						// The beginning of a booking is for the future
+						if(booking.getStartDate() >= Date()){
+							res.status(401).send({error: "This user already has a booking in their name, delete it then try again.", booking: booking._id});
+							return;
+						}
+					});
+				}
+
 				// Check that the booking isn't too long
 				// Note: this checks that bookings are exactly 1, 2, or 3 hours long. This may be too restrictive
 
@@ -290,7 +316,7 @@ module.exports = function(app, express){
 					res.status(401).send('Rooms only available 8:00am - 10:00pm Monday-Friday and 11:00am - 6:00pm Saturday-Sunday');
 					return;
 				}
-				
+
 				booking.user = user._id;
 
 				//turn room number into room object so we can get its reference
@@ -311,7 +337,7 @@ module.exports = function(app, express){
 							res.status(401).send('This room is already in use during this time slot');
 							return;
 						}
-						
+
 						//Otherwise this room is available!
 						booking.room = room._id;
 
@@ -321,9 +347,15 @@ module.exports = function(app, express){
 								res.send(err);
 								return;
 							}
-
-							// Return a message
-							res.json({ message: 'Booking created!', id: booking._id});
+							user.bookingID = booking._id;
+							user.save(function(err, user){
+								if (err){
+									res.send(err);
+									return;
+								}
+								// Return a message
+								res.json({ message: 'Booking created! You did something right!', id: booking._id});
+							});
 						});
 					});
 				});
@@ -332,16 +364,16 @@ module.exports = function(app, express){
 
 		// Get all bookings
 		.get(function(req, res){
-			
+
 			var query;
-			
+
 			if(req.query.startDate && req.query.endDate){
-				query = Booking.find({$or:[{$and: [{startDate: {$lte:req.query.startDate}}, {endDate: {$gte:req.query.endDate}}]}, {$and:[{startDate: {$gte:req.query.startDate}}, {startDate: {$lt:req.query.endDate}}]}, {$and:[{endDate: {$gt:req.query.startDate}}, {endDate: {$lte:req.query.endDate}}]}]});	
+				query = Booking.find({$or:[{$and: [{startDate: {$lte:req.query.startDate}}, {endDate: {$gte:req.query.endDate}}]}, {$and:[{startDate: {$gte:req.query.startDate}}, {startDate: {$lt:req.query.endDate}}]}, {$and:[{endDate: {$gt:req.query.startDate}}, {endDate: {$lte:req.query.endDate}}]}]});
 			}
 			else{
 				query = Booking.find();
 			}
-			
+
 			query.populate('room user equipment').exec(function(err, bookings){
 				if (err) res.send(err);
 
@@ -366,24 +398,38 @@ module.exports = function(app, express){
 
 		// Remove the specific booking
 		.delete(function(req, res){
-			Booking.remove({_id: req.params.id}, function(err, user) {
-				if (err) res.send(err);
+			//TODO The booking already contains a reference to a user, need to update user restrictions
+			//		when they delete a booking. However this should be done near completion as to not
+			//		restrict our own ability to test functionality which may require removal of bookings
+			//		without imposing restritions on ourselves.
 
-				// Return a message
-				res.json({ message: 'Successfully deleted' });
+			Booking.findById(req.params.id, function (err, booking){
+				if (err || !booking) {
+					res.status(401).send({message: "Either there was an error, or that's not a real booking. Don't ask me!", error: err, booking: booking});
+					return;
+				}
+				User.findById(booking.user, function(err, user){
+					if (err) res.send(err);
+					user.bookingID = "";
+					user.save(function(err, user){
+						Booking.remove({_id: booking._id}, function(err, numRemoved){
+							// Return a message
+							res.json({ message: 'The booking was thrown towards a singularity. Good luck getting it back...' });
+						});
+					});
+				});
 			});
 		});
 
 
 	//---------------------------
 	// API route with equipment specified
-		
+
 	apiRouter.route('/equipment')
-	
-	
+
 		//Get equipment that is available during the specified time period
 		.get(function(req, res){
-			
+
 			if(req.query.startDate && req.query.endDate){
 				//Get all equipment books that occur at the same time:
 				//	startTime < booking.startTime && endTime > booking.endTime
@@ -394,7 +440,7 @@ module.exports = function(app, express){
 					bookings.forEach(function(booking){
 						equipmentList.concat(booking.equipment);
 					});
-					
+
 					//get all equipment so we can calculate available equipment
 					var unusedEquipment = [];
 					Equipment.find({}, function(err, allEquipment){
@@ -403,7 +449,6 @@ module.exports = function(app, express){
 							console.log(err);
 						}
 
-						
 						//for every piece of equipment, check if it's in list of used equipment. If it's not, append it to unused equipment list
 						allEquipment.forEach(function(item){
 							var itemFound = false;
@@ -414,20 +459,20 @@ module.exports = function(app, express){
 									break;
 								}
 							}
-							
+
 							if(!itemFound){
 								unusedEquipment.push(item);
 							}
 						});
 						res.json(unusedEquipment);
 					});
-					
-				});	
+
+				});
 			}else{
 				res.status(400).send("Please specify a startDate and an endDate for the query.");
 			}
 		});
-	
+
 	apiRouter.route('/bookings/equipment/:bookingID')
 
 		//update the equipment on a booking
@@ -440,7 +485,7 @@ module.exports = function(app, express){
 						//TODO disallow same types of equipment, this only disallows the same piece equipment
 						for (var i = 0; i < booking.equipment.length; i++ ){
 							var e = booking.equipment[i];
-							if (e.toString() == equip._id.toString()){					
+							if (e.toString() == equip._id.toString()){
 								res.status(400).send("That equipment is already attached to this booking");
 								return;
 							}
@@ -455,7 +500,7 @@ module.exports = function(app, express){
 			} else {
 				res.status(400).send({message : "Specify an equipmentID in the body to add, else use /DELETE to remove all equipment" });
 			}
-			
+
 		})
 
 		//remove the equipment from a booking
@@ -468,5 +513,6 @@ module.exports = function(app, express){
 				});
 			});
 		});
-	return apiRouter;
-};
+
+		return apiRouter;
+	};

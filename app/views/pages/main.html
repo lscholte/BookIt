@@ -1,23 +1,19 @@
 <script>
-
     $(document).on('click', '#selectDayDropdown li a', function() {
-                        var dayText = $(this).text();
-                        $('#selectedDay').html(dayText + '<span class="caret"></span>');
-                    });
-					
-	$(document).on('click', '#quickBookDropdown li a', function() {
-                        var dayText = $(this).text();
-                        $('#selectedDayQuickBook').html(dayText + '<span class="caret"></span>');
-                    });
+        var dayText = $(this).text();
+        $('#selectedDay').html(dayText + '<span class="caret"></span>');
+    });
 
+    $(document).on('click', '#quickBookDropdown li a', function() {
+        var dayText = $(this).text();
+        $('#selectedDayQuickBook').html(dayText + '<span class="caret"></span>');
+    });
 </script>
 
 <!-- Calendar section -->
 <div class="calendar" ng-controller="CalendarController as calendar">
     <div class="row">
-        <div class="col-xs-1">
-           
-        </div>
+        <div class="col-xs-1"><!-- Centering --></div>
         <div class="col-xs-10">
             <div class="container">
                 <h2>Rooms Available</h2>
@@ -25,12 +21,12 @@
                     <div class="previous">
                         <button type="button" class="btn btn-default" ng-click="calendar.lastWeek()">Previous Week</button>
                     </div>
-                    Week of {{ calendar.weekStart().toDateString() }} - {{ calendar.weekEnd().toDateString() }} 
+                    Week of {{ calendar.weekStart().toDateString() }} - {{ calendar.weekEnd().toDateString() }}
                     <div class="next">
                         <button type="button" class="btn btn-default" ng-click="calendar.nextWeek()">Next Week</button>
                     </div>
                 </div>
-                
+
                 <table class="table table-striped">
                     <thead>
                         <tr>
@@ -57,27 +53,34 @@
                 </table>
             </div>
         </div>
-        <div class="col-xs-1">
-         
-        </div>
+        <div class="col-xs-1"><!-- Centering --></div>
     </div>
 </div>
 
 <!-- Active Bookings Section -->
-<div class="activeBooking">
+<div class="activeBooking" ng-controller="ActiveBookingController as Active">
     <div class="row">
-        <div class="col-xs-1">
-            
-        </div>
+        <div class="col-xs-1"><!-- Centering --></div>
         <div class="col-xs-10">
-            <div class="jumbotron">
-                An Active Booking Will Be Seen Here
+            <div class="container" ng-if="Active.hasBooking()">
+                <h2>Active Booking</h2>
+                <div class="jumbotron">
+                    <ul>
+                        <li> Start Time: {{ Active.booking.startTime }} </li>
+                        <li> End Time: {{ Active.booking.endTime }} </li>
+                        <li> Date: {{ Active.booking.date }} </li>
+                        <li> Room: {{ Active.booking.roomNumber }} </li>
+                        <li> Equipment: {{ Active.booking.equipment }} </li>
+                    </ul>
+                    <p style="font-size:small; margin-left:30px">//TODO: Hide quickbook and create booking button while a user has an active booking</p>
+                </div>
+            </div>
+            <div class="container" ng-if="!Active.hasBooking()">
+                <h2>Create a booking below..</h2>
             </div>
         </div>
-        <div class="col-xs-1">
-            
-        </div>
     </div>
+    <div class="col-xs-1"><!-- Centering --></div>
 </div>
 
 <div ng-controller="BookingController as booking">
@@ -88,7 +91,7 @@
 
     <div id="quickBookModel" class="modal fade" role="dialog" data-backdrop="static">
         <div class="modal-dialog">
-            
+
             <!-- Modal content-->
             <div class="modal-content">
                 <div class="modal-header">
@@ -100,9 +103,9 @@
                         <button id="selectedDayQuickBook" class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">Select Day
                             <span class="caret"></span>
                         </button>
-                        
+
                         <!-- We should generate the dropdown items with a script.
-                         These values are simply placeholders.-->
+                        These values are simply placeholders.-->
                         <ul id="quickBookDropdown" class="dropdown-menu">
                             <li ng-repeat="day in booking.days">
                                 <a href="#">{{ day }}</a>
@@ -115,11 +118,8 @@
                     <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
                 </div>
             </div>
-            
         </div>
     </div>
-
-
 
 
 
@@ -130,11 +130,10 @@
 
 
 
-
     <!-- Select Day Modal -->
     <div id="selectDayModal" class="modal fade" role="dialog" data-backdrop="static">
         <div class="modal-dialog">
-            
+
             <!-- Modal content-->
             <div class="modal-content">
                 <div class="modal-header">
@@ -146,9 +145,9 @@
                         <button id="selectedDay" class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">Select Day
                             <span class="caret"></span>
                         </button>
-                        
+
                         <!-- We should generate the dropdown items with a script.
-                         These values are simply placeholders.-->
+                        These values are simply placeholders.-->
                         <ul id="selectDayDropdown" class="dropdown-menu">
                             <li ng-repeat="day in booking.days">
                                 <a href="#" ng-click="booking.setSelectedDay(day)">{{ day }}</a>
@@ -161,15 +160,15 @@
                     <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
                 </div>
             </div>
-            
         </div>
     </div>
+
 
 
     <!-- Select Time Modal -->
     <div id="selectTimeModal" class="modal fade" role="dialog" data-backdrop="static">
         <div class="modal-dialog">
-            
+
             <!-- Modal content-->
             <div style="overflow-x:hidden"; class="modal-content">
                 <div class="modal-header">
@@ -179,7 +178,7 @@
                 <div class="modal-body">
                     <div class="container">
                         <h2>Available Times to Book</h2>
-                        
+
                         <div style="width:500px;height:300px;overflow:scroll;overflow-x:hidden">
                             <table id="thetable" class="table table-bordered table-hover" >
                                 <thead>
@@ -191,7 +190,7 @@
                                 <div>
                                     <tbody>
                                         <!-- These rows will need to be generated with a script.
-                                         These values are simply placeholders. -->
+                                        These values are simply placeholders. -->
                                         <tr>
                                             <td>8:00am-9:00am</td>
                                             <td>Y/N</td>
@@ -219,14 +218,14 @@
                     <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
                 </div>
             </div>
-            
+
         </div>
     </div>
 
     <!-- Select Room Modal -->
     <div id="selectRoomModal" class="modal fade" role="dialog" data-backdrop="static">
         <div class="modal-dialog">
-            
+
             <!-- Modal content-->
             <div style="overflow-x:hidden"; class="modal-content">
                 <div class="modal-header">
@@ -236,7 +235,7 @@
                 <div class="modal-body">
                     <div class="container">
                         <h2>Available Rooms to Book</h2>
-                        
+
                         <div style="width:500px;height:300px;overflow:scroll;overflow-x:hidden">
                             <table id="thetable" class="table table-bordered table-hover" >
                                 <thead>
@@ -248,7 +247,7 @@
                                 <div>
                                     <tbody>
                                         <!-- These rows will need to be generated with a script.
-                                         These values are simply placeholders. -->
+                                        These values are simply placeholders. -->
                                         <tr>
                                             <td>1</td>
                                             <td>Y/N</td>
@@ -301,14 +300,13 @@
                     <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
                 </div>
             </div>
-            
         </div>
     </div>
+
 
     <!-- Confirmation Modal -->
     <div id="confirmationModal" class="modal fade" role="dialog" data-backdrop="static">
         <div class="modal-dialog">
-            
             <!-- Modal content-->
             <div style="overflow-x:hidden"; class="modal-content">
                 <div class="modal-header">
@@ -317,21 +315,19 @@
                 </div>
                 <div class="modal-body" >
                     <div class="container">
-                    <h5>You have booked</h5>
-                    Room: Room Number<br>
-                    Time: Time booked<br>
-                    Date: Date booked<br>
-                    Projector: Y/N<br>
-                    Laptop: Y/N<br>
-                     
-                        
+                        <h5>You have booked</h5>
+                        Room: Room Number<br>
+                        Time: Time booked<br>
+                        Date: Date booked<br>
+                        Projector: Y/N<br>
+                        Laptop: Y/N<br>
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default"  data-dismiss="modal">Ok</button>
+
                 </div>
             </div>
-            
         </div>
     </div>
 </div>

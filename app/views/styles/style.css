@@ -13,6 +13,15 @@
 	font-family: "Arial";
 }
 
+.header h2{
+	color: white;
+	font-size: medium;
+}
+
+.center {
+	text-align: center;
+}
+
 .fm-v{
 	margin-left: 40px;
 }
