@@ -23,11 +23,11 @@
                 <h2>Rooms Available</h2>
                 <div class="calendar-header">
                     <div class="previous">
-                        <button type="button" class="btn btn-default">Previous Week</button>
+                        <button type="button" class="btn btn-default" ng-click="calendar.lastWeek()">Previous Week</button>
                     </div>
                     Week of {{ calendar.weekStart().toDateString() }} - {{ calendar.weekEnd().toDateString() }} 
                     <div class="next">
-                        <button type="button" class="btn btn-default">Next Week</button>
+                        <button type="button" class="btn btn-default" ng-click="calendar.nextWeek()">Next Week</button>
                     </div>
                 </div>
                 

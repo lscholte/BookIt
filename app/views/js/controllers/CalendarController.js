@@ -9,7 +9,7 @@ angular.module('calendarCtrl', ['calendarService'])
 		vm.bookings = data;
 	});
 	
-	this.getBookingCount = function(day){
+	vm.getBookingCount = function(day){
 		day = new Date(day);
 		var count;
 		
@@ -32,16 +32,24 @@ angular.module('calendarCtrl', ['calendarService'])
 		return count;
 	};
 	
-	this.weekStart = function(){
+	vm.weekStart = function(){
   		var day = vm.date.getDay();
      	var diff = vm.date.getDate() - day;
   		return new Date(vm.date.setDate(diff));
 	};
 	
-	this.weekEnd = function(){
+	vm.weekEnd = function(){
   		var day = vm.date.getDay();
      	var diff = vm.date.getDate() - day;
   		return new Date(vm.date.setDate(diff + 6));
+	};
+	
+	vm.nextWeek = function(){
+		vm.date.setDate(vm.date.getDate() + 7);
+	};
+	
+	vm.lastWeek = function(){
+		vm.date.setDate(vm.date.getDate() - 7);
 	};
 	
 });
