@@ -33,7 +33,7 @@ module.exports = function(app, express){
 		// select the names and password explicitly since mongoose is not returning it by default
 		User.findOne({
 			username: req.body.username
-		}).select('name username password bookingID').exec(function(err, user) {
+		}).select('name username password bookingID userType').exec(function(err, user) {
 
 			if (err) res.send(err);
 
@@ -63,6 +63,7 @@ module.exports = function(app, express){
 					var token = jwt.sign(
 					{
 						name: user.name,
+						userType: user.userType,
 						username: user.username,
 						bookingID: user.bookingID
 					},
