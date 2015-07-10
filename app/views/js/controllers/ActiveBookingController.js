@@ -1,9 +1,10 @@
-angular.module('activeCtrl', [])
+angular.module('activeCtrl', ["activeBookingService"])
 
-.controller('ActiveBookingController', function($rootScope, $location, $http, Auth) {
+.controller('ActiveBookingController', function($rootScope, $location, $http, Auth, ActiveBooking) {
 
 	var vm = this;
 	vm.oneCall = true;
+	vm.activeBookingService = ActiveBooking;
 
 	Auth.getUser().then(function(user){
 		vm.user = user.data;
@@ -12,8 +13,10 @@ angular.module('activeCtrl', [])
 	vm.hasBooking = function() {
 		if (vm.user.bookingID) {
 			vm.populateBooking();
+			ActiveBooking.setActiveBooking(true);
 			return true;
 		} else {
+			ActiveBooking.setActiveBooking(false);
 			return false;
 		}
 	};
