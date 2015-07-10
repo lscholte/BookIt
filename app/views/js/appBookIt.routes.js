@@ -27,6 +27,14 @@ angular.module('appBookIt.routes', ['ngRoute'])
 		controller  : 'ActiveBookingController'
 
 	})
+
+	// Route for admin page
+	.when("/admin", {
+		templateUrl : 'app/views/pages/admin.html',
+		controller  : 'CalendarController'
+
+	})
+
 	.otherwise({
 		redirectTo: '/main'
 	});

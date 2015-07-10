@@ -27,13 +27,13 @@ module.exports = function(app, express){
 	// API route for login authentication
 
 	apiRouter.post('/authenticate', function(req, res) {
-		console.log(req.body.username);
+		console.log("Looking for user "+req.body.username);
 
 		// find the user
 		// select the names and password explicitly since mongoose is not returning it by default
 		User.findOne({
 			username: req.body.username
-		}).select('name username password bookingID').exec(function(err, user) {
+		}).select('name username password bookingID userType').exec(function(err, user) {
 
 			if (err) res.send(err);
 
@@ -64,11 +64,12 @@ module.exports = function(app, express){
 					{
 						name: user.name,
 						username: user.username,
+						userType: user.userType,
 						bookingID: user.bookingID
 					},
 					superSecret,
 					{
-								expiresInMinutes: 1440 // expires in 24 hours
+								expiresInMinutes: 720 // expires in 12 hours
 							});
 
 					// return the information including token as JSON
@@ -79,7 +80,7 @@ module.exports = function(app, express){
 					});
 				}
 			}
-		});
+		})
 	});
 
 	// route middleware to verify a token

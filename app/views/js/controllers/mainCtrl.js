@@ -27,9 +27,10 @@ angular.module('mainCtrl', [])
 		// call the Auth.login() function
 		Auth.login(vm.loginData.username, vm.loginData.password)
 			.success(function(data) {
-
-				// if a user successfully logs in redirect to main page
-				if(data.success)
+				// if a user successfully logs in redirect to the user's type page
+				if(data.success && data.userType == 'admin')
+					$location.path('/admin');
+				else if(data.success)
 					$location.path('/main');
 				else
 					vm.error = data.message;
