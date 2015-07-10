@@ -36,7 +36,7 @@ angular.module('appBookIt.routes', ['ngRoute'])
 	})
 
 	.otherwise({
-		redirectTo: '/main'
+		redirectTo: '/login'
 	});
 
 	// Added to remove the # from URLs
