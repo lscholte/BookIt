@@ -65,13 +65,26 @@
             <div class="container" ng-if="Active.hasBooking()">
                 <h2>Active Booking</h2>
                 <div class="jumbotron">
-                    <ul>
-                        <li> Start Time: {{ Active.booking.startTime }} </li>
-                        <li> End Time: {{ Active.booking.endTime }} </li>
-                        <li> Date: {{ Active.booking.date }} </li>
-                        <li> Room: {{ Active.booking.roomNumber }} </li>
-                        <li> Equipment: {{ Active.booking.equipment }} </li>
-                    </ul>
+                    <table class="table table-bordered" >
+                        <thead>
+                            <tr>
+                                <th>Day</th>
+                                <th>Time</th>
+                                <th>Room Number</th>
+                                <th>Equipment</th>
+                            </tr>
+                        </thead>
+                        <div>
+                            <tbody>
+                                <tr>
+                                    <td>{{ Active.booking.date }}</td>
+                                    <td>{{ Active.booking.startTime }} - {{ Active.booking.endTime }}</td>
+                                    <td>{{ Active.booking.roomNumber }}</td>
+                                    <td>{{ Active.booking.equipment }}</td>
+                                </tr>
+                            </tbody>
+                        </div>
+                    </table>
                     <p style="font-size:small; margin-left:30px">//TODO: Hide quickbook and create booking button while a user has an active booking</p>
                 </div>
             </div>
