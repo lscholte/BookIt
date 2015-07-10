@@ -46,8 +46,10 @@
 </div>
 
 <!-- Edit Booking Button -->
-<div class="container">
+<div class="container" ng-controller="AdminController as editor">
 	<h3>Admin Tools</h3>
-    <button id = "editBooking" type="button" class="btn btn-default btn-lg">Edit Bookings</button>
+    <button id = "editBooking" type="button" class="btn btn-default btn-lg" ng-click="editor.editbookings()">
+        Edit Bookings
+    </button>
 </div>
 

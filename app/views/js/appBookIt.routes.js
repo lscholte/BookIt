@@ -35,6 +35,11 @@ angular.module('appBookIt.routes', ['ngRoute'])
 
 	})
 
+	.when("/admin/editbookings", {
+		templateUrl : 'app/views/pages/editbookings.html'
+		
+	})
+
 	.otherwise({
 		redirectTo: '/login'
 	});
