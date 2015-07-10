@@ -1,9 +1,13 @@
-angular.module('bookingCtrl', [])
+angular.module('bookingCtrl', ["activeBookingService"])
 
-.controller('BookingController', function($scope, $location, Auth){
+.controller('BookingController', function($scope, $location, Auth, ActiveBooking){
             
             this.days = [];
             this.selectedDay = null;
+            //this.activeBooking = ActiveBooking.getActiveBooking();
+            this.activeBooking = function(){
+                return ActiveBooking.activeBooking;
+            };
             
             this.setPotentialDays = function() {
                 var d = new Date();
