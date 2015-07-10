@@ -63,6 +63,7 @@ module.exports = function(app, express){
 					var token = jwt.sign(
 					{
 						name: user.name,
+						userType: user.userType,
 						username: user.username,
 						userType: user.userType,
 						bookingID: user.bookingID

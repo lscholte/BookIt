@@ -21,7 +21,7 @@
                     <div class="previous">
                         <button type="button" class="btn btn-default" ng-click="calendar.lastWeek()">Previous Week</button>
                     </div>
-                    Week of {{ calendar.weekStart().toDateString() }} - {{ calendar.weekEnd().toDateString() }}
+                    Week of {{ calendar.weekStart().toDateString() }} to {{ calendar.weekEnd().toDateString() }}
                     <div class="next">
                         <button type="button" class="btn btn-default" ng-click="calendar.nextWeek()">Next Week</button>
                     </div>
@@ -84,9 +84,15 @@
 </div>
 
 <div ng-controller="BookingController as booking">
-    <!-- Create QuickBook Button -->
+
     <div class="container">
-        <button id= "quickBook" type="button" class="btn btn-default btn-lg" data-toggle="modal" data-target="#quickBookModel" ng-click="booking.setPotentialDays()">QuickBook</button>
+        <div class="col-xs-10">
+            <!-- Create QuickBook Button -->
+            <button id= "quickBook" type="button" class="btn btn-default btn-lg" data-toggle="modal" data-target="#quickBookModel" ng-click="booking.setPotentialDays()">QuickBook</button>
+
+            <!-- Create Booking Button -->
+            <button id="createBooking" type="button" class="btn btn-default btn-lg" data-toggle="modal" data-target="#selectDayModal" ng-click="booking.setPotentialDays()" style="margin-left: 20px">Create a Booking</button>
+        </div>
     </div>
 
     <div id="quickBookModel" class="modal fade" role="dialog" data-backdrop="static">
@@ -120,15 +126,6 @@
             </div>
         </div>
     </div>
-
-
-
-    <!-- Create Booking Button -->
-    <div class="container">
-        <button id = "createBooking" type="button" class="btn btn-default btn-lg" data-toggle="modal" data-target="#selectDayModal" ng-click="booking.setPotentialDays()">Create a Booking</button>
-    </div>
-
-
 
     <!-- Select Day Modal -->
     <div id="selectDayModal" class="modal fade" role="dialog" data-backdrop="static">
