@@ -8,16 +8,6 @@
         var dayText = $(this).text();
         $('#selectedDayQuickBook').html(dayText + '<span class="caret"></span>');
     });
-	
-	$(document).on('click', '#quickBookDropdown2 li a', function() {
-        var dayText = $(this).text();
-        $('#selectedStartTimeQuickBook').html(dayText + '<span class="caret"></span>');
-    });
-	
-	$(document).on('click', '#quickBookDropdown3 li a', function() {
-        var dayText = $(this).text();
-        $('#selectedEndTimeQuickBook').html(dayText + '<span class="caret"></span>');
-    });
 </script>
 
 <!-- Calendar section -->
@@ -140,67 +130,10 @@
                                 <a href="#">{{ day }}</a>
                             </li>
                         </ul>
-						
-						
                     </div>
-					
-					<div class="dropdown">
-                        <button id="selectedStartTimeQuickBook" class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">Select Start Time
-                            <span class="caret"></span>
-                        </button>
-
-                        <!-- We should generate the dropdown items with a script.
-                        These values are simply placeholders.-->
-                        <ul id="quickBookDropdown2" class="dropdown-menu">
-							<li><a href="#">8:00am</a></li>
-							<li><a href="#">9:00am</a></li>
-							<li><a href="#">11:00am</a></li>
-							<li><a href="#">12:00am</a></li>
-							<li><a href="#">1:00pm</a></li>
-							<li><a href="#">2:00pm</a></li>
-							<li><a href="#">3:00pm</a></li>
-							<li><a href="#">4:00pm</a></li>
-							<li><a href="#">5:00pm</a></li>
-							<li><a href="#">6:00pm</a></li>
-							<li><a href="#">7:00pm</a></li>
-							<li><a href="#">8:00pm</a></li>
-							<li><a href="#">9:00pm</a></li>
-							<li><a href="#">10:00pm</a></li>
-                        </ul>
-						
-						
-                    </div>
-					
-					<div class="dropdown">
-                        <button id="selectedEndTimeQuickBook" class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">Select End Time
-                            <span class="caret"></span>
-                        </button>
-
-                        <!-- We should generate the dropdown items with a script.
-                        These values are simply placeholders.-->
-                        <ul id="quickBookDropdown3" class="dropdown-menu">
-                            <li><a href="#">8:00am</a></li>
-							<li><a href="#">9:00am</a></li>
-							<li><a href="#">11:00am</a></li>
-							<li><a href="#">12:00am</a></li>
-							<li><a href="#">1:00pm</a></li>
-							<li><a href="#">2:00pm</a></li>
-							<li><a href="#">3:00pm</a></li>
-							<li><a href="#">4:00pm</a></li>
-							<li><a href="#">5:00pm</a></li>
-							<li><a href="#">6:00pm</a></li>
-							<li><a href="#">7:00pm</a></li>
-							<li><a href="#">8:00pm</a></li>
-							<li><a href="#">9:00pm</a></li>
-							<li><a href="#">10:00pm</a></li>
-                        </ul>
-	
-                    </div>
-	
                 </div>
-				<input type="checkbox"> Projector <input type="checkbox"> Laptop <br>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-toggle="modal" data-target="#confirmationModal" data-dismiss="modal">Continue</button>
+                    <button type="button" class="btn btn-default" data-toggle="modal" data-target="#other" data-dismiss="modal">Continue</button>
                     <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
                 </div>
             </div>
