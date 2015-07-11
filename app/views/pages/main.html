@@ -110,10 +110,10 @@
     <div class="container">
         <div class="col-xs-10" ng-if="!booking.activeBooking()">
             <!-- Create QuickBook Button -->
-            <button id= "quickBook" type="button" class="btn btn-default btn-lg" data-toggle="modal" data-target="#quickBookModel" ng-click="booking.setPotentialDays()">QuickBook</button>
+            <button id= "quickBook" type="button" class="btn btn-default btn-lg" data-toggle="modal" data-target="#quickBookModel" ng-click="booking.setDayDropdownItems();booking.setStartTimeDropdownItems();booking.setEndTimeDropdownItems()">QuickBook</button>
 
             <!-- Create Booking Button -->
-            <button id="createBooking" type="button" class="btn btn-default btn-lg" data-toggle="modal" data-target="#selectDayModal" ng-click="booking.setPotentialDays()" style="margin-left: 20px">Create a Booking</button>
+            <button id="createBooking" type="button" class="btn btn-default btn-lg" data-toggle="modal" data-target="#selectDayModal" ng-click="booking.setDayDropdownItems()" style="margin-left: 20px">Create a Booking</button>
         </div>
     </div>
 
@@ -127,69 +127,18 @@
                     <h4 class="modal-title">Select a Date to Book</h4>
                 </div>
                 <div class="modal-body">
-                    <div class="dropdown">
-                        <button id="selectedDayQuickBook" class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">Select Day
-                            <span class="caret"></span>
-                        </button>
-
-                        <!-- We should generate the dropdown items with a script.
-                        These values are simply placeholders.-->
-                        <ul id="quickBookDropdown" class="dropdown-menu">
-                            <li ng-repeat="day in booking.days">
-                                <a href="#">{{ day }}</a>
-                            </li>
-                        </ul>
-                    </div>
-					
-					<div class="dropdown">
-                        <button id="selectedDayQuickBook1" class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">Select Start Time
-                            <span class="caret"></span>
-                        </button>
-
-                        <!-- We should generate the dropdown items with a script.
-                        These values are simply placeholders.-->
-                        <ul id="quickBookDropdown1" class="dropdown-menu">
-                            <li><a href="#">8:00am</a></li>
-							<li><a href="#">9:00am</a></li>
-							<li><a href="#">10:00am</a></li>
-							<li><a href="#">11:00am</a></li>
-							<li><a href="#">12:00am</a></li>
-							<li><a href="#">1:00pm</a></li>
-							<li><a href="#">2:00pm</a></li>
-							<li><a href="#">3:00pm</a></li>
-							<li><a href="#">4:00pm</a></li>
-							<li><a href="#">5:00pm</a></li>
-							<li><a href="#">6:00pm</a></li>
-							<li><a href="#">7:00pm</a></li>
-							<li><a href="#">8:00pm</a></li>
-							<li><a href="#">9:00pm</a></li>	
-                        </ul>
-                    </div>
-					
-					<div class="dropdown">
-                        <button id="selectedDayQuickBook2" class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">Select End Time
-                            <span class="caret"></span>
-                        </button>
-
-                        <!-- We should generate the dropdown items with a script.
-                        These values are simply placeholders.-->
-                        <ul id="quickBookDropdown2" class="dropdown-menu">
-                            <li><a href="#">8:00am</a></li>
-							<li><a href="#">9:00am</a></li>
-							<li><a href="#">10:00am</a></li>
-							<li><a href="#">11:00am</a></li>
-							<li><a href="#">12:00am</a></li>
-							<li><a href="#">1:00pm</a></li>
-							<li><a href="#">2:00pm</a></li>
-							<li><a href="#">3:00pm</a></li>
-							<li><a href="#">4:00pm</a></li>
-							<li><a href="#">5:00pm</a></li>
-							<li><a href="#">6:00pm</a></li>
-							<li><a href="#">7:00pm</a></li>
-							<li><a href="#">8:00pm</a></li>
-							<li><a href="#">9:00pm</a></li>
-                        </ul>
-                    </div>
+                    
+                
+                    
+                        <select class="btn btn-default dropdown-toggle" ng-model="booking.selectedDayText" ng-options="day for day in booking.dayDropdownItems" ng-change="booking.setStartTimeDropdownItems(); booking.setEndTimeDropdownItems()">
+                        </select>
+                        <select class="btn btn-default dropdown-toggle" ng-model="booking.selectedStartTimeText" ng-options="start for start in booking.startTimeDropdownItems" ng-change="booking.setBookingStartTime();booking.setEndTimeDropdownItems()">
+                        </select>
+                        
+                        <select class="btn btn-default dropdown-toggle" ng-model="booking.selectedEndTimeText" ng-options="end for end in booking.endTimeDropdownItems" ng-change="booking.setBookingEndTime()">
+                        </select>
+                    
+    
 
 					<div class = "selectEquipment">
 						<input type="checkbox"> Projector <input type="checkbox"> Laptop <br>
