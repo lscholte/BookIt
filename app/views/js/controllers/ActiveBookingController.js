@@ -35,4 +35,12 @@ angular.module('activeCtrl', ["activeBookingService"])
 			});
 		}
 	};
+	
+	vm.deleteBooking = function(){
+		$http.delete("/api/bookings/" + vm.user.bookingID).success(function(data){
+			vm.user.bookingID = "";
+			vm.booking = {};
+			ActiveBooking.setActiveBooking(false);
+		});	
+	};
 });

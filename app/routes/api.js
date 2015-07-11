@@ -302,12 +302,12 @@ module.exports = function(app, express){
 
 				// Check that the booking isn't too long
 				// Note: this checks that bookings are exactly 1, 2, or 3 hours long. This may be too restrictive
-
+				// also allows student to create a 2 hour booking if the starttime is less thabn 2 hours away
 				var duration = (booking.getEndDate().getTime() - booking.getStartDate().getTime())/(60*60*1000);
-				if(user.getUserType() == 'student' && duration != 1){
-					res.status(401).send('Students can only book rooms for 1 hour');
+				if(user.getUserType() == 'student' && (duration != 1 || !((booking.getStartDate().getTime() - new Date().getTime())/60000 > 120 && duration == 2))){
+					res.status(401).send('Students can only book rooms for 1 hour, or 2 hours if the start of the booking is 2 hours or less away');
 					return;
-				} else if(user.getUserType() == 'staff_faculty' && (duration != 1 || duration != 2 || duration != 3)){
+				} else if(user.getUserType() == 'staff_faculty' && ((duration != 1 || duration != 2 || duration != 3) || !((booking.getStartDate().getTime() - new Date().getTime())/60000 > 120 && duration == 4))){
 					res.status(401).send('Staff and Faculty can book rooms for either 1 hour, 2 hours or 3 hours');
 					return;
 				}
@@ -370,7 +370,9 @@ module.exports = function(app, express){
 			var query;
 
 			if(req.query.startDate && req.query.endDate){
-				query = Booking.find({$or:[{$and: [{startDate: {$lte:req.query.startDate}}, {endDate: {$gte:req.query.endDate}}]}, {$and:[{startDate: {$gte:req.query.startDate}}, {startDate: {$lt:req.query.endDate}}]}, {$and:[{endDate: {$gt:req.query.startDate}}, {endDate: {$lte:req.query.endDate}}]}]});
+				var start = new Date(parseInt(req.query.startDate, 10));
+				var end = new Date(parseInt(req.query.endDate, 10));
+				query = Booking.find({$or:[{$and: [{startDate: {$lte:start}}, {endDate: {$gte:end}}]}, {$and:[{startDate: {$gte:start}}, {startDate: {$lt:end}}]}, {$and:[{endDate: {$gt:start}}, {endDate: {$lte:end}}]}]});
 			}
 			else{
 				query = Booking.find();
@@ -515,6 +517,49 @@ module.exports = function(app, express){
 				});
 			});
 		});
+		
+	apiRouter.route('/rooms')
+		
+		//returns a list of unused rooms for a given time slot
+		.get(function(req, res){
+			if(req.query.startDate && req.query.endDate){
+				//Get all equipment books that occur at the same time:
+				//	startTime < booking.startTime && endTime > booking.endTime
+				//	startTime > booking.startTime && startTime < booking.endTime
+				//	endTime > booking.startTime && endTime < booking.endTime
+				Booking.find({$or:[{$and: [{startDate: {$lte:req.query.startDate}}, {endDate: {$gte:req.query.endDate}}]}, {$and:[{startDate: {$gte:req.query.startDate}}, {startDate: {$lt:req.query.endDate}}]}, {$and:[{endDate: {$gt:req.query.startDate}}, {endDate: {$lte:req.query.endDate}}]}]}).select('room').populate('room').exec(function(err, bookings){
+					var roomList = [];
+					bookings.forEach(function(booking){
+						roomList.push(booking.room);
+					});
+					var emptyRooms = [];
+					Room.find({}, function(err, allRooms){
+						if(err){console.log(err);}
+						
+						//for every room, check if it's in list of used rooms. If it's not, return it
+						allRooms.forEach(function(item){
+							var roomFound = false;
+							//we have to use this loop instead of array.includes() because we're comparing objects
+							for(var i=0; i < roomList.length; i++){
+								if(roomList[i].getRoomNumber() == item.getRoomNumber()){
+									roomFound = true;
+									break;
+								}
+							}
+
+							//send this room back! it's empty!
+							if(!roomFound){
+								emptyRooms.push(item);
+								return;
+							}
+						});
+						res.json(emptyRooms);
+					});
+				});
+			}else{
+				res.status(400).send("Please specify a startDate and an endDate for the query.");
+			}
+		});		
 
 		return apiRouter;
 	};
