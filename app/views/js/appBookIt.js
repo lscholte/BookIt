@@ -1,4 +1,4 @@
-angular.module('appBookIt', ['appBookIt.routes','authService','mainCtrl','calendarService','calendarCtrl', 'bookingCtrl', 'activeCtrl'])
+angular.module('appBookIt', ['appBookIt.routes','authService','mainCtrl','calendarService','calendarCtrl', 'bookingCtrl', 'activeCtrl', 'adminCtrl'])
 
 // application configuration to integrate token into requests
 .config(function($httpProvider) {
