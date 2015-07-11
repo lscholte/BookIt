@@ -127,7 +127,9 @@
                     <h4 class="modal-title">Select a Date to Book</h4>
                 </div>
                 <div class="modal-body">
-                    <form>
+                    
+                
+                    
                         <select class="btn btn-default dropdown-toggle" ng-model="booking.selectedDayText" ng-options="day for day in booking.days" ng-change="booking.setStartEndDay(); booking.setStartTimes(); booking.setEndTimes()">
                         </select>
                         <select class="btn btn-default dropdown-toggle" ng-model="booking.selectedStartTimeText" ng-options="start for start in booking.startTimes" ng-change="booking.setStartTime();booking.setEndTimes()">
@@ -135,7 +137,6 @@
                         
                         <select class="btn btn-default dropdown-toggle" ng-model="booking.selectedEndTimeText" ng-options="end for end in booking.endTimes" ng-change="booking.setEndTime()">
                         </select>
-                    </form>
                     
     
 
