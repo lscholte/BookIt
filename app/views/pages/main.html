@@ -110,10 +110,10 @@
     <div class="container">
         <div class="col-xs-10" ng-if="!booking.activeBooking()">
             <!-- Create QuickBook Button -->
-            <button id= "quickBook" type="button" class="btn btn-default btn-lg" data-toggle="modal" data-target="#quickBookModel" ng-click="booking.setPotentialDays();booking.setStartTimes();booking.setEndTimes()">QuickBook</button>
+            <button id= "quickBook" type="button" class="btn btn-default btn-lg" data-toggle="modal" data-target="#quickBookModel" ng-click="booking.setDayDropdownItems();booking.setStartTimeDropdownItems();booking.setEndTimeDropdownItems()">QuickBook</button>
 
             <!-- Create Booking Button -->
-            <button id="createBooking" type="button" class="btn btn-default btn-lg" data-toggle="modal" data-target="#selectDayModal" ng-click="booking.setPotentialDays()" style="margin-left: 20px">Create a Booking</button>
+            <button id="createBooking" type="button" class="btn btn-default btn-lg" data-toggle="modal" data-target="#selectDayModal" ng-click="booking.setDayDropdownItems()" style="margin-left: 20px">Create a Booking</button>
         </div>
     </div>
 
@@ -130,12 +130,12 @@
                     
                 
                     
-                        <select class="btn btn-default dropdown-toggle" ng-model="booking.selectedDayText" ng-options="day for day in booking.days" ng-change="booking.setStartEndDay(); booking.setStartTimes(); booking.setEndTimes()">
+                        <select class="btn btn-default dropdown-toggle" ng-model="booking.selectedDayText" ng-options="day for day in booking.dayDropdownItems" ng-change="booking.setStartTimeDropdownItems(); booking.setEndTimeDropdownItems()">
                         </select>
-                        <select class="btn btn-default dropdown-toggle" ng-model="booking.selectedStartTimeText" ng-options="start for start in booking.startTimes" ng-change="booking.setStartTime();booking.setEndTimes()">
+                        <select class="btn btn-default dropdown-toggle" ng-model="booking.selectedStartTimeText" ng-options="start for start in booking.startTimeDropdownItems" ng-change="booking.setBookingStartTime();booking.setEndTimeDropdownItems()">
                         </select>
                         
-                        <select class="btn btn-default dropdown-toggle" ng-model="booking.selectedEndTimeText" ng-options="end for end in booking.endTimes" ng-change="booking.setEndTime()">
+                        <select class="btn btn-default dropdown-toggle" ng-model="booking.selectedEndTimeText" ng-options="end for end in booking.endTimeDropdownItems" ng-change="booking.setBookingEndTime()">
                         </select>
                     
     
