@@ -13,7 +13,7 @@ angular.module('quickBookService', [])
 					return null;
 				}
 				//else make the booking
-				$http.post('/api/booking', {startDate: startDate.getTime(), endDate: endDate.getTime(), username: username, roomNumber: data[0].getRoomNumber()}).success(function(data, status, headers, config){
+				$http.post('/api/booking', {startDate: startDate.getTime(), endDate: endDate.getTime(), username: username, roomNumber: data[0].roomNumber}).success(function(data, status, headers, config){
 					//if the booking has equipment...
 					if(equipment.length > 0){
 						//get list of unused equipment
