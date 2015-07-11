@@ -41,6 +41,8 @@ angular.module('bookingCtrl', ["activeBookingService"])
             };
             
             vm.setDayDropdownItems = function() {
+                
+                vm.dayDropdownItems = [];
                 var d = new Date();
             
                 for(var i = 0; i < 14; ++i) {
