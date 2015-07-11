@@ -3,6 +3,7 @@ angular.module('mainCtrl', [])
 .controller('mainController', function($rootScope, $location, Auth) {
 
 	var vm = this;
+	vm.user;
 
 	// get info if a person is logged in
 	vm.loggedIn = Auth.isLoggedIn();
@@ -32,7 +33,7 @@ angular.module('mainCtrl', [])
 					// **BUG** user has to press login twice to get to correct page
 					// this has to do with how getUser is handled as a user has to be actually
 					// logged in to have Auth.getUser() to work... need to find a work around
-					vm.routeUserType();  
+					vm.routeWorkaround();  
 				}
 			
 				else
@@ -58,4 +59,13 @@ angular.module('mainCtrl', [])
 			$location.path('/main');
 		}
 	};
+
+	vm.routeWorkaround = function() {
+		if(vm.loginData.username == "mithrandir"){
+			$location.path('/admin');
+		}
+		else{
+			$location.path('/main');
+		}
+	}
 });
