@@ -29,7 +29,10 @@ angular.module('mainCtrl', [])
 			.success(function(data) {
 				// if a user successfully logs in redirect to the user's type page
 				if(data.success){
-					vm.routeUserType();
+					// **BUG** user has to press login twice to get to correct page
+					// this has to do with how getUser is handled as a user has to be actually
+					// logged in to have Auth.getUser() to work... need to find a work around
+					vm.routeUserType();  
 				}
 			
 				else
