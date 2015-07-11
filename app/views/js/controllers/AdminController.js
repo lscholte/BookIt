@@ -8,8 +8,8 @@ angular.module('adminCtrl', ['calendarService'])
 			vm.bookings = data;
 		});
 
-		vm.editBookings() = function(){
+		vm.editBookings = function(){
 			$location.path('/admin/editbookings');
-		}
+		};
 
 	});

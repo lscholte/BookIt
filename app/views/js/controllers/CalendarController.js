@@ -56,6 +56,19 @@ angular.module('calendarCtrl', ['calendarService'])
 	//change current week to the previous week
 	vm.lastWeek = function(){
 		vm.date.setDate(vm.date.getDate() - 7);
+	};	
+
+	vm.day = function(){
+		var day = vm.date.getDay();
+		return new Date(vm.date.setDate(day));
+	};
+
+	vm.nextDay = function(){
+		vm.date.setDate(vm.date.getDate() + 1);
+	};
+
+	vm.prevDay = function(){
+		vm.date.setDate(vm.date.getDate() - 1);
 	};
 
 });

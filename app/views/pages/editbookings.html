@@ -2,15 +2,19 @@
 	<div class="col-xs-1"><!-- Centering -->
 	</div>
     <div class="col-xs-10">
-		<div class="container">
+		<div class="container" ng-controller="CalendarController as calendar">
 			<h3>Room Bookings</h3>
             <div class="calendar-header">
                 <div class="previous">
-                    <button type="button" class="btn btn-default">Previous Day</button>
+                    <button type="button" class="btn btn-default" ng-click="calendar.prevDay()">
+                        Previous Day
+                    </button>
                 </div>
-                    Day of {{ calendar.dayStart().toDateString() }} - {{ calendar.dayEnd().toDateString() }}
+                    Day of {{ calendar.day().toDateString() }}
                 <div class="next">
-                    <button type="button" class="btn btn-default">Next Day</button>
+                    <button type="button" class="btn btn-default" ng-click="calendar.nextDay()">
+                        Next Day
+                    </button>
                 </div>
             </div> 
 			<div class="bookingsTable">
@@ -18,9 +22,55 @@
                     <thead>
                         <tr>
                             <th>Room</th>
-                           
+                            <th>7:00am</th>
+                            <th>8:00am</th>
+                            <th>9:00am</th>
+                            <th>10:00am</th>
+                            <th>11:00am</th>
+                            <th>12:00pm</th>
+                            <th>1:00pm</th>
+                            <th>2:00pm</th>
+                            <th>3:00pm</th>
+                            <th>4:00pm</th>
+                            <th>5:00pm</th>
+                            <th>6:00pm</th>
+                            <th>7:00pm</th>
+                            <th>8:00pm</th>
+                            <th>9:00pm</th>
+                            <th>10:00pm</th>
+                            <th>11:00pm</th>
                         </tr>
                     </thead>
+                    <tr>
+                        <th>1</th>
+                    </tr>
+                    <tr>
+                        <th>2</th>
+                    </tr>
+                    <tr>
+                        <th>3</th>
+                    </tr>
+                    <tr>
+                        <th>4</th>
+                    </tr>
+                    <tr>
+                        <th>5</th>
+                    </tr>
+                    <tr>
+                        <th>6</th>
+                    </tr>
+                    <tr>
+                        <th>7</th>
+                    </tr>
+                    <tr>
+                        <th>8</th>
+                    </tr>
+                    <tr>
+                        <th>9</th>
+                    </tr>
+                    <tr>
+                        <th>10</th>
+                    </tr>
                     <tbody>
                         <tr>
                             
@@ -32,7 +82,7 @@
 
 		<div class="container">
 			<div class="showBooking">
-
+                <h3>Edit Booking</h3>
 			</div>
 		</div>
 	</div>
