@@ -92,7 +92,6 @@ angular.module('bookingCtrl', ["activeBookingService"])
                 //student
                 else {
                     maxHours = 1;
-                    console.log(vm.user);
                 }
                 
                 if(vm.bookingStartTime.getDay() == 0 || vm.bookingStartTime.getDay() == 6) {
