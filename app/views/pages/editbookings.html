@@ -22,7 +22,6 @@
                     <thead>
                         <tr>
                             <th>Room</th>
-                            <th>7:00am</th>
                             <th>8:00am</th>
                             <th>9:00am</th>
                             <th>10:00am</th>
@@ -38,42 +37,18 @@
                             <th>8:00pm</th>
                             <th>9:00pm</th>
                             <th>10:00pm</th>
-                            <th>11:00pm</th>
                         </tr>
                     </thead>
-                    <tr>
-                        <th>1</th>
-                    </tr>
-                    <tr>
-                        <th>2</th>
-                    </tr>
-                    <tr>
-                        <th>3</th>
-                    </tr>
-                    <tr>
-                        <th>4</th>
-                    </tr>
-                    <tr>
-                        <th>5</th>
-                    </tr>
-                    <tr>
-                        <th>6</th>
-                    </tr>
-                    <tr>
-                        <th>7</th>
-                    </tr>
-                    <tr>
-                        <th>8</th>
-                    </tr>
-                    <tr>
-                        <th>9</th>
-                    </tr>
-                    <tr>
-                        <th>10</th>
-                    </tr>
                     <tbody>
                         <tr>
-                            
+                            <td>
+                                {{ $index }}
+                            </td>
+                            <td>
+                                <button type="button" class="btn btn-default" ng-click="">
+                                    {{ calendar.booking }}
+                                </button>
+                            </td>
                         </tr>
                     </tbody>
                 </table>
