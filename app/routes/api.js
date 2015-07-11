@@ -484,12 +484,15 @@ module.exports = function(app, express){
 			if(req.body.equipmentID){
 				Booking.findById(req.params.bookingID).exec(function(err, booking) {
 					if (err) res.send(err);
+
+					// If the body contains an array, there are likely multiple items to add
 					if (req.body.equipmentID instanceof Array){
+
+						// Iterate through the items in the body
 						for (var i in req.body.equipmentID){
 							Equipment.findById(req.body.equipmentID[i]).exec(function(err, equip) {
 								if (err) res.send(err);
-								console.log(equip);
-								//TODO disallow same types of equipment, this only disallows the same piece equipment
+
 								// Iterate through all equipment already attached to booking, check that none are
 								// the pieces of equipment we're trying to add.
 								for (var i = 0; i < booking.equipment.length; i++ ){
@@ -499,11 +502,16 @@ module.exports = function(app, express){
 										return;
 									}
 								}
-								booking.equipment.push(equip);
-								console.log("Pushed");
-								booking.save(function(err){
-									if (err) res.send(err);
-								});
+								// There can only be two pieces of equipment /per booking
+								if (booking.equipment.length < 2){
+									booking.equipment.push(equip);
+									booking.save(function(err){
+										if (err) res.send(err);
+									});
+								} else {
+									res.status(400).send({success: "false", message: "There are already two pieces of equipment booked!"});
+									return;
+								}
 							});
 						}
 						// Have finished with all the equipment from the body, time to save the updated
@@ -521,18 +529,24 @@ module.exports = function(app, express){
 									return;
 								}
 							}
-							booking.equipment.push(equip);
-							booking.save(function(err){
-								if (err) res.send(err);
-								res.json(booking);
-							});
+							if (booking.equipment.length < 2){
+								booking.equipment.push(equip);
+								booking.save(function(err){
+									if (err) res.send(err);
+								});
+							} else {
+								res.status(400).send({success: "false", message: "There are already two pieces of equipment booked!"});
+								return;
+							}
+							// Have finished with all the equipment from the body, time to save the updated
+							// booking.
+							res.json(booking);
 						});
 					}
 				});
 			} else {
 				res.status(400).send({message : "Specify an equipmentID in the body to add, else use /DELETE to remove all equipment" });
 			}
-
 		})
 
 		//remove the equipment from a booking
@@ -545,9 +559,9 @@ module.exports = function(app, express){
 				});
 			});
 		});
-		
+
 	apiRouter.route('/rooms')
-		
+
 		//returns a list of unused rooms for a given time slot
 		.get(function(req, res){
 			if(req.query.startDate && req.query.endDate){
@@ -562,12 +576,12 @@ module.exports = function(app, express){
 					});
 					var emptyRooms = [];
 					Room.find({}, function(err, allRooms){
-						if(err){console.log(err);}
-						
+						if(err) console.log(err);
+
 						//for every room, check if it's in list of used rooms. If it's not, return it
 						allRooms.forEach(function(item){
 							var roomFound = false;
-							//we have to use this loop instead of array.includes() because we're comparing objects
+							// We have to use this loop instead of array.includes() because we're comparing objects
 							for(var i=0; i < roomList.length; i++){
 								if(roomList[i].getRoomNumber() == item.getRoomNumber()){
 									roomFound = true;
@@ -587,7 +601,7 @@ module.exports = function(app, express){
 			}else{
 				res.status(400).send("Please specify a startDate and an endDate for the query.");
 			}
-		});		
+		});
 
 		return apiRouter;
 	};
