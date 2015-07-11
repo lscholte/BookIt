@@ -341,15 +341,16 @@
                     <div ng-if="booking.createdBooking != null">
                         <div class="container">
                             <h5>You have booked</h5>
-                            Room: Room Number<br>
-                            Time: Time booked<br>
-                            Date: Date booked<br>
-                            Projector: Y/N<br>
-                            Laptop: Y/N<br>
+                            Room: {{ booking.createdBooking.room.roomNumber }}<br>
+                            Start Time: {{ booking.createdBooking.startTime.toLocaleString() }}<br>
+                            End Time: {{ booking.createdBooking.endTime.toLocaleString() }}<br>
+                            Equipment: {{ booking.createdBooking.equipment }}<br>
                         </div>
                     </div>
                     <div ng-if="booking.createdBooking == null">
                         Error creating booking
+                        
+                        <!-- TODO: Add more details to error message -->
                     </div>
                 </div>
                 <div class="modal-footer">
