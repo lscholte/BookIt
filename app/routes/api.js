@@ -414,7 +414,7 @@ module.exports = function(app, express){
 				}
 				User.findById(booking.user, function(err, user){
 					if (err) res.send(err);
-					user.bookingID = "";
+					user.bookingID = null;
 					user.save(function(err, user){
 						Booking.remove({_id: booking._id}, function(err, numRemoved){
 							// Return a message
