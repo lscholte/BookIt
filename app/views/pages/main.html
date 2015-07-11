@@ -141,11 +141,11 @@
     
 
 					<div class = "selectEquipment">
-						<input type="checkbox"> Projector <input type="checkbox"> Laptop <br>
+                        <label ng-repeat="type in booking.equipmentTypes">{{ type }}: <input type="checkbox" ng-click="booking.updateEquipment(type)"></label>
 					</div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-toggle="modal" data-target="#confirmationModal" data-dismiss="modal">Continue</button>
+                    <button type="button" class="btn btn-default" data-toggle="modal" data-target="#confirmationModal" data-dismiss="modal" ng-click="booking.createBooking()">Create Booking</button>
                     <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
                 </div>
             </div>
@@ -337,13 +337,19 @@
                     <h4 class="modal-title">Confirmation</h4>
                 </div>
                 <div class="modal-body" >
-                    <div class="container">
-                        <h5>You have booked</h5>
-                        Room: Room Number<br>
-                        Time: Time booked<br>
-                        Date: Date booked<br>
-                        Projector: Y/N<br>
-                        Laptop: Y/N<br>
+                    
+                    <div ng-if="booking.createdBooking != null">
+                        <div class="container">
+                            <h5>You have booked</h5>
+                            Room: Room Number<br>
+                            Time: Time booked<br>
+                            Date: Date booked<br>
+                            Projector: Y/N<br>
+                            Laptop: Y/N<br>
+                        </div>
+                    </div>
+                    <div ng-if="booking.createdBooking == null">
+                        Error creating booking
                     </div>
                 </div>
                 <div class="modal-footer">

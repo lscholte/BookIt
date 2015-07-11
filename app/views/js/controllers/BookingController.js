@@ -1,6 +1,6 @@
-angular.module('bookingCtrl', ["activeBookingService"])
+angular.module('bookingCtrl', ["activeBookingService", "quickBookService"])
 
-.controller('BookingController', function($scope, $location, Auth, ActiveBooking){
+.controller('BookingController', function($scope, $location, Auth, ActiveBooking, quickBook){
             
             //All of this stuff currently relates to
             //the quickbook feature, so maybe it is worth
@@ -14,13 +14,15 @@ angular.module('bookingCtrl', ["activeBookingService"])
             vm.dayDropdownItems = [];
             vm.startTimeDropdownItems = [];
             vm.endTimeDropdownItems = []
-            
+            vm.equipmentTypes = ["Projector", "Laptop"];
+    
             vm.selectedDayText = "";
             vm.selectedStartTimeText = "";
             vm.selectedEndTimeText = "";
             
             vm.bookingStartTime = null;
             vm.bookingEndTime = null;
+            vm.equipment = [];
     
     
     
@@ -126,5 +128,22 @@ angular.module('bookingCtrl', ["activeBookingService"])
                 vm.selectedEndTimeText = vm.endTimeDropdownItems[0];
                 vm.setBookingEndTime();
             };
-            
+    
+            vm.updateEquipment = function(type) {
+                type = type.toLowerCase();
+                var index = vm.equipment.indexOf(type);
+                if(index == -1) {
+                    vm.equipment.push(type);
+                }
+                else {
+                    vm.equipment.splice(index, 1);
+                }
+                console.log(vm.equipment);
+            }
+    
+    vm.createBooking = function() {
+         vm.createdBooking = quickBook.book(vm.bookingStartTime, vm.bookingEndTime, vm.user.username, vm.equipment);
+    }
+    
+    
             });
