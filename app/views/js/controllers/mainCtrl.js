@@ -28,8 +28,10 @@ angular.module('mainCtrl', [])
 		Auth.login(vm.loginData.username, vm.loginData.password)
 			.success(function(data) {
 				// if a user successfully logs in redirect to the user's type page
-				if(data.success)
-					$location.path('/main');
+				if(data.success){
+					vm.routeUserType();
+				}
+			
 				else
 					vm.error = data.message;
 			});
@@ -41,5 +43,16 @@ angular.module('mainCtrl', [])
 		// reset all user info
 		vm.user = {};
 		$location.path('/login');
+	};
+
+	vm.routeUserType = function() {
+		Auth.getUser().then(function(user){
+			vm.user = user.data;
+		});
+		if(vm.user.userType == 'admin')
+			$location.path('/admin');
+		else{
+			$location.path('/main');
+		}
 	};
 });

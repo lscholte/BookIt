@@ -71,4 +71,9 @@ angular.module('calendarCtrl', ['calendarService'])
 		vm.date.setDate(vm.date.getDate() - 1);
 	};
 
+	vm.booked = function(index){
+
+
+	};
+	
 });
