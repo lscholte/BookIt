@@ -2,6 +2,13 @@ angular.module('bookingCtrl', ["activeBookingService"])
 
 .controller('BookingController', function($scope, $location, Auth, ActiveBooking){
             
+            //TODO: This needs some serious cleaning up.
+            //All of this stuff currently relates to
+            //the quickbook feature, so maybe it is worth
+            //making this the quickbook controller and
+            //creating a new controller for the other
+            //booking process
+            
             this.days = [];
             this.startTimes = [];
             this.endTimes = []
