@@ -484,22 +484,50 @@ module.exports = function(app, express){
 			if(req.body.equipmentID){
 				Booking.findById(req.params.bookingID).exec(function(err, booking) {
 					if (err) res.send(err);
-					Equipment.findById(req.body.equipmentID).exec(function(err, equip) {
-						if (err) res.send(err);
-						//TODO disallow same types of equipment, this only disallows the same piece equipment
-						for (var i = 0; i < booking.equipment.length; i++ ){
-							var e = booking.equipment[i];
-							if (e.toString() == equip._id.toString()){
-								res.status(400).send("That equipment is already attached to this booking");
-								return;
-							}
+					if (req.body.equipmentID instanceof Array){
+						for (var i in req.body.equipmentID){
+							Equipment.findById(req.body.equipmentID[i]).exec(function(err, equip) {
+								if (err) res.send(err);
+								console.log(equip);
+								//TODO disallow same types of equipment, this only disallows the same piece equipment
+								// Iterate through all equipment already attached to booking, check that none are
+								// the pieces of equipment we're trying to add.
+								for (var i = 0; i < booking.equipment.length; i++ ){
+									var e = booking.equipment[i];
+									if (e.toString() == equip._id.toString()){
+										res.status(400).send("That equipment is already attached to this booking");
+										return;
+									}
+								}
+								booking.equipment.push(equip);
+								console.log("Pushed");
+								booking.save(function(err){
+									if (err) res.send(err);
+								});
+							});
 						}
-						booking.equipment.push(equip);
-						booking.save(function(err){
+						// Have finished with all the equipment from the body, time to save the updated
+						// booking.
+						res.json(booking);
+
+					} else {
+						Equipment.findById(req.body.equipmentID).exec(function(err, equip) {
 							if (err) res.send(err);
-							res.json(booking);
+							//TODO disallow same types of equipment, this only disallows the same piece equipment
+							for (var i = 0; i < booking.equipment.length; i++ ){
+								var e = booking.equipment[i];
+								if (e.toString() == equip._id.toString()){
+									res.status(400).send("That equipment is already attached to this booking");
+									return;
+								}
+							}
+							booking.equipment.push(equip);
+							booking.save(function(err){
+								if (err) res.send(err);
+								res.json(booking);
+							});
 						});
-					});
+					}
 				});
 			} else {
 				res.status(400).send({message : "Specify an equipmentID in the body to add, else use /DELETE to remove all equipment" });
