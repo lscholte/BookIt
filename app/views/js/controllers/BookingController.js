@@ -82,6 +82,7 @@ angular.module('bookingCtrl', ["activeBookingService"])
                 var closeHour = 0;
                 var startHour = vm.bookingStartTime.getHours();
                 
+                
                 //staff/faculty
                 //TODO: Investigate why vm.user is undefined and
                 //therefore causing problems when I try and
@@ -92,6 +93,13 @@ angular.module('bookingCtrl', ["activeBookingService"])
                 //student
                 else {
                     maxHours = 1;
+                }
+                
+                //If the booking start time is within 2 hours of the current time,
+                //then allow the user to book for 1 extra hour
+                var timeDiff = Math.abs(new Date() - vm.bookingStartTime);
+                if(timeDiff < 7200000) {
+                    maxHours += 1;
                 }
                 
                 if(vm.bookingStartTime.getDay() == 0 || vm.bookingStartTime.getDay() == 6) {
