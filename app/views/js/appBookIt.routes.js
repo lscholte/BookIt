@@ -35,6 +35,11 @@ angular.module('appBookIt.routes', ['ngRoute'])
 
 	})
 
+	.when("/admin", {
+		templateUrl : 'app/views/pages/admin.html',
+		controller  : 'AdminController'
+	})
+
 	.when("/admin/editbookings", {
 		templateUrl : 'app/views/pages/editbookings.html'
 		

@@ -58,7 +58,7 @@ angular.module('calendarCtrl', ['calendarService'])
 		vm.date.setDate(vm.date.getDate() - 7);
 	};	
 
-	vm.day = function(){
+	vm.currentDay = function(){
 		var day = vm.date.getDay();
 		return new Date(vm.date.setDate(day));
 	};
@@ -71,9 +71,12 @@ angular.module('calendarCtrl', ['calendarService'])
 		vm.date.setDate(vm.date.getDate() - 1);
 	};
 
-	vm.booked = function(index){
+	vm.booked = function(startDay){
+
+		var list = Calendar.range(startDay, startDay);
 
 
 	};
+	
 	
 });
