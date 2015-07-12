@@ -73,7 +73,7 @@
                             </tbody>
                         </div>
                     </table>
-                    <button id= "deleteBooking" type="button" class="btn btn-default btn-lg"  ng-click="Active.deleteBooking()">Delete Booking</button>
+                    <button id= "deleteBooking" type="button" class="btn btn-default btn-lg"  data-toggle="modal" data-target="#deleteBookingModal">Delete Booking</button>
                     <button id= "deleteBooking" type="button" class="btn btn-default btn-lg" data-toggle="modal" data-target="#editBookingModal">Edit Booking</button>
                 </div>
             </div>
@@ -106,6 +106,26 @@
                     <button type="button" class="btn btn-default" data-toggle="modal" data-dismiss="modal" ng-click="booking.createBooking()">Confirm Changes</button>
                     <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
                 </div>
+            </div>
+        </div>
+    </div>
+    
+    <div id="deleteBookingModal" class="modal fade" role="dialog" data-backdrop="static">
+        <div class="modal-dialog">
+            
+            <div class="modal-content">
+                 <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Delete Booking</h4>
+                </div>
+
+                <div class="modal-body">
+                    Are you sure you want to delete this booking? Please be aware that if you delete a booking less than 5 hours before its start time you will be unable to create a another booking for 24 hours.
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-toggle="modal" data-dismiss="modal" ng-click="Active.deleteBooking()">Confirm Deletion</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                </div> 
             </div>
         </div>
     </div>
