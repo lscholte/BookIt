@@ -65,7 +65,6 @@ module.exports = function(app, express){
 						name: user.name,
 						userType: user.userType,
 						username: user.username,
-						userType: user.userType,
 						bookingID: user.bookingID
 					},
 					superSecret,
