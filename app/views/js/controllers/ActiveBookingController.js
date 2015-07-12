@@ -25,21 +25,31 @@ angular.module('activeCtrl', ["activeBookingService"])
 		if (vm.oneCall){
 			vm.oneCall = false;
 			$http.get("/api/bookings/" + vm.user.bookingID).success(function(data){
-				var own = vm.booking = {};
-				own.startTime = (new Date(data.startDate)).toLocaleTimeString();
-				own.endTime = (new Date(data.endDate)).toLocaleTimeString();
-				own.date = (new Date(data.startDate)).toDateString();
-				own.roomNumber = data.room.roomNumber;
-				own.equipment = data.equipment.length == 0 ? "None" : data.equipment;
-				if (own.equipment != "None") {
-					if (own.equipment.length == 2) {
-						own.equipment = data.equipment[0].equipmentType;
-						own.equipment += " and ";
-						own.equipment += data.equipment[1].equipmentType;
-					} else {
-						own.equipment = own.equipment[0].equipmentType == "laptop" ? "Laptop" : "Projector";
-					}
-				};
+				if(new Date(data.startDate).getTime() > new Date().getTime()){
+					var own = vm.booking = {};
+					own.startTime = (new Date(data.startDate)).toLocaleTimeString();
+					own.endTime = (new Date(data.endDate)).toLocaleTimeString();
+					own.date = (new Date(data.startDate)).toDateString();
+					own.roomNumber = data.room.roomNumber;
+					own.equipment = data.equipment.length == 0 ? "None" : data.equipment;
+					if (own.equipment != "None") {
+						if (own.equipment.length == 2) {
+							own.equipment = data.equipment[0].equipmentType;
+							own.equipment += " and ";
+							own.equipment += data.equipment[1].equipmentType;
+						} else {
+							own.equipment = own.equipment[0].equipmentType == "laptop" ? "Laptop" : "Projector";
+						}
+					};
+					ActiveBooking.setActiveBooking(true);
+					return true;
+				}
+				else{
+					vm.user.bookingID = null;
+					$http.post('api/users/' + vm.user.username, {bookingID:null}).success(function(){});
+					ActiveBooking.setActiveBooking(false);
+					return false;
+				}
 			});
 		}
 	};

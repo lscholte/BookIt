@@ -303,6 +303,8 @@ module.exports = function(app, express){
 							return;
 						}
 					});
+					/*res.status(401).send({error: "This user already has a booking in their name, delete it then try again.", booking: booking._id});
+					return;*/
 				}
 
 				// Check that the booking isn't too long
