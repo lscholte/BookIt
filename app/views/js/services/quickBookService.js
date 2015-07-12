@@ -36,8 +36,8 @@ angular.module('quickBookService', [])
 					else{
 						 callback(bookingID, null);
 					}
-				}).error(function(){
-                    callback(null, "Something went wrong");
+				}).error(function(data){
+                    callback(null, data);
 				});	
 			});			
 		};
