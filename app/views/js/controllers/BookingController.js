@@ -138,13 +138,11 @@ angular.module('bookingCtrl', ["activeBookingService", "quickBookService"])
                 else {
                     vm.equipment.splice(index, 1);
                 }
-                console.log(vm.equipment);
             }
     
             vm.createBooking = function() {
                 quickBook.book(vm.bookingStartTime, vm.bookingEndTime, vm.user.username, vm.equipment, function(data, error) {
                     vm.waitingForBooking = false;
-                    console.log(vm.waitingForBooking);
                     if(error) {
                         vm.bookingError = error;
                     }
@@ -154,7 +152,6 @@ angular.module('bookingCtrl', ["activeBookingService", "quickBookService"])
                     }
                 });
                 vm.waitingForBooking = true;
-                console.log(vm.waitingForBooking);
             };
     
     
