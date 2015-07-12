@@ -70,13 +70,18 @@ angular.module('calendarCtrl', ['calendarService'])
 	vm.prevDay = function(){
 		vm.date.setDate(vm.date.getDate() - 1);
 	};
+	/*
+	vm.isABooking = function(){
 
-	vm.booked = function(startDay){
+		bookingsList = vm.booking;
+		for(bookings in bookingsList){
+			if(){
 
-		var list = Calendar.range(startDay, startDay);
-
-
+				return "O";
+			}
+		}
+		return "X";
 	};
-	
+	*/
 	
 });
