@@ -52,25 +52,24 @@ angular.module('calendarCtrl', ['calendarService'])
 
 	//Change current week to the next week
 	vm.nextWeek = function(){
-		vm.date.setDate(vm.date.getDate() + 7);
+		vm.date.setTime(vm.date.getTime() + 7*86400000);
 	};
 
 	//change current week to the previous week
 	vm.lastWeek = function(){
-		vm.date.setDate(vm.date.getDate() - 7);
-	};	
+		vm.date.setTime(vm.date.getTime() - 7*86400000);
+	};
 
 	vm.currentDay = function(){
-		var day = vm.date.getDay();
-		return new Date(vm.date.setDate(day));
+		return vm.date.toDateString();
 	};
 
 	vm.nextDay = function(){
-		vm.date.setDate(vm.date.getDate() + 1);
+		vm.date.setTime(vm.date.getTime() + 86400000);
 	};
 
 	vm.prevDay = function(){
-		vm.date.setDate(vm.date.getDate() - 1);
+		vm.date.setTime(vm.date.getTime() - 86400000);
 	};
 
 	vm.isABooking = function(room, startingTime){
@@ -84,5 +83,4 @@ angular.module('calendarCtrl', ['calendarService'])
 		}
 		return "X";
 	};
-	
 });
