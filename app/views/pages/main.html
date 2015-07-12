@@ -96,6 +96,7 @@
                         </div>
                     </table>
                     <button id= "deleteBooking" type="button" class="btn btn-default btn-lg"  ng-click="Active.deleteBooking()">Delete Booking</button>
+                    <button id= "deleteBooking" type="button" class="btn btn-default btn-lg" data-toggle="modal" data-target="#editBookingModal">Edit Booking</button>
                 </div>
             </div>
             <div class="container" ng-if="!Active.hasBooking()">
@@ -104,6 +105,34 @@
         </div>
     </div>
     <div class="col-xs-1"><!-- Centering --></div>
+    
+    <div id="editBookingModal" class="modal fade" role="dialog" data-backdrop="static">
+        <div class="modal-dialog">
+            
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Edit Booking</h4>
+                </div>
+                <div class="modal-body">
+                    <b>Your Booking</b><br>
+                    {{ Active.booking.date }} from {{ Active.booking.startTime }} to {{ Active.booking.endTime }}<br><br>
+                    <b>Equipment</b><br>
+                    
+                    <label ng-repeat="type in Active.equipmentTypes">{{ type }}: <input type="checkbox"></label>
+
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-toggle="modal" data-dismiss="modal" ng-click="booking.createBooking()">Confirm Changes</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    
 </div>
 
 <div ng-controller="BookingController as booking">
