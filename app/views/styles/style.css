@@ -59,6 +59,10 @@
 	border-color: black;
 }
 
+#redConfirm {
+	background-image: radial-gradient(circle, #fff 80%, rgba(198, 53, 39, 0.6) 81%);
+}
+
 .logoutHolder input{
 	background-color: black;
 	font-family: "Arial";
