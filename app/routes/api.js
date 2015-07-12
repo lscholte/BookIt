@@ -575,7 +575,9 @@ module.exports = function(app, express){
 				//	startTime < booking.startTime && endTime > booking.endTime
 				//	startTime > booking.startTime && startTime < booking.endTime
 				//	endTime > booking.startTime && endTime < booking.endTime
-				Booking.find({$or:[{$and: [{startDate: {$lte:req.query.startDate}}, {endDate: {$gte:req.query.endDate}}]}, {$and:[{startDate: {$gte:req.query.startDate}}, {startDate: {$lt:req.query.endDate}}]}, {$and:[{endDate: {$gt:req.query.startDate}}, {endDate: {$lte:req.query.endDate}}]}]}).select('room').populate('room').exec(function(err, bookings){
+				var start = new Date(parseInt(req.query.startDate, 10));
+				var end = new Date(parseInt(req.query.endDate, 10));
+				Booking.find({$or:[{$and: [{startDate: {$lte:start}}, {endDate: {$gte:end}}]}, {$and:[{startDate: {$gte:start}}, {startDate: {$lt:end}}]}, {$and:[{endDate: {$gt:start}}, {endDate: {$lte:end}}]}]}).select('room').populate('room').exec(function(err, bookings){
 					var roomList = [];
 					bookings.forEach(function(booking){
 						roomList.push(booking.room);
