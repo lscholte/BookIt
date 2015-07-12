@@ -1,6 +1,6 @@
 angular.module('activeCtrl', ["activeBookingService", "editBookingService"])
 
-.controller('ActiveBookingController', function($rootScope, $location, $http, Auth, ActiveBooking, EditBooking) {
+.controller('ActiveBookingController', function($rootScope, $location, $window, $http, Auth, ActiveBooking, EditBooking) {
 
 	var vm = this;
 	vm.oneCall = true;
@@ -73,7 +73,12 @@ angular.module('activeCtrl', ["activeBookingService", "editBookingService"])
 	};
     
     vm.editBooking = function() {
-        EditBooking.editBooking(vm.user.bookingID, new Date(vm.booking.startDate), new Date(vm.booking.endDate), vm.editedEquipment, function(result) {
+        EditBooking.editBooking(vm.user.bookingID, new Date(vm.booking.startDate), new Date(vm.booking.endDate), vm.editedEquipment, function(result, success) {
+            vm.editBookingResult = result;
+            if(success) {
+                vm.editBookingResult = result;
+                $window.location.href = '/main';
+            }
             vm.editBookingResult = result;
         });
         vm.editBookingResult = null;
