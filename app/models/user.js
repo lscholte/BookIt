@@ -75,7 +75,7 @@ UserSchema.methods.isBanned = function(){
 	}
 	else{
 		var currentDate = new Date();
-		return this.bannedUntil.now() > currentDate.now();
+		return this.bannedUntil.getTime() > currentDate.getTime();
 	}
 };
 

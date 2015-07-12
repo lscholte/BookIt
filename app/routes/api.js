@@ -286,7 +286,7 @@ module.exports = function(app, express){
 
 				// Check user doesn't have restriction
 				if(user.isBanned()){
-					res.status(401).send('User unable to create booking until ' + user.getBannedUntil.toTimeString());
+					res.status(401).send('User unable to create booking until ' + user.getBannedUntil().toLocaleString() + ' because they cancelled a booking with less than 5 hours notice');
 					return;
 				}
 
