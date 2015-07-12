@@ -314,7 +314,7 @@ module.exports = function(app, express){
 				if(user.getUserType() == 'student' && (duration != 1 || ((booking.getStartDate().getTime() - new Date().getTime())/60000 < 120 && duration > 2))){
 					res.status(401).send('Students can only book rooms for 1 hour, or 2 hours if the start of the booking is 2 hours or less away');
 					return;
-				} else if(user.getUserType() == 'staff_faculty' && ((duration != 1 || duration != 2 || duration != 3) || ((booking.getStartDate().getTime() - new Date().getTime())/60000 < 120 && duration > 4))){
+				} else if(user.getUserType() == 'staff_faculty' && ((duration != 1 && duration != 2 && duration != 3) || ((booking.getStartDate().getTime() - new Date().getTime())/60000 < 120 && duration > 4))){
 					res.status(401).send('Staff and Faculty can book rooms for either 1 hour, 2 hours or 3 hours');
 					return;
 				}
