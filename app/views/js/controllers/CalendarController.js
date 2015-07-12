@@ -38,16 +38,16 @@ angular.module('calendarCtrl', ['calendarService'])
 
 	//Get date object for the Sunday of week specified by vm.date
 	vm.weekStart = function(){
-  		var day = vm.date.getDay();
-     	var diff = vm.date.getDate() - day;
-  		return new Date(vm.date.setDate(diff));
+		var day = vm.date.getDay();
+		var diff = vm.date.getDate() - day;
+		return new Date(vm.date.setDate(diff));
 	};
 
 	//Get date object for the Saturday of week specified by vm.date
 	vm.weekEnd = function(){
-  		var day = vm.date.getDay();
-     	var diff = vm.date.getDate() - day;
-  		return new Date(vm.date.setDate(diff + 6));
+		var day = vm.date.getDay();
+		var diff = vm.date.getDate() - day;
+		return new Date(vm.date.setDate(diff + 6));
 	};
 
 	//Change current week to the next week
@@ -75,10 +75,13 @@ angular.module('calendarCtrl', ['calendarService'])
 	vm.isABooking = function(room, startingTime){
 
 		bookingsList = vm.booking;
+		console.log(bookingsList);
 		for(booking in bookingsList){
+			console.log(booking.startTime + " == " + startingTime + " :: " + booking.startTime == startingTime);
 			if(booking.room == room){
-				if(booking.startTime == startingTime)
+				if(booking.startTime == startingTime){
 					return "O";
+				}
 			}
 		}
 		return "X";
