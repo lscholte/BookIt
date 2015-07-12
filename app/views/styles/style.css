@@ -9,6 +9,10 @@
     width: 100%;
 }
 
+.header a {
+    text-decoration: none;
+}
+
 .edge {
 	background-image: url("/app/views/styles/header-home-bg.png");
 	background-repeat: repeat-x;
