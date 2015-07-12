@@ -1,25 +1,3 @@
-<script>
-    $(document).on('click', '#selectDayDropdown li a', function() {
-        var dayText = $(this).text();
-        $('#selectedDay').html(dayText + '<span class="caret"></span>');
-    });
-
-    $(document).on('click', '#quickBookDropdown li a', function() {
-        var dayText = $(this).text();
-        $('#selectedDayQuickBook').html(dayText + '<span class="caret"></span>');
-    });
-
-	$(document).on('click', '#quickBookDropdown1 li a', function() {
-        var dayText = $(this).text();
-        $('#selectedDayQuickBook1').html(dayText + '<span class="caret"></span>');
-    });
-
-	$(document).on('click', '#quickBookDropdown2 li a', function() {
-        var dayText = $(this).text();
-        $('#selectedDayQuickBook2').html(dayText + '<span class="caret"></span>');
-    });
-</script>
-
 <!-- Calendar section -->
 <div class="calendar" ng-controller="CalendarController as calendar">
     <div class="row">
