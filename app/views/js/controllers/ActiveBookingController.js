@@ -29,6 +29,7 @@ angular.module('activeCtrl', ["activeBookingService"])
 			$http.get("/api/bookings/" + vm.user.bookingID).success(function(data){
 				if(new Date(data.endDate).getTime() > new Date().getTime()){
 					var own = vm.booking = {};
+					own.startDate = data.startDate; //for checking for ban
 					own.startTime = (new Date(data.startDate)).toLocaleTimeString();
 					own.endTime = (new Date(data.endDate)).toLocaleTimeString();
 					own.date = (new Date(data.startDate)).toDateString();
@@ -59,8 +60,8 @@ angular.module('activeCtrl', ["activeBookingService"])
 			// slap this user with a ban!
 			if((new Date(vm.booking.startDate).getTime() - new Date().getTime())/(60*60*1000) < 5 ){
 				var banDate = new Date();
-				banDate = banDate.setDate(banDate.getDate() + 1);
-				$http.post('/api/user/' + vm.user.username, {bannedUntil:banDate.getTime()}).success(function(){});
+				banDate.setDate(banDate.getDate() + 1);
+				$http.post('/api/users/' + vm.user.username, {bannedUntil:banDate.getTime()}).success(function(){});
 			}
 			vm.user.bookingID = null;
 			vm.booking = {};
