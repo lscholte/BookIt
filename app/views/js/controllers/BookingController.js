@@ -141,9 +141,9 @@ angular.module('bookingCtrl', ["activeBookingService", "quickBookService"])
                 console.log(vm.equipment);
             }
     
-    vm.createBooking = function() {
-         vm.createdBooking = quickBook.book(vm.bookingStartTime, vm.bookingEndTime, vm.user.username, vm.equipment);
-    }
+            vm.createBooking = function() {
+                quickBook.book(vm.bookingStartTime, vm.bookingEndTime, vm.user.username, vm.equipment);
+            };
     
     
             });
