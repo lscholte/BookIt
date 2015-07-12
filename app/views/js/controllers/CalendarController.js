@@ -28,7 +28,8 @@ angular.module('calendarCtrl', ['calendarService'])
 			var bookingDate = new Date(vm.bookings[index].startDate).toDateString();
 			var desiredDate = day.toDateString();
 			if( bookingDate == desiredDate){
-				count--;
+				var duration = Math.floor((new Date().getTime(vm.bookings[index].endDate) - bookingDate.getTime())/(60*60*1000));
+				count-=duration;
 			}
 		}
 		return count;
