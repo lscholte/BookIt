@@ -25,7 +25,7 @@ angular.module('activeCtrl', ["activeBookingService"])
 		if (vm.oneCall){
 			vm.oneCall = false;
 			$http.get("/api/bookings/" + vm.user.bookingID).success(function(data){
-				if(new Date(data.startDate).getTime() > new Date().getTime()){
+				if(new Date(data.endDate).getTime() > new Date().getTime()){
 					var own = vm.booking = {};
 					own.startTime = (new Date(data.startDate)).toLocaleTimeString();
 					own.endTime = (new Date(data.endDate)).toLocaleTimeString();
@@ -45,9 +45,7 @@ angular.module('activeCtrl', ["activeBookingService"])
 					return true;
 				}
 				else{
-					vm.user.bookingID = null;
-					$http.post('api/users/' + vm.user.username, {bookingID:null}).success(function(){});
-					ActiveBooking.setActiveBooking(false);
+                    vm.deleteBooking();
 					return false;
 				}
 			});
