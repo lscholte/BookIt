@@ -1,25 +1,3 @@
-<script>
-    $(document).on('click', '#selectDayDropdown li a', function() {
-        var dayText = $(this).text();
-        $('#selectedDay').html(dayText + '<span class="caret"></span>');
-    });
-
-    $(document).on('click', '#quickBookDropdown li a', function() {
-        var dayText = $(this).text();
-        $('#selectedDayQuickBook').html(dayText + '<span class="caret"></span>');
-    });
-
-	$(document).on('click', '#quickBookDropdown1 li a', function() {
-        var dayText = $(this).text();
-        $('#selectedDayQuickBook1').html(dayText + '<span class="caret"></span>');
-    });
-
-	$(document).on('click', '#quickBookDropdown2 li a', function() {
-        var dayText = $(this).text();
-        $('#selectedDayQuickBook2').html(dayText + '<span class="caret"></span>');
-    });
-</script>
-
 <!-- Calendar section -->
 <div class="calendar" ng-controller="CalendarController as calendar">
     <div class="row">
@@ -162,7 +140,7 @@
             <button id= "quickBook" type="button" class="btn btn-default btn-lg" data-toggle="modal" data-target="#quickBookModel" ng-click="booking.setDayDropdownItems();booking.setStartTimeDropdownItems();booking.setEndTimeDropdownItems()">QuickBook</button>
 
             <!-- Create Booking Button -->
-            <button id="createBooking" type="button" class="btn btn-default btn-lg" data-toggle="modal" data-target="#selectDayModal" ng-click="booking.setDayDropdownItems()" style="margin-left: 20px">Create a Booking</button>
+<!--            <button id="createBooking" type="button" class="btn btn-default btn-lg" data-toggle="modal" data-target="#selectDayModal" ng-click="booking.setDayDropdownItems()" style="margin-left: 20px">Create a Booking</button>-->
         </div>
     </div>
 
@@ -201,244 +179,209 @@
         </div>
     </div>
 
-    <div id="quickBookModel" class="modal fade" role="dialog" data-backdrop="static">
-        <div class="modal-dialog">
-
-            <!-- Modal content-->
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title">Select a Date to Book</h4>
-                </div>
-                <div class="modal-body">
-
-
-
-                    <select class="btn btn-default dropdown-toggle" ng-model="booking.selectedDayText" ng-options="day for day in booking.dayDropdownItems" ng-change="booking.setStartTimeDropdownItems(); booking.setEndTimeDropdownItems()">
-                    </select>
-                    <select class="btn btn-default dropdown-toggle" ng-model="booking.selectedStartTimeText" ng-options="start for start in booking.startTimeDropdownItems" ng-change="booking.setBookingStartTime();booking.setEndTimeDropdownItems()">
-                    </select>
-
-                    <select class="btn btn-default dropdown-toggle" ng-model="booking.selectedEndTimeText" ng-options="end for end in booking.endTimeDropdownItems" ng-change="booking.setBookingEndTime()">
-                    </select>
-
-
-
-                    <div class = "selectEquipment">
-                        <label ng-repeat="type in booking.equipmentTypes">{{ type }}: <input type="checkbox" ng-click="booking.updateEquipment(type)"></label>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-toggle="modal" data-target="#bookingConfirmation" data-dismiss="modal" ng-click="booking.createBooking()">Create Booking</button>
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <!-- Select Day Modal -->
-    <div id="bookingConfirmation" class="modal fade" role="dialog" data-backdrop="static">
-        <div class="modal-dialog">
-
+<!--    <div id="bookingConfirmation" class="modal fade" role="dialog" data-backdrop="static">-->
+<!--        <div class="modal-dialog">-->
+<!---->
             <!-- Modal content-->
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                </div>
-                <div class="modal-body">
-                    <div ng-if="booking.waitingForBooking">
-                        We are attempting to create your study room booking! Please wait...
-                    </div>
-                    <div ng-if="!booking.waitingForBooking">
-                        <div ng-if="booking.bookingError">
-                            {{ booking.bookingError }}
-                        </div>
-                        <div ng-if="!booking.bookingError">
-                            Booking successfully created!
-                        </div>
-                    </div>
-                <div class="modal-footer">
-                    <div ng-if="!booking.waitingForBooking">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+<!--            <div class="modal-content">-->
+<!--                <div class="modal-header">-->
+<!--                    <button type="button" class="close" data-dismiss="modal">&times;</button>-->
+<!--                </div>-->
+<!--                <div class="modal-body">-->
+<!--                    <div ng-if="booking.waitingForBooking">-->
+<!--                        We are attempting to create your study room booking! Please wait...-->
+<!--                    </div>-->
+<!--                    <div ng-if="!booking.waitingForBooking">-->
+<!--                        <div ng-if="booking.bookingError">-->
+<!--                            {{ booking.bookingError }}-->
+<!--                        </div>-->
+<!--                        <div ng-if="!booking.bookingError">-->
+<!--                            Booking successfully created!-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                <div class="modal-footer">-->
+<!--                    <div ng-if="!booking.waitingForBooking">-->
+<!--                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
 
 
 
     <!-- Select Time Modal -->
-    <div id="selectTimeModal" class="modal fade" role="dialog" data-backdrop="static">
-        <div class="modal-dialog">
-
+<!--    <div id="selectTimeModal" class="modal fade" role="dialog" data-backdrop="static">-->
+<!--        <div class="modal-dialog">-->
+<!---->
             <!-- Modal content-->
-            <div style="overflow-x:hidden"; class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title">Select a Time to Book</h4>
-                </div>
-                <div class="modal-body">
-                    <div class="container">
-                        <h2>Available Times to Book</h2>
-
-                        <div style="width:500px;height:300px;overflow:scroll;overflow-x:hidden">
-                            <table id="thetable" class="table table-bordered table-hover" >
-                                <thead>
-                                    <tr>
-                                        <th>Time</th>
-                                        <th>Availability</th>
-                                    </tr>
-                                </thead>
-                                <div>
-                                    <tbody>
+<!--            <div style="overflow-x:hidden"; class="modal-content">-->
+<!--                <div class="modal-header">-->
+<!--                    <button type="button" class="close" data-dismiss="modal">&times;</button>-->
+<!--                    <h4 class="modal-title">Select a Time to Book</h4>-->
+<!--                </div>-->
+<!--                <div class="modal-body">-->
+<!--                    <div class="container">-->
+<!--                        <h2>Available Times to Book</h2>-->
+<!---->
+<!--                        <div style="width:500px;height:300px;overflow:scroll;overflow-x:hidden">-->
+<!--                            <table id="thetable" class="table table-bordered table-hover" >-->
+<!--                                <thead>-->
+<!--                                    <tr>-->
+<!--                                        <th>Time</th>-->
+<!--                                        <th>Availability</th>-->
+<!--                                    </tr>-->
+<!--                                </thead>-->
+<!--                                <div>-->
+<!--                                    <tbody>-->
                                         <!-- These rows will need to be generated with a script.
                                         These values are simply placeholders. -->
-                                        <tr>
-                                            <td>8:00am-9:00am</td>
-                                            <td>Y/N</td>
-                                        </tr>
-                                        <tr>
-                                            <td>9:00am-10:00am</td>
-                                            <td>Y/N</td>
-                                        </tr>
-                                        <tr>
-                                            <td>...</td>
-                                            <td>Y/N</td>
-                                        </tr>
-                                        <tr>
-                                            <td>9:00pm-10:00pm</td>
-                                            <td>Y/N</td>
-                                        </tr>
-                                    </tbody>
-                                </div>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-toggle="modal" data-target="#selectRoomModal" data-dismiss="modal">Continue</button>
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                </div>
-            </div>
-
-        </div>
-    </div>
+<!--                                        <tr>-->
+<!--                                            <td>8:00am-9:00am</td>-->
+<!--                                            <td>Y/N</td>-->
+<!--                                        </tr>-->
+<!--                                        <tr>-->
+<!--                                            <td>9:00am-10:00am</td>-->
+<!--                                            <td>Y/N</td>-->
+<!--                                        </tr>-->
+<!--                                        <tr>-->
+<!--                                            <td>...</td>-->
+<!--                                            <td>Y/N</td>-->
+<!--                                        </tr>-->
+<!--                                        <tr>-->
+<!--                                            <td>9:00pm-10:00pm</td>-->
+<!--                                            <td>Y/N</td>-->
+<!--                                        </tr>-->
+<!--                                    </tbody>-->
+<!--                                </div>-->
+<!--                            </table>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!---->
+<!--                <div class="modal-footer">-->
+<!--                    <button type="button" class="btn btn-default" data-toggle="modal" data-target="#selectRoomModal" data-dismiss="modal">Continue</button>-->
+<!--                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>-->
+<!--                </div>-->
+<!--            </div>-->
+<!---->
+<!--        </div>-->
+<!--    </div>-->
 
     <!-- Select Room Modal -->
-    <div id="selectRoomModal" class="modal fade" role="dialog" data-backdrop="static">
-        <div class="modal-dialog">
-
+<!--    <div id="selectRoomModal" class="modal fade" role="dialog" data-backdrop="static">-->
+<!--        <div class="modal-dialog">-->
+<!---->
             <!-- Modal content-->
-            <div style="overflow-x:hidden"; class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title">Select a Room to Book</h4>
-                </div>
-                <div class="modal-body">
-                    <div class="container">
-                        <h2>Available Rooms to Book</h2>
-
-                        <div style="width:500px;height:300px;overflow:scroll;overflow-x:hidden">
-                            <table id="thetable" class="table table-bordered table-hover" >
-                                <thead>
-                                    <tr>
-                                        <th>Room</th>
-                                        <th>Availability</th>
-                                    </tr>
-                                </thead>
-                                <div>
-                                    <tbody>
+<!--            <div style="overflow-x:hidden"; class="modal-content">-->
+<!--                <div class="modal-header">-->
+<!--                    <button type="button" class="close" data-dismiss="modal">&times;</button>-->
+<!--                    <h4 class="modal-title">Select a Room to Book</h4>-->
+<!--                </div>-->
+<!--                <div class="modal-body">-->
+<!--                    <div class="container">-->
+<!--                        <h2>Available Rooms to Book</h2>-->
+<!---->
+<!--                        <div style="width:500px;height:300px;overflow:scroll;overflow-x:hidden">-->
+<!--                            <table id="thetable" class="table table-bordered table-hover" >-->
+<!--                                <thead>-->
+<!--                                    <tr>-->
+<!--                                        <th>Room</th>-->
+<!--                                        <th>Availability</th>-->
+<!--                                    </tr>-->
+<!--                                </thead>-->
+<!--                                <div>-->
+<!--                                    <tbody>-->
                                         <!-- These rows will need to be generated with a script.
                                         These values are simply placeholders. -->
-                                        <tr>
-                                            <td>1</td>
-                                            <td>Y/N</td>
-                                        </tr>
-                                        <tr>
-                                            <td>2</td>
-                                            <td>Y/N</td>
-                                        </tr>
-                                        <tr>
-                                            <td>3</td>
-                                            <td>Y/N</td>
-                                        </tr>
-                                        <tr>
-                                            <td>4</td>
-                                            <td>Y/N</td>
-                                        </tr>
-                                        <tr>
-                                            <td>5</td>
-                                            <td>Y/N</td>
-                                        </tr>
-                                        <tr>
-                                            <td>6</td>
-                                            <td>Y/N</td>
-                                        </tr>
-                                        <tr>
-                                            <td>7</td>
-                                            <td>Y/N</td>
-                                        </tr>
-                                        <tr>
-                                            <td>8</td>
-                                            <td>Y/N</td>
-                                        </tr>
-                                        <tr>
-                                            <td>9</td>
-                                            <td>Y/N</td>
-                                        </tr>
-                                        <tr>
-                                            <td>10</td>
-                                            <td>Y/N</td>
-                                        </tr>
-                                    </tbody>
-                                </div>
-                            </table>
-                        </div>
-                        <input type="checkbox"> Projector <input type="checkbox"> Laptop <br>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-toggle="modal" data-target="#confirmationModal" data-dismiss="modal">Continue</button>
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                </div>
-            </div>
-        </div>
-    </div>
+<!--                                        <tr>-->
+<!--                                            <td>1</td>-->
+<!--                                            <td>Y/N</td>-->
+<!--                                        </tr>-->
+<!--                                        <tr>-->
+<!--                                            <td>2</td>-->
+<!--                                            <td>Y/N</td>-->
+<!--                                        </tr>-->
+<!--                                        <tr>-->
+<!--                                            <td>3</td>-->
+<!--                                            <td>Y/N</td>-->
+<!--                                        </tr>-->
+<!--                                        <tr>-->
+<!--                                            <td>4</td>-->
+<!--                                            <td>Y/N</td>-->
+<!--                                        </tr>-->
+<!--                                        <tr>-->
+<!--                                            <td>5</td>-->
+<!--                                            <td>Y/N</td>-->
+<!--                                        </tr>-->
+<!--                                        <tr>-->
+<!--                                            <td>6</td>-->
+<!--                                            <td>Y/N</td>-->
+<!--                                        </tr>-->
+<!--                                        <tr>-->
+<!--                                            <td>7</td>-->
+<!--                                            <td>Y/N</td>-->
+<!--                                        </tr>-->
+<!--                                        <tr>-->
+<!--                                            <td>8</td>-->
+<!--                                            <td>Y/N</td>-->
+<!--                                        </tr>-->
+<!--                                        <tr>-->
+<!--                                            <td>9</td>-->
+<!--                                            <td>Y/N</td>-->
+<!--                                        </tr>-->
+<!--                                        <tr>-->
+<!--                                            <td>10</td>-->
+<!--                                            <td>Y/N</td>-->
+<!--                                        </tr>-->
+<!--                                    </tbody>-->
+<!--                                </div>-->
+<!--                            </table>-->
+<!--                        </div>-->
+<!--                        <input type="checkbox"> Projector <input type="checkbox"> Laptop <br>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--                <div class="modal-footer">-->
+<!--                    <button type="button" class="btn btn-default" data-toggle="modal" data-target="#confirmationModal" data-dismiss="modal">Continue</button>-->
+<!--                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
 
 
     <!-- Confirmation Modal -->
-    <div id="confirmationModal" class="modal fade" role="dialog" data-backdrop="static">
-        <div class="modal-dialog">
+<!--    <div id="confirmationModal" class="modal fade" role="dialog" data-backdrop="static">-->
+<!--        <div class="modal-dialog">-->
             <!-- Modal content-->
-            <div style="overflow-x:hidden"; class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title">Confirmation</h4>
-                </div>
-                <div class="modal-body" >
-
-                    <div ng-if="booking.createdBooking != null">
-                        <div class="container">
-                            <h5>You have booked</h5>
-                            Room: {{ booking.createdBooking.room.roomNumber }}<br>
-                            Start Time: {{ booking.createdBooking.startTime.toLocaleString() }}<br>
-                            End Time: {{ booking.createdBooking.endTime.toLocaleString() }}<br>
-                            Equipment: {{ booking.createdBooking.equipment }}<br>
-                        </div>
-                    </div>
-                    <div ng-if="booking.createdBooking == null">
-                        Error creating booking
-
+<!--            <div style="overflow-x:hidden"; class="modal-content">-->
+<!--                <div class="modal-header">-->
+<!--                    <button type="button" class="close" data-dismiss="modal">&times;</button>-->
+<!--                    <h4 class="modal-title">Confirmation</h4>-->
+<!--                </div>-->
+<!--                <div class="modal-body" >-->
+<!---->
+<!--                    <div ng-if="booking.createdBooking != null">-->
+<!--                        <div class="container">-->
+<!--                            <h5>You have booked</h5>-->
+<!--                            Room: {{ booking.createdBooking.room.roomNumber }}<br>-->
+<!--                            Start Time: {{ booking.createdBooking.startTime.toLocaleString() }}<br>-->
+<!--                            End Time: {{ booking.createdBooking.endTime.toLocaleString() }}<br>-->
+<!--                            Equipment: {{ booking.createdBooking.equipment }}<br>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                    <div ng-if="booking.createdBooking == null">-->
+<!--                        Error creating booking-->
+<!---->
                         <!-- TODO: Add more details to error message -->
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default"  data-dismiss="modal">Ok</button>
-
-                </div>
-            </div>
-        </div>
-    </div>
+<!--                    </div>-->
+<!--                </div>-->
+<!--                <div class="modal-footer">-->
+<!--                    <button type="button" class="btn btn-default"  data-dismiss="modal">Ok</button>-->
+<!---->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
 </div>
