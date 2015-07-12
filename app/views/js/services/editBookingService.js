@@ -25,20 +25,20 @@ angular.module('editBookingService', [])
                     }
                     
                     if(equipmentIds.length != equipment.length){
-                        callback("A requested piece of equipment is not available during your booking time");
+                        callback("A requested piece of equipment is not available during your booking time", false);
                         return;
                     }
                     
                     if(equipmentIds.length > 0) {
                         $http.put('/api/bookings/equipment/' + bookingID, {equipmentID:equipmentIds}).success(function(data, status, headers, config){
-                            callback("Your booking has been successfully updated");
+                            callback("Your booking has been successfully updated", true);
                         }).error(function(data, status, headers, config) {
                             //can't get booking
-                            callback(null, "Failed to add equipment to booking for unknown reason");
+                            callback(null, "Failed to add equipment to booking for unknown reason", false);
                             return;
                         });
                     }
-                    callback("Your booking has been successfully updated");
+                    callback("Your booking has been successfully updated", true);
                 });
             });
             
