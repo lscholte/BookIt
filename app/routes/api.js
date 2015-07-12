@@ -280,7 +280,7 @@ module.exports = function(app, express){
 
 				// User doesn't exist
 				if(!user){
-					res.status(401).send('Where\'s ' + user.userName + "? Oh wait, I was looking for waldo..");
+					res.status(401).send('Where\'s ' + req.body.usernamee + "? Oh wait, I was looking for waldo..");
 					return;
 				}
 
