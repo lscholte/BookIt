@@ -72,18 +72,17 @@ angular.module('calendarCtrl', ['calendarService'])
 	vm.prevDay = function(){
 		vm.date.setDate(vm.date.getDate() - 1);
 	};
-	/*
-	vm.isABooking = function(){
+
+	vm.isABooking = function(room, startingTime){
 
 		bookingsList = vm.booking;
-		for(bookings in bookingsList){
-			if(){
-
-				return "O";
+		for(booking in bookingsList){
+			if(booking.room == room){
+				if(booking.startTime == startingTime)
+					return "O";
 			}
 		}
 		return "X";
 	};
-	*/
 	
 });
