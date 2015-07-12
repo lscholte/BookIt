@@ -76,13 +76,24 @@ angular.module('calendarCtrl', ['calendarService'])
 		bookingsList = vm.booking;
 		console.log(bookingsList);
 		for(booking in bookingsList){
-			console.log(booking.startTime + " == " + startingTime + " :: " + booking.startTime == startingTime);
+			var bookingDate = new Date(vm.bookings[booking].startDate).toDateString();
+			console.log(booking.startD + " == " + startingTime + " :: " + booking.startDate == startingTime);
 			if(booking.room == room){
-				if(booking.startTime == startingTime){
+				if(bookingDate == startingTime){
 					return "O";
 				}
 			}
 		}
 		return "X";
 	};
+
+	vm.setToHour = function(hour, day) {
+		day = new Date(day);
+
+		day.setHours(hour);
+		day.setSeconds(0);
+		day.setMilliseconds(0);
+
+		return day;
+	}
 });
