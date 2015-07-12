@@ -145,17 +145,16 @@
 					</div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-toggle="modal" data-dismiss="modal" ng-click="booking.createBooking()">Create Booking</button>
+                    <button type="button" class="btn btn-default" data-toggle="modal" data-target="#bookingConfirmation" data-dismiss="modal" ng-click="booking.createBooking()">Create Booking</button>
                     <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
                 </div>
             </div>
         </div>
     </div>
-
-    <!-- Select Day Modal -->
-    <div id="selectDayModal" class="modal fade" role="dialog" data-backdrop="static">
+    
+    <div id="quickBookModel" class="modal fade" role="dialog" data-backdrop="static">
         <div class="modal-dialog">
-
+            
             <!-- Modal content-->
             <div class="modal-content">
                 <div class="modal-header">
@@ -163,23 +162,56 @@
                     <h4 class="modal-title">Select a Date to Book</h4>
                 </div>
                 <div class="modal-body">
-                    <div class="dropdown">
-                        <button id="selectedDay" class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">Select Day
-                            <span class="caret"></span>
-                        </button>
-
-                        <!-- We should generate the dropdown items with a script.
-                        These values are simply placeholders.-->
-                        <ul id="selectDayDropdown" class="dropdown-menu">
-                            <li ng-repeat="day in booking.days">
-                                <a href="#" ng-click="booking.setSelectedDay(day)">{{ day }}</a>
-                            </li>
-                        </ul>
+                    
+                    
+                    
+                    <select class="btn btn-default dropdown-toggle" ng-model="booking.selectedDayText" ng-options="day for day in booking.dayDropdownItems" ng-change="booking.setStartTimeDropdownItems(); booking.setEndTimeDropdownItems()">
+                    </select>
+                    <select class="btn btn-default dropdown-toggle" ng-model="booking.selectedStartTimeText" ng-options="start for start in booking.startTimeDropdownItems" ng-change="booking.setBookingStartTime();booking.setEndTimeDropdownItems()">
+                    </select>
+                    
+                    <select class="btn btn-default dropdown-toggle" ng-model="booking.selectedEndTimeText" ng-options="end for end in booking.endTimeDropdownItems" ng-change="booking.setBookingEndTime()">
+                    </select>
+                    
+                    
+                    
+                    <div class = "selectEquipment">
+                        <label ng-repeat="type in booking.equipmentTypes">{{ type }}: <input type="checkbox" ng-click="booking.updateEquipment(type)"></label>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-toggle="modal" data-target="#selectTimeModal" data-dismiss="modal">Continue</button>
+                    <button type="button" class="btn btn-default" data-toggle="modal" data-target="#bookingConfirmation" data-dismiss="modal" ng-click="booking.createBooking()">Create Booking</button>
                     <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Select Day Modal -->
+    <div id="bookingConfirmation" class="modal fade" role="dialog" data-backdrop="static">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div ng-if="booking.waitingForBooking">
+                        We are attempting to create your study room booking! Please wait...
+                    </div>
+                    <div ng-if="!booking.waitingForBooking">
+                        <div ng-if="booking.bookingError">
+                            {{ booking.bookingError }}
+                        </div>
+                        <div ng-if="!booking.bookingError">
+                            Booking successfully created!
+                        </div>
+                    </div>
+                <div class="modal-footer">
+                    <div ng-if="!booking.waitingForBooking">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
                 </div>
             </div>
         </div>
