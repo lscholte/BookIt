@@ -142,7 +142,18 @@ angular.module('bookingCtrl', ["activeBookingService", "quickBookService"])
             }
     
             vm.createBooking = function() {
-                quickBook.book(vm.bookingStartTime, vm.bookingEndTime, vm.user.username, vm.equipment);
+                quickBook.book(vm.bookingStartTime, vm.bookingEndTime, vm.user.username, vm.equipment, function(data, error) {
+                    vm.waitingForBooking = false;
+                    console.log(vm.waitingForBooking);
+                    if(error) {
+                        vm.bookingError = error;
+                    }
+                    else {
+                        vm.user.bookingID = data;
+                    }
+                });
+                vm.waitingForBooking = true;
+                console.log(vm.waitingForBooking);
             };
     
     

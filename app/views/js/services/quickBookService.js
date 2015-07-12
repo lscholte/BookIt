@@ -5,12 +5,12 @@ angular.module('quickBookService', [])
 		var quickBookFactory = {};
 		
 		//startDate and endDate expected as javascript Date Objects. equipment is somthing like [laptop, projecter] to book both a laptop and a projector. returns booking id if succesful
-		quickBookFactory.book = function(startDate, endDate, username, equipment){
+		quickBookFactory.book = function(startDate, endDate, username, equipment, callback){
 			//Find rooms
 			$http.get('/api/rooms?startDate=' + startDate.getTime() + '&endDate=' + endDate.getTime()).success(function(data, status, headers, config){
 				//there's no rooms in this timeslot
 				if(data.length == 0){
-					return null;
+					callback(null, "There are no available rooms during the requested time period");
 				}
 				//else make the booking
 				$http.post('/api/bookings', {startDate: startDate.getTime(), endDate: endDate.getTime(), username: username, roomNumber: data[0].roomNumber}).success(function(data, status, headers, config){
@@ -29,15 +29,15 @@ angular.module('quickBookService', [])
 								}
 							}
 							$http.put('/api/bookings/equipment/' + bookingID, {equipmentID:equipmentIds}).success(function(data, status, headers, config){
-								return bookingID;
+                                callback(bookingID, null);
 							});
 						});
 					}
 					else{
-						return data;
+						 callback(bookingID, null);
 					}
 				}).error(function(){
-					return null;
+                    callback(null, "Something went wrong");
 				});	
 			});			
 		};
