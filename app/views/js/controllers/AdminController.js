@@ -9,7 +9,7 @@ angular.module('adminCtrl', ['calendarService'])
 		});
 
 		vm.editBookings = function(){
-			$location.path('/admin/editbookings');
+			$location.path("/admin/editbookings");
 		};
 
 	});
