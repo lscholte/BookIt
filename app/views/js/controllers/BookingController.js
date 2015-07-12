@@ -1,6 +1,6 @@
 angular.module('bookingCtrl', ["activeBookingService", "quickBookService"])
 
-.controller('BookingController', function($scope, $location, Auth, ActiveBooking, quickBook){
+.controller('BookingController', function($scope, $location, $window, Auth, ActiveBooking, quickBook){
             
             //All of this stuff currently relates to
             //the quickbook feature, so maybe it is worth
@@ -148,6 +148,7 @@ angular.module('bookingCtrl', ["activeBookingService", "quickBookService"])
                     }
                     else {
                         vm.user.bookingID = data;
+                        $window.location.href = '/main';
                     }
                 });
                 vm.waitingForBooking = true;

@@ -28,7 +28,9 @@ angular.module('calendarCtrl', ['calendarService'])
 			var bookingDate = new Date(vm.bookings[index].startDate).toDateString();
 			var desiredDate = day.toDateString();
 			if( bookingDate == desiredDate){
-				count--;
+				var duration = Math.floor((new Date(vm.bookings[index].endDate).getTime() - new Date(vm.bookings[index].startDate).getTime())/(60*60*1000));
+				console.log(duration);
+				count = count - duration;
 			}
 		}
 		return count;
@@ -70,18 +72,17 @@ angular.module('calendarCtrl', ['calendarService'])
 	vm.prevDay = function(){
 		vm.date.setDate(vm.date.getDate() - 1);
 	};
-	/*
-	vm.isABooking = function(){
+
+	vm.isABooking = function(room, startingTime){
 
 		bookingsList = vm.booking;
-		for(bookings in bookingsList){
-			if(){
-
-				return "O";
+		for(booking in bookingsList){
+			if(booking.room == room){
+				if(booking.startTime == startingTime)
+					return "O";
 			}
 		}
 		return "X";
 	};
-	*/
 	
 });

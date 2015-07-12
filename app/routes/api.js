@@ -311,10 +311,10 @@ module.exports = function(app, express){
 				// Note: this checks that bookings are exactly 1, 2, or 3 hours long. This may be too restrictive
 				// also allows student to create a 2 hour booking if the starttime is less thabn 2 hours away
 				var duration = (booking.getEndDate().getTime() - booking.getStartDate().getTime())/(60*60*1000);
-				if(user.getUserType() == 'student' && (duration != 1 || ((booking.getStartDate().getTime() - new Date().getTime())/60000 < 120 && duration > 2))){
+				if(user.getUserType() == 'student' && (duration != 1 && ((booking.getStartDate().getTime() - new Date().getTime())/60000 < 120 && duration > 2))){
 					res.status(401).send('Students can only book rooms for 1 hour, or 2 hours if the start of the booking is 2 hours or less away');
 					return;
-				} else if(user.getUserType() == 'staff_faculty' && ((duration != 1 && duration != 2 && duration != 3) || ((booking.getStartDate().getTime() - new Date().getTime())/60000 < 120 && duration > 4))){
+				} else if(user.getUserType() == 'staff_faculty' && ((duration != 1 && duration != 2 && duration != 3) && ((booking.getStartDate().getTime() - new Date().getTime())/60000 < 120 && duration > 4))){
 					res.status(401).send('Staff and Faculty can book rooms for either 1 hour, 2 hours or 3 hours');
 					return;
 				}
