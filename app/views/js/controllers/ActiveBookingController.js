@@ -33,7 +33,7 @@ angular.module('activeCtrl', ["activeBookingService"])
 				own.equipment = data.equipment.length == 0 ? "None" : data.equipment;
 				if (own.equipment != "None") {
 					if (own.equipment.length == 2) {
-						own.equipment = data.equipment[0].equipmentType;
+						own.equipment = data.equipment[0].equipmentType == "laptop" ? "Laptop" : "Projector";
 						own.equipment += " and ";
 						own.equipment += data.equipment[1].equipmentType;
 					} else {
