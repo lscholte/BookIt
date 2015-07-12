@@ -41,8 +41,8 @@ angular.module('appBookIt.routes', ['ngRoute'])
 	})
 
 	.when("/admin/editbookings", {
-		templateUrl : 'app/views/pages/editbookings.html'
-		
+		templateUrl : 'app/views/pages/editbookings.html',
+		controller : 'AdminController'
 	})
 
 	.otherwise({

@@ -1,6 +1,6 @@
 angular.module('mainCtrl', [])
 
-.controller('mainController', function($rootScope, $location, Auth) {
+.controller('mainController', function($rootScope, $window, $location, Auth) {
 
 	var vm = this;
 	vm.user;
@@ -33,9 +33,8 @@ angular.module('mainCtrl', [])
 					// **BUG** user has to press login twice to get to correct page
 					// this has to do with how getUser is handled as a user has to be actually
 					// logged in to have Auth.getUser() to work... need to find a work around
-					vm.routeWorkaround();  
+					vm.routeWorkaround();
 				}
-			
 				else
 					vm.error = data.message;
 			});
@@ -46,7 +45,8 @@ angular.module('mainCtrl', [])
 		Auth.logout();
 		// reset all user info
 		vm.user = {};
-		$location.path('/login');
+		$window.location.path = '/login';
+		$window.location.reload();
 	};
 
 	vm.routeUserType = function() {
