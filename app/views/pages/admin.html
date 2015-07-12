@@ -1,55 +1,61 @@
 <!-- Calendar section -->
 <div class="calendar" ng-controller="CalendarController as calendar">
-    <div class="row">
-        <div class="col-xs-1"><!-- Centering --></div>
-        <div class="col-xs-10">
-            <div class="container">
-                <h2>Rooms Available</h2>
-                <div class="calendar-header">
-                    <div class="previous">
-                        <button type="button" class="btn btn-default" ng-click="calendar.lastWeek()">Previous Week</button>
-                    </div>
-                    Week of {{ calendar.weekStart().toDateString() }} - {{ calendar.weekEnd().toDateString() }}
-                    <div class="next">
-                        <button type="button" class="btn btn-default" ng-click="calendar.nextWeek()">Next Week</button>
-                    </div>
-                </div>
+	<div class="row">
+		<div class="col-xs-1"><!-- Centering --></div>
+		<div class="col-xs-10">
+			<div class="container">
+				<h2>Rooms Available</h2>
+				<div class="calendar-header">
+					<div class="previous">
+						<button type="button" class="btn btn-default" ng-click="calendar.lastWeek()">Previous Week</button>
+					</div>
+					Week of {{ calendar.weekStart().toDateString() }} - {{ calendar.weekEnd().toDateString() }}
+					<div class="next">
+						<button type="button" class="btn btn-default" ng-click="calendar.nextWeek()">Next Week</button>
+					</div>
+				</div>
 
-                <table class="table table-striped">
-                    <thead>
-                        <tr>
-                            <th>Sunday</th>
-                            <th>Monday</th>
-                            <th>Tuesday</th>
-                            <th>Wednesday</th>
-                            <th>Thursday</th>
-                            <th>Friday</th>
-                            <th>Saturday</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>{{ calendar.getBookingCount(calendar.weekStart()) }}</td>
-                            <td>{{ calendar.getBookingCount(calendar.weekStart().setDate(calendar.weekStart().getDate() + 1)) }}</td>
-                            <td>{{ calendar.getBookingCount(calendar.weekStart().setDate(calendar.weekStart().getDate() + 2)) }}</td>
-                            <td>{{ calendar.getBookingCount(calendar.weekStart().setDate(calendar.weekStart().getDate() + 3)) }}</td>
-                            <td>{{ calendar.getBookingCount(calendar.weekStart().setDate(calendar.weekStart().getDate() + 4)) }}</td>
-                            <td>{{ calendar.getBookingCount(calendar.weekStart().setDate(calendar.weekStart().getDate() + 5)) }}</td>
-                            <td>{{ calendar.getBookingCount(calendar.weekStart().setDate(calendar.weekStart().getDate() + 6)) }}</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-        <div class="col-xs-1"><!-- Centering --></div>
-    </div>
+				<table class="table table-striped">
+					<thead>
+						<tr>
+							<th>Sunday</th>
+							<th>Monday</th>
+							<th>Tuesday</th>
+							<th>Wednesday</th>
+							<th>Thursday</th>
+							<th>Friday</th>
+							<th>Saturday</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>{{ calendar.getBookingCount(calendar.weekStart()) }}</td>
+							<td>{{ calendar.getBookingCount(calendar.weekStart().setDate(calendar.weekStart().getDate() + 1)) }}</td>
+							<td>{{ calendar.getBookingCount(calendar.weekStart().setDate(calendar.weekStart().getDate() + 2)) }}</td>
+							<td>{{ calendar.getBookingCount(calendar.weekStart().setDate(calendar.weekStart().getDate() + 3)) }}</td>
+							<td>{{ calendar.getBookingCount(calendar.weekStart().setDate(calendar.weekStart().getDate() + 4)) }}</td>
+							<td>{{ calendar.getBookingCount(calendar.weekStart().setDate(calendar.weekStart().getDate() + 5)) }}</td>
+							<td>{{ calendar.getBookingCount(calendar.weekStart().setDate(calendar.weekStart().getDate() + 6)) }}</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+		<div class="col-xs-1"><!-- Centering --></div>
+	</div>
 </div>
 
 <!-- Edit Booking Button -->
-<div class="container" ng-controller="AdminController as editor">
-	<h3>Admin Tools</h3>
-    <button id = "editBooking" type="button" class="btn btn-default btn-lg" ng-click="editor.editBookings()">
-        Edit Bookings
-    </button>
+<div class="row">
+	<div class="col-xs-1"><!-- Centering --></div>
+	<div class="col-xs-10">
+		<div class="container" ng-controller="AdminController as editor">
+			<h3>Admin Tools</h3>
+			<button id = "editBooking" type="button" class="btn btn-default btn-lg" ng-click="editor.editBookings()">
+				Edit Bookings
+			</button>
+		</div>
+	</div>
+	<div class="col-xs-1"><!-- Centering --></div>
 </div>
 
