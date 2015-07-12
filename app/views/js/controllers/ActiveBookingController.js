@@ -11,7 +11,7 @@ angular.module('activeCtrl', ["activeBookingService"])
 	});
 
 	vm.hasBooking = function() {
-		if (vm.user.bookingID) {
+		if (vm.user && vm.user.bookingID) {
 			vm.populateBooking();
 			ActiveBooking.setActiveBooking(true);
 			return true;
