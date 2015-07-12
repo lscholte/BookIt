@@ -121,7 +121,13 @@ module.exports = function(app, express){
 	});
 
 	apiRouter.get('/me', function(req, res){
-		res.send(req.decoded);
+		User.findOne({username: req.decoded.username}, function(err, data){
+			if(err){
+				console.log(err);
+			}
+			res.send(data);
+		});
+		//res.send(req.decoded);
 	});
 
 	//=========================================
