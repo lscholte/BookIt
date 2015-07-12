@@ -5,6 +5,8 @@ angular.module('activeCtrl', ["activeBookingService"])
 	var vm = this;
 	vm.oneCall = true;
 	vm.activeBookingService = ActiveBooking;
+    
+    vm.equipmentTypes = ["Projector", "Laptop"];
 
 	Auth.getUser().then(function(user){
 		vm.user = user.data;
