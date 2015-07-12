@@ -1,12 +1,13 @@
-angular.module('activeCtrl', ["activeBookingService"])
+angular.module('activeCtrl', ["activeBookingService", "editBookingService"])
 
-.controller('ActiveBookingController', function($rootScope, $location, $http, Auth, ActiveBooking) {
+.controller('ActiveBookingController', function($rootScope, $location, $http, Auth, ActiveBooking, EditBooking) {
 
 	var vm = this;
 	vm.oneCall = true;
 	vm.activeBookingService = ActiveBooking;
     
     vm.equipmentTypes = ["Projector", "Laptop"];
+    
 
 	Auth.getUser().then(function(user){
 		vm.user = user.data;
@@ -30,6 +31,7 @@ angular.module('activeCtrl', ["activeBookingService"])
 				if(new Date(data.endDate).getTime() > new Date().getTime()){
 					var own = vm.booking = {};
 					own.startDate = data.startDate; //for checking for ban
+                    own.endDate = data.endDate;
 					own.startTime = (new Date(data.startDate)).toLocaleTimeString();
 					own.endTime = (new Date(data.endDate)).toLocaleTimeString();
 					own.date = (new Date(data.startDate)).toDateString();
@@ -69,4 +71,22 @@ angular.module('activeCtrl', ["activeBookingService"])
 			
 		});
 	};
+    
+    vm.editBooking = function() {
+        EditBooking.editBooking(vm.user.bookingID, new Date(vm.booking.startDate), new Date(vm.booking.endDate), vm.editedEquipment, function(result) {
+            vm.editBookingResult = result;
+        });
+        vm.editBookingResult = null;
+    }
+    
+    vm.updateEquipment = function(type) {
+        type = type.toLowerCase();
+        var index = vm.editedEquipment.indexOf(type);
+        if(index == -1) {
+            vm.editedEquipment.push(type);
+        }
+        else {
+            vm.editedEquipment.splice(index, 1);
+        }
+    }
 });
