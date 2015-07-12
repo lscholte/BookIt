@@ -8,12 +8,12 @@
         var dayText = $(this).text();
         $('#selectedDayQuickBook').html(dayText + '<span class="caret"></span>');
     });
-	
+
 	$(document).on('click', '#quickBookDropdown1 li a', function() {
         var dayText = $(this).text();
         $('#selectedDayQuickBook1').html(dayText + '<span class="caret"></span>');
     });
-	
+
 	$(document).on('click', '#quickBookDropdown2 li a', function() {
         var dayText = $(this).text();
         $('#selectedDayQuickBook2').html(dayText + '<span class="caret"></span>');
@@ -127,18 +127,18 @@
                     <h4 class="modal-title">Select a Date to Book</h4>
                 </div>
                 <div class="modal-body">
-                    
-                
-                    
+
+
+
                         <select class="btn btn-default dropdown-toggle" ng-model="booking.selectedDayText" ng-options="day for day in booking.dayDropdownItems" ng-change="booking.setStartTimeDropdownItems(); booking.setEndTimeDropdownItems()">
                         </select>
                         <select class="btn btn-default dropdown-toggle" ng-model="booking.selectedStartTimeText" ng-options="start for start in booking.startTimeDropdownItems" ng-change="booking.setBookingStartTime();booking.setEndTimeDropdownItems()">
                         </select>
-                        
+
                         <select class="btn btn-default dropdown-toggle" ng-model="booking.selectedEndTimeText" ng-options="end for end in booking.endTimeDropdownItems" ng-change="booking.setBookingEndTime()">
                         </select>
-                    
-    
+
+
 
 					<div class = "selectEquipment">
                         <label ng-repeat="type in booking.equipmentTypes">{{ type }}: <input type="checkbox" ng-click="booking.updateEquipment(type)"></label>
@@ -151,10 +151,10 @@
             </div>
         </div>
     </div>
-    
+
     <div id="quickBookModel" class="modal fade" role="dialog" data-backdrop="static">
         <div class="modal-dialog">
-            
+
             <!-- Modal content-->
             <div class="modal-content">
                 <div class="modal-header">
@@ -162,19 +162,19 @@
                     <h4 class="modal-title">Select a Date to Book</h4>
                 </div>
                 <div class="modal-body">
-                    
-                    
-                    
+
+
+
                     <select class="btn btn-default dropdown-toggle" ng-model="booking.selectedDayText" ng-options="day for day in booking.dayDropdownItems" ng-change="booking.setStartTimeDropdownItems(); booking.setEndTimeDropdownItems()">
                     </select>
                     <select class="btn btn-default dropdown-toggle" ng-model="booking.selectedStartTimeText" ng-options="start for start in booking.startTimeDropdownItems" ng-change="booking.setBookingStartTime();booking.setEndTimeDropdownItems()">
                     </select>
-                    
+
                     <select class="btn btn-default dropdown-toggle" ng-model="booking.selectedEndTimeText" ng-options="end for end in booking.endTimeDropdownItems" ng-change="booking.setBookingEndTime()">
                     </select>
-                    
-                    
-                    
+
+
+
                     <div class = "selectEquipment">
                         <label ng-repeat="type in booking.equipmentTypes">{{ type }}: <input type="checkbox" ng-click="booking.updateEquipment(type)"></label>
                     </div>
@@ -267,7 +267,7 @@
                         </div>
                     </div>
                 </div>
-				
+
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-toggle="modal" data-target="#selectRoomModal" data-dismiss="modal">Continue</button>
                     <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
@@ -369,7 +369,7 @@
                     <h4 class="modal-title">Confirmation</h4>
                 </div>
                 <div class="modal-body" >
-                    
+
                     <div ng-if="booking.createdBooking != null">
                         <div class="container">
                             <h5>You have booked</h5>
@@ -381,7 +381,7 @@
                     </div>
                     <div ng-if="booking.createdBooking == null">
                         Error creating booking
-                        
+
                         <!-- TODO: Add more details to error message -->
                     </div>
                 </div>
