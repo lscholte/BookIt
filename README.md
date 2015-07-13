@@ -12,6 +12,9 @@ The web application will be accessable through your modern browser, at __http://
 	'database': 'mongodb://admin:nodejs@ds043942.mongolab.com:43942/bookit',
 	'secret': 'Bookitsecret'
 ```
+In general any relational database can be used to run this application.
+
+___
 Some users are available for testing. Use any of the following username password pairs to login to the bookit system.
 
 | Username      | Password      | User Type     |
