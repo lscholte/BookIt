@@ -36,5 +36,5 @@ anguler.module('userService', [])
 
 	// return our entire userFactory object
 	return userFactory;
-	
+
 });
