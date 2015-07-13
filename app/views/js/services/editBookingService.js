@@ -6,12 +6,6 @@ angular.module('editBookingService', [])
 
 		quickBookFactory.editBooking = function(bookingID, startDate, endDate, equipment, callback) {
 
-
-
-            //get booking
-            //get the equipment associated with booking
-            //remove the booking's equipment from the requested equipment
-
             $http.delete('/api/bookings/equipment/' + bookingID).success(function(data, status, headers, config) {
                 $http.get('/api/equipment?startDate=' + startDate.getTime() + '&endDate=' + endDate.getTime()).success(function(data, status, headers, config) {
                     var equipmentIds = [];
