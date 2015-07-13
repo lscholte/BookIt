@@ -3,8 +3,6 @@ angular.module('appBookIt.routes', ['ngRoute'])
 .config(function($routeProvider, $locationProvider) {
 	$routeProvider
 
-	// Route for home page
-
 	// Route for login page
 	.when("/login", {
 
@@ -42,7 +40,12 @@ angular.module('appBookIt.routes', ['ngRoute'])
 
 	.when("/admin/editbookings", {
 		templateUrl : 'app/views/pages/editbookings.html',
-		controller : 'AdminController'
+		controller : 'AdminController',
+		resolve : {
+			bookings: function(Calendar){
+				return Calendar.all();
+			}
+		}
 	})
 
 	.otherwise({

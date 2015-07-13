@@ -74,7 +74,6 @@ angular.module('calendarCtrl', ['calendarService'])
 	vm.isABooking = function(room, startingTime){
 
 		bookingsList = vm.booking;
-		console.log(bookingsList);
 		for(booking in bookingsList){
 			console.log(booking.startTime + " == " + startingTime + " :: " + booking.startTime == startingTime);
 			if(booking.room == room){
