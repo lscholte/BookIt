@@ -24,13 +24,6 @@ angular.module('bookingCtrl', ["activeBookingService", "quickBookService"])
             vm.bookingEndTime = null;
             vm.equipment = [];
 
-
-
-            //TODO: Investigate this part of the code.
-            //For some reason vm.user is undefined when I try
-            //and use it later even, which causes problems
-            //because the booking process needs to know
-            //whether the user is a student or staff/faculty member
             vm.user = Auth.getUser().then(function(user) {
                 vm.user = user.data;
             });
@@ -86,9 +79,6 @@ angular.module('bookingCtrl', ["activeBookingService", "quickBookService"])
 
 
                 //staff/faculty
-                //TODO: Investigate why vm.user is undefined and
-                //therefore causing problems when I try and
-                //access vm.user.userType
                 if(vm.user.userType == "staff_faculty") {
                     maxHours = 3;
                 }
