@@ -7,7 +7,7 @@ This project implements a web application running on node.js, express.js, angula
 > node server.js
 ```
 ___
-The web application will be accessable through your modern browser, at __http://localhost:8080__. This repository currently has a database key and secret assocaited with it. These are both included in the repository. However, should they be removed, the following database link and secret will give access to a testing database used during development. These keys need to be represented in config.js for the application to function properly.
+The web application will be accessable through your modern browser, at __http://localhost:8080__. This repository currently has a database key and secret associated with it. These are both included in the repository. However, should they be removed, the following database link and secret will give access to a testing database used during development. These keys need to be represented in config.js for the application to function properly.
 ```
 	'database': 'mongodb://admin:nodejs@ds043942.mongolab.com:43942/bookit',
 	'secret': 'Bookitsecret'
