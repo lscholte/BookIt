@@ -18,7 +18,6 @@ angular.module('calendarCtrl', ['calendarService'])
     	if (time){
 	        day = new Date(day);
 	        day.setHours(time, 0, 0 , 0);
-	        console.log(day.toISOString());
 	        var hour = day.getHours();
 
 	        if((day.getDay() == 0 || day.getDay() == 6) && (hour < 11 || hour > 17) || hour < 8 || hour > 21) {
@@ -27,13 +26,19 @@ angular.module('calendarCtrl', ['calendarService'])
 
 	        var count = 10;
 
-	        for(var index in vm.bookings){
-	            var bookingDate = new Date(vm.bookings[index].startDate).toISOString();
-	            var desiredDate = day.toISOString();
-	            if( bookingDate == desiredDate){
-	                --count;
-	            }
-	        }
+            for(var index in vm.bookings){
+                var bookingDate = new Date(vm.bookings[index].startDate);
+                var diff = Math.floor((new Date(vm.bookings[index].endDate).getTime() - bookingDate.getTime())/(60*60*1000));
+                for(var i = 0; i < diff; ++i) {
+                    var compareDate = new Date(bookingDate.getTime() + i*60*60*1000).toISOString();
+                    var desiredDate = day.toISOString();
+                    if( compareDate == desiredDate){
+                        --count;
+                        break;
+                    }
+                }
+                
+            }
 	        return count;
 	    } else {
 			day = new Date(day);
