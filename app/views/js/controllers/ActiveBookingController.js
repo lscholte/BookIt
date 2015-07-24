@@ -106,7 +106,6 @@ angular.module('activeCtrl', ["activeBookingService", "editBookingService"])
                 equipment.push(vm.selectedEquipment[i].equipmentType.toLowerCase());
             }
         }
-        console.log(equipment);
         
         EditBooking.editBooking(vm.user.bookingID, new Date(vm.booking.startDate), new Date(vm.booking.endDate), equipment, function(result, success) {
             vm.editBookingResult = result;

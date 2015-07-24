@@ -97,7 +97,6 @@
                     <b>Your Booking</b><br>
                     {{ Active.booking.date }} from {{ Active.booking.startTime }} to {{ Active.booking.endTime }}<br><br>
                     <b>Equipment</b><br>
-                    {{ Active.selectedEquipment }}
                     <label ng-repeat="equip in Active.selectedEquipment">{{ equip.equipmentType }}: <input type="checkbox" ng-model="equip.selected"></label>
                     <div ng-if="Active.editBookingResult">
                         {{ Active.editBookingResult }}
