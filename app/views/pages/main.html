@@ -15,9 +15,9 @@
                     </div>
                 </div>
 
-                <table class="table table-striped">
+                <table class="table table-striped center">
                     <thead>
-                        <tr>
+                        <tr class="center">
                             <th>Sunday</th>
                             <th>Monday</th>
                             <th>Tuesday</th>
@@ -28,7 +28,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
+                        <tr class="availibilities center">
                             <td>{{ calendar.getBookingCount(calendar.weekStart()) }}</td>
                             <td>{{ calendar.getBookingCount(calendar.weekStart().setDate(calendar.weekStart().getDate() + 1)) }}</td>
                             <td>{{ calendar.getBookingCount(calendar.weekStart().setDate(calendar.weekStart().getDate() + 2)) }}</td>

@@ -39,7 +39,7 @@
 	font-size: medium;
 }
 
-.center {
+.center, .center th{
 	text-align: center;
 }
 
@@ -59,8 +59,18 @@
 	border-color: black;
 }
 
+.availibilities td {
+	font-size: medium;
+	font-weight: bold;
+}
+
 #redConfirm {
 	background-image: radial-gradient(circle, #fff 80%, rgba(198, 53, 39, 0.6) 81%);
+}
+
+.btn-booked {
+	background-image: radial-gradient(circle, #F5AA1C 80%, #C63527 81%);
+	background-color: #F5AA1C;
 }
 
 .logoutHolder input{
@@ -104,8 +114,5 @@
 }
 
 .bookingEditor{
-
 	font-size: 20px;
-	background-color: #F7F7E6;
-
 }

@@ -1,11 +1,11 @@
 angular.module('editBookingService', [])
 
         .factory('EditBooking', function($http){
-            
+
             var quickBookFactory = {};
-            
+
             quickBookFactory.editBooking = function(bookingID, startDate, endDate, equipment, callback) {
-                
+
                 $http.delete('/api/bookings/equipment/' + bookingID).success(function(data, status, headers, config) {
                     $http.get('/api/equipment?startDate=' + startDate.getTime() + '&endDate=' + endDate.getTime()).success(function(data, status, headers, config) {
                         var equipmentIds = [];
@@ -17,12 +17,12 @@ angular.module('editBookingService', [])
                                 }
                             }
                         }
-                        
+
                         if(equipmentIds.length != equipment.length){
                             callback("A requested piece of equipment is not available during your booking time", false);
                             return;
                         }
-                        
+
                         if(equipmentIds.length > 0) {
                             $http.put('/api/bookings/equipment/' + bookingID, {equipmentID:equipmentIds}).success(function(data, status, headers, config){
                                 callback("Your booking has been successfully updated", true);
@@ -36,7 +36,7 @@ angular.module('editBookingService', [])
                     });
                 });
             };
-            
+
             return quickBookFactory;
-            
+
         });

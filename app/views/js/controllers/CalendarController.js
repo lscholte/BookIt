@@ -3,11 +3,11 @@ angular.module('calendarCtrl', ['calendarService'])
 .controller('CalendarController', function($scope, Calendar){
 
 	var vm = this;
-	vm.date = new Date();
+	vm.date = Calendar.date;
 
 	//loads all the bookings
-	Calendar.all().success(function(data){
-		vm.bookings = data;
+	Calendar.all().then(function(result){
+		vm.bookings = result.data;
 	});
 
 	// returns the number of available booking time slots on a given day
@@ -59,10 +59,6 @@ angular.module('calendarCtrl', ['calendarService'])
 		vm.date.setTime(vm.date.getTime() - 7*86400000);
 	};
 
-	vm.currentDay = function(){
-		return vm.date.toDateString();
-	};
-
 	vm.nextDay = function(){
 		vm.date.setTime(vm.date.getTime() + 86400000);
 	};
@@ -71,17 +67,7 @@ angular.module('calendarCtrl', ['calendarService'])
 		vm.date.setTime(vm.date.getTime() - 86400000);
 	};
 
-	vm.isABooking = function(room, startingTime){
-
-		bookingsList = vm.booking;
-		for(booking in bookingsList){
-			console.log(booking.startTime + " == " + startingTime + " :: " + booking.startTime == startingTime);
-			if(booking.room == room){
-				if(booking.startTime == startingTime){
-					return "O";
-				}
-			}
-		}
-		return "X";
+	vm.currentDay = function(){
+		return vm.date;
 	};
 });
