@@ -6,6 +6,13 @@ angular.module('activeCtrl', ["activeBookingService", "editBookingService"])
 	var vm = this;
 	vm.activeBookingService = ActiveBooking;
     vm.equipmentTypes = ["Projector", "Laptop"];
+    
+    vm.selectedEquipment = [];
+    for(var i = 0; i < vm.equipmentTypes.length; ++i) {
+        vm.selectedEquipment.push(
+            {equipmentType: vm.equipmentTypes[i], selected: false }
+            );
+    }
 
     // This is a bit of a hacky boolean to stop a page from trying to run the call to populate bookings more than once
 	vm.oneCall = true;
@@ -41,6 +48,15 @@ angular.module('activeCtrl', ["activeBookingService", "editBookingService"])
 					own.endTime = (new Date(data.endDate)).toLocaleTimeString();
 					own.date = (new Date(data.startDate)).toDateString();
 					own.roomNumber = data.room.roomNumber;
+                    
+                    for(var i = 0; i < vm.selectedEquipment.length; ++i) {
+                        for(var j = 0; j < data.equipment.length; ++j) {
+                            if(vm.selectedEquipment[i].equipmentType.toLowerCase() == data.equipment[j].equipmentType.toLowerCase()) {
+                                vm.selectedEquipment[i].selected = true;
+                            }
+                        }
+                    }
+                    console.log(vm.selectedEquipment);
 
 					// Logic for beautifying the booked equipment shown to the user
 					own.equipment = data.equipment.length == 0 ? "None" : data.equipment;
@@ -83,7 +99,15 @@ angular.module('activeCtrl', ["activeBookingService", "editBookingService"])
 
     vm.editBooking = function() {
     	// Pass information around (to the service) then update the view
-        EditBooking.editBooking(vm.user.bookingID, new Date(vm.booking.startDate), new Date(vm.booking.endDate), vm.editedEquipment, function(result, success) {
+        
+        var equipment = [];
+        for(var i = 0; i < vm.selectedEquipment.length; ++i) {
+            if(vm.selectedEquipment[i].selected) {
+                equipment.push(vm.selectedEquipment[i].equipmentType.toLowerCase());
+            }
+        }
+        
+        EditBooking.editBooking(vm.user.bookingID, new Date(vm.booking.startDate), new Date(vm.booking.endDate), equipment, function(result, success) {
             vm.editBookingResult = result;
             if(success) {
                 vm.editBookingResult = result;
@@ -94,14 +118,4 @@ angular.module('activeCtrl', ["activeBookingService", "editBookingService"])
         vm.editBookingResult = null;
     }
 
-    vm.updateEquipment = function(type) {
-        type = type.toLowerCase();
-        var index = vm.editedEquipment.indexOf(type);
-        if(index == -1) {
-            vm.editedEquipment.push(type);
-        }
-        else {
-            vm.editedEquipment.splice(index, 1);
-        }
-    }
 });

@@ -18,6 +18,7 @@
                 <table class="table table-striped center">
                     <thead>
                         <tr class="center">
+                            <th> </th>
                             <th>Sunday</th>
                             <th>Monday</th>
                             <th>Tuesday</th>
@@ -28,14 +29,15 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr class="availibilities center">
-                            <td>{{ calendar.getBookingCount(calendar.weekStart()) }}</td>
-                            <td>{{ calendar.getBookingCount(calendar.weekStart().setDate(calendar.weekStart().getDate() + 1)) }}</td>
-                            <td>{{ calendar.getBookingCount(calendar.weekStart().setDate(calendar.weekStart().getDate() + 2)) }}</td>
-                            <td>{{ calendar.getBookingCount(calendar.weekStart().setDate(calendar.weekStart().getDate() + 3)) }}</td>
-                            <td>{{ calendar.getBookingCount(calendar.weekStart().setDate(calendar.weekStart().getDate() + 4)) }}</td>
-                            <td>{{ calendar.getBookingCount(calendar.weekStart().setDate(calendar.weekStart().getDate() + 5)) }}</td>
-                            <td>{{ calendar.getBookingCount(calendar.weekStart().setDate(calendar.weekStart().getDate() + 6)) }}</td>
+                        <tr ng-repeat="hour in calendar.hours" class="availibilities center">
+                            <th> {{ hour }}</th>
+                            <td>{{ calendar.getBookingCount(calendar.weekStart(), hour) }}</td>
+                            <td>{{ calendar.getBookingCount(calendar.weekStart().setDate(calendar.weekStart().getDate() + 1), hour) }}</td>
+                            <td>{{ calendar.getBookingCount(calendar.weekStart().setDate(calendar.weekStart().getDate() + 2), hour) }}</td>
+                            <td>{{ calendar.getBookingCount(calendar.weekStart().setDate(calendar.weekStart().getDate() + 3), hour) }}</td>
+                            <td>{{ calendar.getBookingCount(calendar.weekStart().setDate(calendar.weekStart().getDate() + 4), hour) }}</td>
+                            <td>{{ calendar.getBookingCount(calendar.weekStart().setDate(calendar.weekStart().getDate() + 5), hour) }}</td>
+                            <td>{{ calendar.getBookingCount(calendar.weekStart().setDate(calendar.weekStart().getDate() + 6), hour) }}</td>
                         </tr>
                     </tbody>
                 </table>
@@ -97,8 +99,7 @@
                     <b>Your Booking</b><br>
                     {{ Active.booking.date }} from {{ Active.booking.startTime }} to {{ Active.booking.endTime }}<br><br>
                     <b>Equipment</b><br>
-
-                    <label ng-repeat="type in Active.equipmentTypes" ng-click="Active.updateEquipment(type)">{{ type }}: <input type="checkbox"></label>
+                    <label ng-repeat="equip in Active.selectedEquipment">{{ equip.equipmentType }}: <input type="checkbox" ng-model="equip.selected"></label>
                     <div ng-if="Active.editBookingResult">
                         {{ Active.editBookingResult }}
                     </div>

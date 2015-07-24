@@ -3,37 +3,36 @@ angular.module('calendarCtrl', ['calendarService'])
 .controller('CalendarController', function($scope, Calendar){
 
 	var vm = this;
+
 	vm.date = Calendar.date;
+    vm.hours = ["8:00 AM","9:00 AM","10:00 AM","11:00 AM","12:00 PM","1:00 PM","2:00 PM","3:00 PM","4:00 PM","5:00 PM","6:00 PM","7:00 PM","8:00 PM","9:00 PM"];
 
 	//loads all the bookings
 	Calendar.all().then(function(result){
 		vm.bookings = result.data;
 	});
 
-	// returns the number of available booking time slots on a given day
-	vm.getBookingCount = function(day){
-		day = new Date(day);
-		var count;
+    vm.getBookingCount = function(day, time){
+        day = new Date(day);
+        day = new Date(day.toDateString() + " " + time);
+        console.log(day.toISOString());
+        var hour = day.getHours();
 
-		//Figure out how many booking slots are available hypothetically, then subtract bookings that are already made
-		//ToDo: ideally the initial value for count would use an api call for calculation
-		if(day.getDay() == 0 || day.getDay() == 6){
-			count = 70; // On weekends rooms open 11-6 (7 hours), and there's 10 rooms, so 70 = 7*10
-		}
-		else{
-			count = 140; //weekdays, rooms open 8-10 (14 hours), and there's 10 rooms, so 140 = 14*10
-		}
+        if((day.getDay() == 0 || day.getDay() == 6) && (hour < 11 || hour > 17) || hour < 8 || hour > 21) {
+            return "N/A";
+        }
 
-		for(var index in vm.bookings){
-			var bookingDate = new Date(vm.bookings[index].startDate).toDateString();
-			var desiredDate = day.toDateString();
-			if( bookingDate == desiredDate){
-				var duration = Math.floor((new Date(vm.bookings[index].endDate).getTime() - new Date(vm.bookings[index].startDate).getTime())/(60*60*1000));
-				count = count - duration;
-			}
-		}
-		return count;
-	};
+        var count = 10;
+
+        for(var index in vm.bookings){
+            var bookingDate = new Date(vm.bookings[index].startDate).toISOString();
+            var desiredDate = day.toISOString();
+            if( bookingDate == desiredDate){
+                --count;
+            }
+        }
+        return count;
+    };
 
 	//Get date object for the Sunday of week specified by vm.date
 	vm.weekStart = function(){
