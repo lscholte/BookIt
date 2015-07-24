@@ -30,7 +30,7 @@
                     </thead>
                     <tbody>
                         <tr ng-repeat="hour in calendar.hours" class="availibilities center">
-                            <th> {{ hour }}</th>
+                            <th> {{ hour }}:00</th>
                             <td>{{ calendar.getBookingCount(calendar.weekStart(), hour) }}</td>
                             <td>{{ calendar.getBookingCount(calendar.weekStart().setDate(calendar.weekStart().getDate() + 1), hour) }}</td>
                             <td>{{ calendar.getBookingCount(calendar.weekStart().setDate(calendar.weekStart().getDate() + 2), hour) }}</td>
