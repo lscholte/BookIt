@@ -83,10 +83,10 @@
         </div>
     </div>
     <div class="col-xs-1"><!-- Centering --></div>
-    
+
     <div id="editBookingModal" class="modal fade" role="dialog" data-backdrop="static">
         <div class="modal-dialog">
-            
+
             <!-- Modal content-->
             <div class="modal-content">
                 <div class="modal-header">
@@ -97,7 +97,7 @@
                     <b>Your Booking</b><br>
                     {{ Active.booking.date }} from {{ Active.booking.startTime }} to {{ Active.booking.endTime }}<br><br>
                     <b>Equipment</b><br>
-                    
+
                     <label ng-repeat="type in Active.equipmentTypes" ng-click="Active.updateEquipment(type)">{{ type }}: <input type="checkbox"></label>
                     <div ng-if="Active.editBookingResult">
                         {{ Active.editBookingResult }}
@@ -106,15 +106,15 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" ng-click="Active.editBooking()">Confirm Changes</button>
-                    <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="Active.editBookingResult = null">Close</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="Active.editBookingResult = null">Cancel</button>
                 </div>
             </div>
         </div>
     </div>
-    
+
     <div id="deleteBookingModal" class="modal fade" role="dialog" data-backdrop="static">
         <div class="modal-dialog">
-            
+
             <div class="modal-content">
                  <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
@@ -127,12 +127,12 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" id="redConfirm" data-toggle="modal" data-dismiss="modal" ng-click="Active.deleteBooking()">Confirm Deletion</button>
                     <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                </div> 
+                </div>
             </div>
         </div>
     </div>
 
-    
+
 </div>
 
 <div ng-controller="BookingController as booking">

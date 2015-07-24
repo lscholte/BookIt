@@ -148,14 +148,14 @@ module.exports = function(app, express){
 				if (err) {
 					switch (err.code){
 					// Switch for catching errors on user creation: eg. username and password requirements
-					case 11000:
-					return res.json({success: false, message: 'That username is taken!'});
-					break;
-					default:
-					res.send(err);
-					break;
+						case 11000:
+							return res.json({success: false, message: 'That username is taken!'});
+							break;
+						default:
+							res.send(err);
+							break;
+					}
 				}
-			}
 
 				// Return a message
 				res.json({ message: 'User created!' });
@@ -376,6 +376,7 @@ module.exports = function(app, express){
 
 			var query;
 
+			// If there is a start time and end time specified in the req find only the bookings for that period
 			if(req.query.startDate && req.query.endDate){
 				var start = new Date(parseInt(req.query.startDate, 10));
 				var end = new Date(parseInt(req.query.endDate, 10));
@@ -385,10 +386,11 @@ module.exports = function(app, express){
 				query = Booking.find();
 			}
 
+			// Ensure that bookings are returned with refrence to actual room, user, and equipment objects.
 			query.populate('room user equipment').exec(function(err, bookings){
 				if (err) res.send(err);
 
-				// return the users
+				// return the bookings
 				res.json(bookings);
 			});
 		});
@@ -409,16 +411,13 @@ module.exports = function(app, express){
 
 		// Remove the specific booking
 		.delete(function(req, res){
-			//TODO The booking already contains a reference to a user, need to update user restrictions
-			//		when they delete a booking. However this should be done near completion as to not
-			//		restrict our own ability to test functionality which may require removal of bookings
-			//		without imposing restritions on ourselves.
-
+			// Find the booking
 			Booking.findById(req.params.id, function (err, booking){
 				if (err || !booking) {
 					res.status(401).send({message: "Either there was an error, or that's not a real booking. Don't ask me!", error: err, booking: booking});
 					return;
 				}
+				// The owner of the booking has a refrence to update too, they're doubly-linked
 				User.findById(booking.user, function(err, user){
 					if (err) res.send(err);
 					user.bookingID = null;
@@ -475,6 +474,7 @@ module.exports = function(app, express){
 								unusedEquipment.push(item);
 							}
 						});
+						// Return the equipment currently not in use
 						res.json(unusedEquipment);
 					});
 
@@ -525,7 +525,9 @@ module.exports = function(app, express){
 						// booking.
 						res.json(booking);
 
+					// Else there is only one item to add
 					} else {
+						// Find the equipment object
 						Equipment.findById(req.body.equipmentID).exec(function(err, equip) {
 							if (err) res.send(err);
 							//TODO disallow same types of equipment, this only disallows the same piece equipment
@@ -536,6 +538,7 @@ module.exports = function(app, express){
 									return;
 								}
 							}
+							// There can only be two pieces of equipment /per booking
 							if (booking.equipment.length < 2){
 								booking.equipment.push(equip);
 								booking.save(function(err){
@@ -545,8 +548,7 @@ module.exports = function(app, express){
 								res.status(400).send({success: "false", message: "There are already two pieces of equipment booked!"});
 								return;
 							}
-							// Have finished with all the equipment from the body, time to save the updated
-							// booking.
+							// Have finished with all the equipment from the request body, time to save the updated booking.
 							res.json(booking);
 						});
 					}
@@ -556,10 +558,12 @@ module.exports = function(app, express){
 			}
 		})
 
-		//remove the equipment from a booking
+		// Remove the equipment from a booking
 		.delete(function(req, res){
+			// Find the booking
 			Booking.findById(req.params.bookingID).exec(function(err, booking) {
 				if (err) res.send(err);
+				// Overwrite anything that was stored in this booking's equipment array with an empty array
 				booking.equipment = [];
 				booking.save(function(err){
 					res.status(200).send({message : "Removed all equipment on booking, send equipmentID in /PUT body to add", booking : booking});
@@ -572,22 +576,26 @@ module.exports = function(app, express){
 		//returns a list of unused rooms for a given time slot
 		.get(function(req, res){
 			if(req.query.startDate && req.query.endDate){
-				//Get all equipment books that occur at the same time:
+				// Get all room bookings that occur at the same time:
 				//	startTime < booking.startTime && endTime > booking.endTime
 				//	startTime > booking.startTime && startTime < booking.endTime
 				//	endTime > booking.startTime && endTime < booking.endTime
 				var start = new Date(parseInt(req.query.startDate, 10));
 				var end = new Date(parseInt(req.query.endDate, 10));
+				// This one liner finds all bookings that are in active within at least any part of the specified time
 				Booking.find({$or:[{$and: [{startDate: {$lte:start}}, {endDate: {$gte:end}}]}, {$and:[{startDate: {$gte:start}}, {startDate: {$lt:end}}]}, {$and:[{endDate: {$gt:start}}, {endDate: {$lte:end}}]}]}).select('room').populate('room').exec(function(err, bookings){
+					// Assemble the list of rooms that are currently in use
 					var roomList = [];
 					bookings.forEach(function(booking){
 						roomList.push(booking.room);
 					});
+
+					// Assemble a list of all the empty rooms
 					var emptyRooms = [];
 					Room.find({}, function(err, allRooms){
 						if(err) console.log(err);
 
-						//for every room, check if it's in list of used rooms. If it's not, return it
+						// For every room, check if it's in list of used rooms. If it's not, return it
 						allRooms.forEach(function(item){
 							var roomFound = false;
 							// We have to use this loop instead of array.includes() because we're comparing objects
@@ -598,7 +606,7 @@ module.exports = function(app, express){
 								}
 							}
 
-							//send this room back! it's empty!
+							// Send this room back! it's empty!
 							if(!roomFound){
 								emptyRooms.push(item);
 								return;

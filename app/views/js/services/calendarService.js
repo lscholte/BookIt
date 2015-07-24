@@ -8,7 +8,7 @@ angular.module('calendarService', [])
 		calendarFactory.all = function(){
 			return $http.get('/api/bookings');
 		};
-		
+
 		calendarFactory.range = function(start, end){
 				return $http.get('/api/bookings?startDate=' + start + '&endDate=' + end);
 		};

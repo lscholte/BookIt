@@ -29,8 +29,8 @@ UserSchema.pre('save', function(next) {
 	});
 });
 
-// method to compare a given password with the database hash
 UserSchema.methods.comparePassword = function(password) {
+	// method to compare a given password with the database hash
 	var user = this;
 
 	//fixes weird case where an undefined value, instead of an empty string, was being sent
@@ -42,34 +42,43 @@ UserSchema.methods.comparePassword = function(password) {
 };
 
 UserSchema.methods.setName = function(name){
+	// Update the user's name
 	this.name = name;
 };
 
 UserSchema.methods.getName = function(){
+	// Return the user's name
 	return this.name;
 };
 
 UserSchema.methods.getUserType = function(){
+	// Return the type of user this object represents
 	return this.userType;
 };
 
 UserSchema.methods.setBannedUntil = function(date){
+	// Used when a booking is deleted near it's start time
+	// Set the date that the ban on this user should expire
 	this.bannedUntil = date;
 };
 
 UserSchema.methods.getBannedUntil = function(){
+	// Return the date and time that this user is banned until
 	return this.bannedUntil;
 };
 
 UserSchema.methods.getBooking = function(){
+	// Get the booking associated with this user
 	return this.bookingID;
 };
 
 UserSchema.methods.setBooking = function(booking){
+	// Associate this user with a booking object
 	this.bookingID = booking.toString();
 }
 
 UserSchema.methods.isBanned = function(){
+	// Return a boolean result stating if this user is banned or not
 	if(this.bannedUntil == null){
 		return false;
 	}
