@@ -6,7 +6,7 @@ angular.module('activeCtrl', ["activeBookingService", "editBookingService"])
 	var vm = this;
 	vm.activeBookingService = ActiveBooking;
     vm.equipmentTypes = ["Projector", "Laptop"];
-    
+
     vm.selectedEquipment = [];
     for(var i = 0; i < vm.equipmentTypes.length; ++i) {
         vm.selectedEquipment.push(
@@ -48,7 +48,7 @@ angular.module('activeCtrl', ["activeBookingService", "editBookingService"])
 					own.endTime = (new Date(data.endDate)).toLocaleTimeString();
 					own.date = (new Date(data.startDate)).toDateString();
 					own.roomNumber = data.room.roomNumber;
-                    
+
                     for(var i = 0; i < vm.selectedEquipment.length; ++i) {
                         for(var j = 0; j < data.equipment.length; ++j) {
                             if(vm.selectedEquipment[i].equipmentType.toLowerCase() == data.equipment[j].equipmentType.toLowerCase()) {

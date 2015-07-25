@@ -3,39 +3,64 @@ angular.module('calendarCtrl', ['calendarService'])
 .controller('CalendarController', function($scope, Calendar){
 
 	var vm = this;
-	vm.date = new Date();
-    vm.hours = ["8:00 AM","9:00 AM","10:00 AM","11:00 AM","12:00 PM","1:00 PM","2:00 PM","3:00 PM","4:00 PM","5:00 PM","6:00 PM","7:00 PM","8:00 PM","9:00 PM"];
+
+	vm.date = Calendar.date;
+    vm.hours = [8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22];
 
 	//loads all the bookings
-	Calendar.all().success(function(data){
-		vm.bookings = data;
+	Calendar.all().then(function(result){
+		vm.bookings = result.data;
 	});
-    
-    vm.getBookingCount = function(day, time){
-        day = new Date(day);
-        day = new Date(day.toDateString() + " " + time);
-        var hour = day.getHours();
-        
-        if((day.getDay() == 0 || day.getDay() == 6) && (hour < 11 || hour > 17) || hour < 8 || hour > 21) {
-            return "N/A";
-        }
-        
-        var count = 10;
-        
-        for(var index in vm.bookings){
-            var bookingDate = new Date(vm.bookings[index].startDate);
-            var diff = Math.floor((new Date(vm.bookings[index].endDate).getTime() - bookingDate.getTime())/(60*60*1000));
-            for(var i = 0; i < diff; ++i) {
-                var compareDate = new Date(bookingDate.getTime() + i*60*60*1000).toISOString();
-                var desiredDate = day.toISOString();
-                if( compareDate == desiredDate){
-                    --count;
-                    break;
-                }
-            }
 
-        }
-        return count;
+    vm.getBookingCount = function(day, time){
+
+    	// Calls to this function are made from the student home page, where they're converned about hours each day
+    	// There are also calls made to getBookingCount from the admin splash page where only totals are shown.
+    	if (time){
+	        day = new Date(day);
+	        day.setHours(time, 0, 0 , 0);
+	        var hour = day.getHours();
+
+	        if((day.getDay() == 0 || day.getDay() == 6) && (hour < 11 || hour > 17) || hour < 8 || hour > 21) {
+	            return "";
+	        }
+
+	        var count = 10;
+
+            for(var index in vm.bookings){
+                var bookingDate = new Date(vm.bookings[index].startDate);
+                var diff = Math.floor((new Date(vm.bookings[index].endDate).getTime() - bookingDate.getTime())/(60*60*1000));
+                for(var i = 0; i < diff; ++i) {
+                    var compareDate = new Date(bookingDate.getTime() + i*60*60*1000).toISOString();
+                    var desiredDate = day.toISOString();
+                    if( compareDate == desiredDate){
+                        --count;
+                        break;
+                    }
+                }
+                
+            }
+	        return count;
+	    } else {
+			day = new Date(day);
+			var count;
+			//Figure out how many booking slots are available hypothetically, then subtract bookings that are already made
+			if(day.getDay() == 0 || day.getDay() == 6){
+				count = 70; // On weekends rooms open 11-6 (7 hours), and there's 10 rooms, so 70 = 7*10
+			}
+			else{
+				count = 140; //weekdays, rooms open 8-10 (14 hours), and there's 10 rooms, so 140 = 14*10
+			}
+			for(var index in vm.bookings){
+				var bookingDate = new Date(vm.bookings[index].startDate).toDateString();
+				var desiredDate = day.toDateString();
+				if( bookingDate == desiredDate){
+					var duration = Math.floor((new Date(vm.bookings[index].endDate).getTime() - new Date(vm.bookings[index].startDate).getTime())/(60*60*1000));
+					count = count - duration;
+				}
+			}
+			return count;
+	    }
     };
 
 	//Get date object for the Sunday of week specified by vm.date
@@ -62,10 +87,6 @@ angular.module('calendarCtrl', ['calendarService'])
 		vm.date.setTime(vm.date.getTime() - 7*86400000);
 	};
 
-	vm.currentDay = function(){
-		return vm.date.toDateString();
-	};
-
 	vm.nextDay = function(){
 		vm.date.setTime(vm.date.getTime() + 86400000);
 	};
@@ -74,17 +95,7 @@ angular.module('calendarCtrl', ['calendarService'])
 		vm.date.setTime(vm.date.getTime() - 86400000);
 	};
 
-	vm.isABooking = function(room, startingTime){
-
-		bookingsList = vm.booking;
-		for(booking in bookingsList){
-			console.log(booking.startTime + " == " + startingTime + " :: " + booking.startTime == startingTime);
-			if(booking.room == room){
-				if(booking.startTime == startingTime){
-					return "O";
-				}
-			}
-		}
-		return "X";
+	vm.currentDay = function(){
+		return vm.date;
 	};
 });

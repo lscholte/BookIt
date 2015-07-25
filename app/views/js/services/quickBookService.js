@@ -1,12 +1,12 @@
 angular.module('quickBookService', [])
 
         .factory('quickBook', function($http){
-            
+
             var quickBookFactory = {};
-            
+
             //startDate and endDate expected as javascript Date Objects. equipment is somthing like [laptop, projecter] to book both a laptop and a projector. returns booking id if succesful
             quickBookFactory.book = function(startDate, endDate, username, equipment, callback){
-                
+
                 //check for equipment
                 var equipmentIds = [];
                 $http.get('/api/equipment?startDate=' + startDate.getTime() + '&endDate=' + endDate.getTime()).success(function(data, status, headers, config){
@@ -43,7 +43,7 @@ angular.module('quickBookService', [])
                     });
                 });
             };
-            
+
             return quickBookFactory;
-            
+
         });

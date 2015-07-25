@@ -1,8 +1,10 @@
 angular.module('calendarService', [])
 
-	.factory('Calendar', function($http){
+	.factory('Calendar', ['$http', function($http){
 
 		var calendarFactory = {};
+
+		calendarFactory.date = new Date();
 
 		//Get All Bookings
 		calendarFactory.all = function(){
@@ -10,9 +12,11 @@ angular.module('calendarService', [])
 		};
 
 		calendarFactory.range = function(start, end){
-				return $http.get('/api/bookings?startDate=' + start + '&endDate=' + end);
+			var path = '/api/bookings?startDate=' + start + '&endDate=' + end;
+			console.log(path);
+			return $http.get(path);
 		};
 
 		return calendarFactory;
 
-	});
+	}]);
