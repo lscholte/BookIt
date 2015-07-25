@@ -37,7 +37,9 @@
 					<tbody class="center">
 						<tr ng-repeat="i in [8,9,10,11,12,13,14,15,16,17,18,19,20,21,22]">
 
-							<td>{{ i }}:00</td>
+							<th ng-if="i < 12">{{ i }}:00 AM</td>
+                            <th ng-if="i == 12">{{ i }}:00 PM</td>
+                            <th ng-if="i > 12">{{ i - 12}}:00 PM</td>
 							<td><button type="button" ng-class="admin.isABooking(1, i) ? 'btn-booked' : ''" class="btn btn-default" ng-click="admin.getBooking(1, i)"> <br> </button></td>
 							<td><button type="button" ng-class="admin.isABooking(2, i) ? 'btn-booked' : ''" class="btn btn-default" ng-click="admin.getBooking(2, i)"> <br> </button></td>
 							<td><button type="button" ng-class="admin.isABooking(3, i) ? 'btn-booked' : ''" class="btn btn-default" ng-click="admin.getBooking(3, i)"> <br> </button></td>
