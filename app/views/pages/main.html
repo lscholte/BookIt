@@ -29,7 +29,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr ng-repeat="hour in calendar.hours" class="availibilities center">
+                        <tr ng-repeat="hour in [8,9,10,11,12,13,14,15,16,17,18,19,20,21,22]" class="availibilities center">
                             <th ng-if="hour < 12"> {{ hour }}:00 AM</th>
                             <th ng-if="hour == 12"> {{ hour }}:00 PM</th>
                             <th ng-if="hour > 12"> {{ hour - 12}}:00 PM</th>
