@@ -172,9 +172,8 @@
 
 
 
-					<div class = "selectEquipment">
-                        <label ng-repeat="type in booking.equipmentTypes">{{ type }}: <input type="checkbox" ng-click="booking.updateEquipment(type)"></label>
-					</div>
+                        <label ng-repeat="equip in booking.selectedEquipment">{{ equip.equipmentType }}: <input type="checkbox" ng-model="equip.selected"></label>
+
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-toggle="modal" data-target="#bookingConfirmation" data-dismiss="modal" ng-click="booking.createBooking()">Create Booking</button>

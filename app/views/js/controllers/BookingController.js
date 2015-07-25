@@ -22,7 +22,12 @@ angular.module('bookingCtrl', ["activeBookingService", "quickBookService"])
 
             vm.bookingStartTime = null;
             vm.bookingEndTime = null;
-            vm.equipment = [];
+            vm.selectedEquipment = [];
+            for(var i = 0; i < vm.equipmentTypes.length; ++i) {
+                vm.selectedEquipment.push(
+                    {equipmentType: vm.equipmentTypes[i], selected: false }
+                    );
+            }
 
             vm.user = Auth.getUser().then(function(user) {
                 vm.user = user.data;
@@ -119,19 +124,15 @@ angular.module('bookingCtrl', ["activeBookingService", "quickBookService"])
                 vm.setBookingEndTime();
             };
 
-            vm.updateEquipment = function(type) {
-                type = type.toLowerCase();
-                var index = vm.equipment.indexOf(type);
-                if(index == -1) {
-                    vm.equipment.push(type);
-                }
-                else {
-                    vm.equipment.splice(index, 1);
-                }
-            }
-
             vm.createBooking = function() {
-                quickBook.book(vm.bookingStartTime, vm.bookingEndTime, vm.user.username, vm.equipment, function(data, error) {
+                var equipment = [];
+                for(var i = 0; i < vm.selectedEquipment.length; ++i) {
+                    if(vm.selectedEquipment[i].selected) {
+                        equipment.push(vm.selectedEquipment[i].equipmentType.toLowerCase());
+                    }
+                }
+                
+                quickBook.book(vm.bookingStartTime, vm.bookingEndTime, vm.user.username, equipment, function(data, error) {
                     vm.waitingForBooking = false;
                     if(error) {
                         vm.bookingError = error;
