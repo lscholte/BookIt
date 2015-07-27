@@ -94,6 +94,7 @@ angular.module('activeCtrl', ["activeBookingService", "editBookingService"])
 			vm.user.bookingID = null;
 			vm.booking = {};
 			ActiveBooking.setActiveBooking(false);
+			$window.location.href = '/main';
 		});
 	};
 
